@@ -2,26 +2,25 @@
 % Please edit documentation in R/QA_export.R
 \name{export_xlsx.QA_matrix}
 \alias{export_xlsx.QA_matrix}
-\title{Export des objets QA_matrix dans un fichier Excel}
+\title{Export QA_matrix objects to an Excel file}
 \usage{
 \method{export_xlsx}{QA_matrix}(x, layout = c("all", "modalities", "values",
   "combined"), create = TRUE, clear_sheet = TRUE, auto_format = TRUE,
   file_name, sheet_names, ...)
 }
 \arguments{
-\item{x}{objet de type \code{QA_matrix}.}
+\item{x}{a \code{QA_matrix} object.}
 
-\item{layout}{composantes du bilan à exporter. Par défaut \code{layout = "all"} : la matrice des modalités
-(\code{"modalities"}) et celle des valeurs (\code{"values"}) sont exportées. Pour exporter la matrice
-des modalités avec en plus les variables supplémentaires de la matrice des valeurs, utiliser
-\code{layout = "combined"}.}
+\item{layout}{QA_matrix' component to export. By default \code{layout = "all"}: the modalities matrix
+(\code{"modalities"}) and the values matrix (\code{"values"}) are export. To add 
+the additional variables of the values matrix to the modalities matrix, use \code{layout = "combined"}.}
 
-\item{create}{booléen indiquant s'il faut créer le fichier excel ou non (\code{create = TRUE} par défaut)}
+\item{create}{boolean indicating whether to create a new Excel file or not (\code{TRUE} by default).}
 
-\item{clear_sheet}{booléen indiquant s'il faut nettoyer les feuilles du fichier Excel avant l'export (
-\code{clear_sheet = TRUE} par défaut).}
+\item{clear_sheet}{boolean indicating whether to clear the Excel's sheets before exporting  (\code{TRUE} by default); 
+usefull when the Excel file already exist.}
 
-\item{auto_format}{booléen indiquant s'il faut formatter la sortie (\code{auto_format = TRUE} par défaut).}
+\item{auto_format}{boolean indicating whether to format the ouptut or not (\code{TRUE} by default).}
 
 \item{file_name}{argument optionnel indiquant chemin vers le fichier à exporter. Si no spécifié
 alors un fichier *export.xls* est créé dans le working directory.}
@@ -32,7 +31,7 @@ Si le paramètre est spécifié alors les éventuelles feuilles contenant ces no
 \item{...}{autres paramètres non utilisés.}
 }
 \description{
-Permet d'exporter un bilan qualité dans un fichier Excel.
+Function to export a quality assessment matrix  (\code{QA_matrix}) to an Excel file.
 }
 \seealso{
 Other QA_matrix functions: \code{\link{compute_score}},

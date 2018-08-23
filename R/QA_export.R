@@ -1,16 +1,15 @@
-#' Export des objets QA_matrix dans un fichier Excel
+#' Export QA_matrix objects to an Excel file
 #'
-#' Permet d'exporter un bilan qualité dans un fichier Excel.
+#' Function to export a quality assessment matrix  (\code{QA_matrix}) to an Excel file.
 #'
-#' @param x objet de type \code{QA_matrix}.
-#' @param layout composantes du bilan à exporter. Par défaut \code{layout = "all"} : la matrice des modalités
-#' (\code{"modalities"}) et celle des valeurs (\code{"values"}) sont exportées. Pour exporter la matrice
-#' des modalités avec en plus les variables supplémentaires de la matrice des valeurs, utiliser
-#' \code{layout = "combined"}.
-#' @param create booléen indiquant s'il faut créer le fichier excel ou non (\code{create = TRUE} par défaut)
-#' @param clear_sheet booléen indiquant s'il faut nettoyer les feuilles du fichier Excel avant l'export (
-#' \code{clear_sheet = TRUE} par défaut).
-#' @param auto_format booléen indiquant s'il faut formatter la sortie (\code{auto_format = TRUE} par défaut).
+#' @param x a \code{QA_matrix} object.
+#' @param layout QA_matrix' component to export. By default \code{layout = "all"}: the modalities matrix
+#' (\code{"modalities"}) and the values matrix (\code{"values"}) are export. To add 
+#' the additional variables of the values matrix to the modalities matrix, use \code{layout = "combined"}.
+#' @param create boolean indicating whether to create a new Excel file or not (\code{TRUE} by default).
+#' @param clear_sheet boolean indicating whether to clear the Excel's sheets before exporting  (\code{TRUE} by default); 
+#' usefull when the Excel file already exist.
+#' @param auto_format boolean indicating whether to format the ouptut or not (\code{TRUE} by default).
 #' @param file_name argument optionnel indiquant chemin vers le fichier à exporter. Si no spécifié
 #' alors un fichier *export.xls* est créé dans le working directory.
 #' @param sheet_names nom des feuilles Excel en sortie. Si non spécifié alors le nom correspond à la composante exportée.
@@ -81,18 +80,18 @@ export_xlsx.default <- function(x, ...){
     stop("Il faut un objet de type QA_matrix ou mQA_matrix")
 }
 
-#' Export des objets mQA_matrix dans des fichiers Excel
+#' Export mQA_matrix objects to an Excel file
 #'
-#' Permet d'exporter dans des fichiers Excel une liste de bilan qualité
+#' Function to export a list of quality assessment matrix  (\code{mQA_matrix}) to an Excel file.
 #'
-#' @param x objet de type \code{mQA_matrix} à exporter.
-#' @param export_dir dossier d'export des résultats.
-#' @param layout_file paramètre d'export. Par défaut (\code{layout_file = "ByComponent"}) on a un fichier Excel par composante
-#' de la matrice bilan qualité (matrice des modalités ou des valeurs) dont chaque feuille correspond à un bilan qualité. Pour avoir
-#' un fichier par bilan qualité dont chaque feuille correspond à la composante exportée, utiliser \code{layout_file = "ByQRMatrix"}.
-#' @param file_extension extension des fichiers (\code{".xls"} ou \code{".xlsx"}).
-#' @param layout composantes du bilan à exporter : voir \code{\link{export_xlsx.QA_matrix}} .
-#' @param ... autres paramètres de la fonction \code{\link{export_xlsx.QA_matrix}}.
+#' @param x a \code{mQA_matrix} object.
+#' @param export_dir folder to export the result.
+#' @param layout_file export parameter. By default (\code{layout_file = "ByComponent"}) an Excel by component
+#' of the quality assessment matrix (modalities and/or values matrix) whose each sheet correspond to a QA_matrix. \code{layout_file = "ByQRMatrix"} to export 
+#' one file per QA_matrix.
+#' @param file_extension the files' extension (\code{".xls"} or \code{".xlsx"}).
+#' @param ... other parameters of the \code{\link{export_xlsx.QA_matrix}} function.
+#' @inheritParams export_xlsx.QA_matrix
 #' @family QA_matrix functions
 #' @export
 export_xlsx.mQA_matrix <- function(x, export_dir = "./",

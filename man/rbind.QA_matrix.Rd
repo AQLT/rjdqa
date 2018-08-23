@@ -23,7 +23,7 @@ et \code{values}.
 QR <- extract_QR()
 QR1 <- compute_score(QR1, score_pond = c(m7 = 2, q = 3, qs_residual_sa_on_sa = 5))
 QR2 <- compute_score(QR1, score_pond = c(m7 = 2, qs_residual_sa_on_sa = 5))
-rbind(QR1, QR2) # Une erreur est renvoyÃ©e
+rbind(QR1, QR2) # Une erreur est renvoyée
 rbind(QR1, QR2, check_formula = FALSE)
 }
 }

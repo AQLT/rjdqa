@@ -2,29 +2,31 @@
 % Please edit documentation in R/QA_export.R
 \name{export_xlsx.mQA_matrix}
 \alias{export_xlsx.mQA_matrix}
-\title{Export des objets mQA_matrix dans des fichiers Excel}
+\title{Export mQA_matrix objects to an Excel file}
 \usage{
 \method{export_xlsx}{mQA_matrix}(x, export_dir = "./",
   layout_file = c("ByComponent", "ByQRMatrix"), file_extension = c(".xls",
   ".xlsx"), layout = c("all", "modalities", "values", "combined"), ...)
 }
 \arguments{
-\item{x}{objet de type \code{mQA_matrix} à exporter.}
+\item{x}{a \code{mQA_matrix} object.}
 
-\item{export_dir}{dossier d'export des résultats.}
+\item{export_dir}{folder to export the result.}
 
-\item{layout_file}{paramètre d'export. Par défaut (\code{layout_file = "ByComponent"}) on a un fichier Excel par composante
-de la matrice bilan qualité (matrice des modalités ou des valeurs) dont chaque feuille correspond à un bilan qualité. Pour avoir
-un fichier par bilan qualité dont chaque feuille correspond à la composante exportée, utiliser \code{layout_file = "ByQRMatrix"}.}
+\item{layout_file}{export parameter. By default (\code{layout_file = "ByComponent"}) an Excel by component
+of the quality assessment matrix (modalities and/or values matrix) whose each sheet correspond to a QA_matrix. \code{layout_file = "ByQRMatrix"} to export 
+one file per QA_matrix.}
 
-\item{file_extension}{extension des fichiers (\code{".xls"} ou \code{".xlsx"}).}
+\item{file_extension}{the files' extension (\code{".xls"} or \code{".xlsx"}).}
 
-\item{layout}{composantes du bilan à exporter : voir \code{\link{export_xlsx.QA_matrix}} .}
+\item{layout}{QA_matrix' component to export. By default \code{layout = "all"}: the modalities matrix
+(\code{"modalities"}) and the values matrix (\code{"values"}) are export. To add 
+the additional variables of the values matrix to the modalities matrix, use \code{layout = "combined"}.}
 
-\item{...}{autres paramètres de la fonction \code{\link{export_xlsx.QA_matrix}}.}
+\item{...}{other parameters of the \code{\link{export_xlsx.QA_matrix}} function.}
 }
 \description{
-Permet d'exporter dans des fichiers Excel une liste de bilan qualité
+Function to export a list of quality assessment matrix  (\code{mQA_matrix}) to an Excel file.
 }
 \seealso{
 Other QA_matrix functions: \code{\link{compute_score}},

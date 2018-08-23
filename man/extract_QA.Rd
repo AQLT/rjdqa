@@ -56,7 +56,7 @@ Le résultat de cette fonction est un objet \code{\link{QA_matrix}} qui est une 
 \dontrun{
 QA <- extract_QA()
 print(QA)
-# Pour extraire la matrice des modalitÃ©s :
+# Pour extraire la matrice des modalités :
 QA$modalities
 # Ou :
 QA[["modalities"]]

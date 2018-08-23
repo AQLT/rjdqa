@@ -24,7 +24,7 @@ Pour les objets \code{mQA_matrix} il s'agit d'une liste de scores (\code{NULL} o
 QR <- extract_QR()
 mQR <- mQA_matrix(QR, compute_score(QR))
 extract_score(QR) # NULL
-extract_score(mQR) # liste dont le premier Ã©lÃ©ment est NULL
+extract_score(mQR) # liste dont le premier élément est NULL
 }
 }
 \seealso{
