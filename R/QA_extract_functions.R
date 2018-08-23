@@ -1,13 +1,13 @@
-#' Extraction d'un bilan qualité
+#' Extract a quality assessment matrix
 #'
-#' Permet d'extraire un bilan qualité à partir du fichier CSV contenant la matrice des diagnostics.
+#' Functions to extracts a quality assessment matrix from a CSV file exported by JDemetra+ (or the JDemetra+ cruncher) or from a seasonal adjustment object create by the RJDemetra package.
 #'
-#' @param x fichier CSV contenant la matrice des diagnostics. S'il n'est pas spécifié une fenêtre s'ouvre
-#' pour sélectionner le fichier.
-#' @param series_name blabla
-#' @param sep séparateur de caractères utilisé dans le fichier csv (par défaut \code{sep = ";"})
-#' @param dec séparateur décimal utilisé dans le fichier csv (par défaut \code{dec = ","})
-#' @param ...  aaa
+#' @param x a CSV file containing the diagnostics matrix or a \code{SA} object. By default a dialog box opens to select a CSV file.
+#' @param sep the field separator character in the CSV file (\code{sep = ";"} by default).
+#' @param dec the character used in the file for decimal points (\code{dec = ","} by default).
+#' @param series_name The name of series for the \code{extract_QA.SA} method.
+#' By default the name of the \code{x} parameter is used.
+#' @param ... unused argument.
 #'
 #' @details La fonction permet d'extraire un bilan qualité à partir d'un fichier csv contenant l'ensemble des
 #' diagnostics (généralement fichier \emph{demetra_m.csv}).
@@ -28,12 +28,12 @@
 #'   calculer le score (si le calcul est fait).
 #'
 #' @encoding UTF-8
-#' @return Un objet de type \code{\link{QA_matrix}}.
+#' @return A \code{\link{QA_matrix}} object.
 #' @family QA_matrix functions
 #' @examples \dontrun{
 #' QA <- extract_QA()
-#' print(QA)
-#' # Pour extraire la matrice des modalités :
+#' QA
+#' # To extract the modalities' matrix:
 #' QA$modalities
 #' # Ou :
 #' QA[["modalities"]]
