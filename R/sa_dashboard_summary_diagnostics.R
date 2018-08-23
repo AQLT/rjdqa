@@ -115,5 +115,5 @@ plot.summary_diagnostics <- function(x, ...){
     plotrix::addtable2plot(0.5, 0.5,
                   table, bty = "o", display.rownames = TRUE, hlines = TRUE,
                   vlines = TRUE,bg = bg_color, xjust = 0.5, yjust = 0.5)
-    title("Summary of Key Diagnostics", line = -4)
+    title("Summary of Key Diagnostics", line = -3)
 }
