@@ -1,17 +1,24 @@
 Package: rjdqa
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Quality assessment for seasonnal adjustment
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(
+  person("Alain", "Quartier-la-Tente", role = c("aut", "cre"),
+                 email = "alain.quartier@yahoo.fr"))
+Description: Add-in to the RJdemetra package on seasonal adjustments.
+    It allows to produce quality assessments outputs (dashboards, quality matrix, etc.).
+License: EUPL
 Depends:
     R (>= 3.1.1),
-Imports:
     RJDemetra,
+Imports:
+    methods,
     plotrix,
-    zoo
+    XLConnect,
+    utils,
+    graphics,
+    stats
 Encoding: UTF-8
+URL: https://github.com/AQLT/rjdqa
 LazyData: true
+RoxygenNote: 6.0.1

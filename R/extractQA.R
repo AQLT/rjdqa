@@ -4,15 +4,17 @@
 #'
 #' @param x fichier CSV contenant la matrice des diagnostics. S'il n'est pas spécifié une fenêtre s'ouvre
 #' pour sélectionner le fichier.
+#' @param series_name blabla
 #' @param sep séparateur de caractères utilisé dans le fichier csv (par défaut \code{sep = ";"})
 #' @param dec séparateur décimal utilisé dans le fichier csv (par défaut \code{dec = ","})
+#' @param ...  aaa
 #'
 #' @details La fonction permet d'extraire un bilan qualité à partir d'un fichier csv contenant l'ensemble des
 #' diagnostics (généralement fichier \emph{demetra_m.csv}).
 #'
-#' Ce fichiers peut être obtenu en lançant le cruncher (\code{\link{cruncher}} ou \code{\link{cruncher_and_param}}) avec
+#' Ce fichiers peut être obtenu en lançant le cruncher (\code{{cruncher}} ou \code{{cruncher_and_param}}) avec
 #' l'ensemble des paramètres de base pour les paramètres à exporter et l'option \code{csv_layout = "vtable"} (par défaut)
-#' pour le format de sortie des fichiers csv (option de \code{\link{cruncher_and_param}} ou de \code{\link{create_param_file}}
+#' pour le format de sortie des fichiers csv (option de \code{{cruncher_and_param}} ou de \code{{create_param_file}}
 #' lors de la création du
 #' fichier de paramètres).
 #'
@@ -37,14 +39,133 @@
 #' QA[["modalities"]]
 #' }
 #' @export
-#' 
+#' @name extract_QA
+#' @rdname extract_QA
 extract_QA <- function(x, ...){
     UseMethod("extract_QA", x)
 }
-extract_QA.SA <- function(x){
+
+#' @name extract_QA
+#' @rdname extract_QA
+#' @export
+extract_QA.SA <- function(x, series_name, ...){
+    if(missing(series_name))
+        series_name <- deparse(substitute(sa_obj))
     
+    arima_tests <- arima_test(x)
+    frequency <- frequency(x$final$series[,"y"])
+    arima_model <- x$regarima$arma
+    arima_model <- sprintf("(%i,%i,%i)(%i,%i,%i)",
+                           arima_model["p"], arima_model["d"], arima_model["q"],
+                           arima_model["bp"], arima_model["bd"], arima_model["bq"])
+    
+    ############################################
+    ####### ARIMA residuals tests ##############
+    ############################################
+    arima_tests <- arima_tests[,c("skewness","kurtosis","mean","normality","lb","lb2")]
+    colnames(arima_tests) <- 
+        sprintf("residuals_%s",
+                c("skewness","kurtosis","mean",
+                  "normality","independency",
+                  "homoskedasticity"))
+    arima_tests[,  sprintf("%s_modality", colnames(arima_tests))] <-
+        cut(as.numeric(arima_tests),
+            breaks = c(0, 0.01, 0.1, 1),
+            labels = c("Bad", "Uncertain", "Good"),
+            right = FALSE)
+    ############################################
+    ####### Diagnostics  #######################
+    ############################################
+    res_tests <- get_residual_tests(x)
+    res_tests <- res_tests[,c("Cycle", "Seasonal", "Irregular", "TD & Hol.", "Others", "Total", 
+                              "Combined test", "Kruskall-Wallis", "Stability test", "Evolutive test", 
+                              "ResS_SA_QS", "ResS_SA_F", "ResS_I_QS", "ResS_I_F", "ResTD_SA_F", 
+                              "ResTD_I_F")]
+    colnames(res_tests) <- c("cycle_contrib_to_var", "seasonal_contrib_to_var", "irregular_contrib_to_var",
+                             "td_hol_contrib_to_var", "others_contrib_to_var", "total_contrib_to_var", 
+                             "combined_test", "combined_kw", "combined_stability_test", "combined_evolutive_test",
+                             "qs_residual_sa_on_sa","f_residual_sa_on_sa",
+                             "qs_residual_sa_on_i","f_residual_sa_on_i",
+                             "f_residual_td_on_sa", "f_residual_td_on_i")
+    res_tests[,sprintf("%s_modality",
+                       c("qs_residual_sa_on_sa","f_residual_sa_on_sa",
+                         "qs_residual_sa_on_i","f_residual_sa_on_i",
+                         "f_residual_td_on_sa", "f_residual_td_on_i"))] <- 
+        cut(as.numeric(res_tests[, c("qs_residual_sa_on_sa","f_residual_sa_on_sa",
+                                     "qs_residual_sa_on_i","f_residual_sa_on_i",
+                                     "f_residual_td_on_sa", "f_residual_td_on_i")]), 
+            breaks = c(0,0.001, 0.01, 0.05, 1),
+            labels = c("Severe", "Bad", "Uncertain", "Good"),
+            right = FALSE)
+    
+    ###########################################
+    ####### Decomposition  #####################
+    ############################################
+    decomposition <- get_decomposition_info(x)
+    colnames(decomposition) <- c("m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10", 
+                                       "q", "q_m2","henderson","IC_ratio","Seasonal_filter","global_MSR_ratio")
+    
+
+    decomposition[, sprintf("%s_modality", c("m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10", 
+                                             "q", "q_m2"))] <- 
+        cut(as.numeric(decomposition[,c("m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10", 
+                                        "q", "q_m2")]), 
+                                 breaks = c(0, 1, 2, Inf),
+                                 labels = c("Good", "Bad", "Severe"), right = FALSE)
+    
+    #############################################
+    
+    QA_global <- data.frame(series = series_name, frequency = frequency,
+                            arima_model = arima_model, arima_tests,
+                            decomposition, res_tests,
+                            stringsAsFactors = FALSE,row.names = NULL)
+    c("skewness","kurtosis","mean",
+      "normality","independency",
+      "homoskedasticity")
+    c("cycle_contrib_to_var", "seasonal_contrib_to_var", "irregular_contrib_to_var",
+      "td_hol_contrib_to_var", "others_contrib_to_var", "total_contrib_to_var", 
+      "combined_test", "combined_kw", "combined_stability_test", "combined_evolutive_test",
+      "qs_residual_sa_on_sa","f_residual_sa_on_sa",
+      "qs_residual_sa_on_i","f_residual_sa_on_i",
+      "f_residual_td_on_sa", "f_residual_td_on_i")
+    c("m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10", 
+      "q_value", "q_m2_value")
+    modalities_variables <- c("series", sprintf("%s_modality",c("qs_residual_sa_on_sa","f_residual_sa_on_sa",
+                              "qs_residual_sa_on_i","f_residual_sa_on_i",
+                              "f_residual_td_on_sa", "f_residual_td_on_i",
+                              "residuals_skewness","residuals_kurtosis","residuals_mean",
+                              "residuals_normality","residuals_independency",
+                              "residuals_homoskedasticity",
+                              "m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10", 
+                              "q", "q_m2")))
+    values_variables <- c("series", "qs_residual_sa_on_sa","f_residual_sa_on_sa",
+                          "qs_residual_sa_on_i","f_residual_sa_on_i",
+                          "f_residual_td_on_sa", "f_residual_td_on_i",
+                          "residuals_skewness","residuals_kurtosis","residuals_mean",
+                          "residuals_normality","residuals_independency",
+                          "residuals_homoskedasticity",
+                          "m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10", 
+                          "q", "q_m2",
+                          "henderson","IC_ratio","Seasonal_filter","global_MSR_ratio",
+                          "cycle_contrib_to_var", "seasonal_contrib_to_var", "irregular_contrib_to_var",
+                          "td_hol_contrib_to_var", "others_contrib_to_var", "total_contrib_to_var", 
+                          "combined_test", "combined_kw", "combined_stability_test", "combined_evolutive_test",
+                          "frequency","arima_model")
+
+    QA_modalities <- QA_global[,modalities_variables]
+    colnames(QA_modalities) <- gsub("_modality","",colnames(QA_modalities))
+    QA_values <- QA_global[,values_variables]
+    rownames(QA_modalities) <- rownames(QA_values) <- NULL
+    
+    QA_modalities[,-1] <- lapply(QA_modalities[,-1],factor,
+                                 levels = c("Good", "Uncertain", "Bad","Severe"), ordered = TRUE)
+    QA <- QA_matrix(modalities = QA_modalities, values = QA_values)
+    QA
 }
-extract_QA.default <- function(x, sep = ";", dec = ","){
+#' @name extract_QA
+#' @rdname extract_QA
+#' @export
+extract_QA.default <- function(x, sep = ";", dec = ",", ...){
     if(missing(x) || is.null(x)){
         if(Sys.info()[['sysname']] == "Windows"){
             x <- utils::choose.files(caption = "Sélectionner le fichier contenant la matrice des paramètres",
@@ -271,3 +392,11 @@ extractFrequency <- function(demetra_m){
         freq[which((nobs_compute[i,] == n[i]) | (nobs_compute[i,] + 1 == n[i]) | (nobs_compute[i,] - 1 == n[i]))[1]]
     }))
 }
+
+#' @importFrom RJDemetra x13 x13_spec
+#' @importFrom graphics arrows axis barplot box layout legend lines mtext par plot plot.new strwidth text title points
+#' @importFrom stats cor cycle deltat frequency lag na.omit pchisq pt sd start time ts ts.union window
+#' @importFrom utils as.roman head read.csv tail globalVariables head tail
+utils::globalVariables(c("TD1", "TD2", "TD3", "TD4", "TD5", "TD6", "TD7",
+                          "phi1", "phi2", "phi3", "phi4", "phi5", "phi6",
+                         "regarima_coefs","theta1", "theta2", "theta3", "theta4", "theta5", "theta6"))

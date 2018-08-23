@@ -1,7 +1,7 @@
 trading_day_pattern <- function(x){
     if(!all(c("preprocessing.model.tde_f") %in% names(x$user_defined))){
-        my_spec <- x13_spec(x)
-        x <- x13(x$final$series[,"y"], my_spec,userdefined = "preprocessing.model.tde_f")
+        my_spec <- RJDemetra::x13_spec(x)
+        x <- RJDemetra::x13(x$final$series[,"y"], my_spec,userdefined = "preprocessing.model.tde_f")
     }
     
     reg_coefficients <- x$regarima$regression.coefficients
@@ -45,7 +45,8 @@ trading_day_pattern <- function(x){
     result
 }
 
-plot.trading_day_pattern <- function(x,...){
+plot.trading_day_pattern <- function(x, decimal.mark = getOption("OutDec"),
+                                     ...){
     if(is.null(x$evolution)){
         plot(0,type='n',axes=FALSE,main="Moving Holiday Pattern")
         plot.new()
@@ -61,13 +62,14 @@ plot.trading_day_pattern <- function(x,...){
     }
     data_table$Evolution <- sprintf("%+.1f%%",data_table$Evolution)
     
+    mai <- par("mai")  
     barplot(x$estimated_values, names.arg=names(x$estimated_values),ann=FALSE,
             main = "Trading Day Pattern")
     par(mai = c(0,0,0,0))
     plot(0,type='n',axes=FALSE,ann = F, xlim = c(0,1), ylim = c(0,1))
-    addtable2plot(0.5, 0.5,
+    plotrix::addtable2plot(0.5, 0.5,
                   data_table[-3,, drop=FALSE], bty = "o", display.rownames = TRUE, hlines = TRUE,
                   display.colnames = FALSE,
                   vlines = TRUE,title = title, xjust = 0.5, yjust = 0.5)
-    par(mai = c(1.02, 0.82, 0.82, 0.42))
+    par(mai = mai)
 }

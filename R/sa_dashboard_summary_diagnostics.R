@@ -28,7 +28,7 @@ summary_diagnostics.X13<- function(x, digits = 2, decimal.mark = getOption("OutD
     moving_seasonality_c <- cut(moving_seasonality,
                                 breaks = c(0, 0.05, 0.1, Inf),
                                 labels = FALSE, right = FALSE)
-    moving_seasonality_c <- (3:1)[moving_seasonality_c]
+    # moving_seasonality_c <- (3:1)[moving_seasonality_c]
     row.names <- c("Adjustability (M7)", "Residual Seasonality (qs-test on sa)",
                    "Residual Seasonality (f-test on sa)",
                    "Residual Trading-days effects (f-test on sa)",
@@ -112,7 +112,7 @@ plot.summary_diagnostics <- function(x, ...){
     table <- x[,1:2]
     rownames(table) <- row_names
     plot(1, type="n", xlab="", ylab="", xlim = c(0,1), ylim = c(0,1),axes=FALSE)
-    addtable2plot(0.5, 0.5,
+    plotrix::addtable2plot(0.5, 0.5,
                   table, bty = "o", display.rownames = TRUE, hlines = TRUE,
                   vlines = TRUE,bg = bg_color, xjust = 0.5, yjust = 0.5)
     title("Summary of Key Diagnostics", line = -4)

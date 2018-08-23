@@ -6,39 +6,41 @@ recent_history <- function(x, nb_last_obs = 24){
     result
 }
 
-plot.recent_history <- function(x, ...){
-    x <- recent_history(mysa)
+plot.recent_history <- function(x,
+                                raw_color = "#33A02C",
+                                sa_color = "#E31A1C",
+                                trend_color = "black", ...){
     plot_date <- as.numeric(time(x))
     plot_date_lab <- time_to_date(x)
     freq <- frequency(x)
     if(freq == 12){
-        plot_date_lab <- format(plot_date_lab, format = "%b %Y")
+        plot_date_lab <- format(plot_date_lab, format = "%b %y")
     }else if(freq == 4){
         plot_date_lab <- sprintf("%s-%s",
                                  quarters(plot_date_lab),
-                                 format(plot_date_lab, format = "%Y"))
+                                 format(plot_date_lab, format = "%y"))
     }else{
         plot_date_lab <- as.character(plot_date_lab)
     }
 
     # par(mar = c(6,4,1,1))
     plot(x[,"y"],
-         type = "p", pch = 4, col = "green",
+         type = "p", pch = 4, col = raw_color,
          xlab = NULL, ylab = NULL,
          xaxt = "n", yaxt = "n")
     lines(x[,"t"],
-          lty = c("dashed"), col = "black")
+          lty = c("dashed"), col = trend_color)
     lines(x[,"sa"],
-          lty = c("solid"), col = "red")
+          lty = c("solid"), col = sa_color)
     # axis(1, at = plot_date,
     #      labels = plot_date_lab, las = 2, cex.axis = 1)
     axis(1, at = plot_date,
          labels = FALSE)
     text(x = plot_date, y = par()$usr[3] - 0.03*(par()$usr[4] - par()$usr[3]),
-         labels = plot_date_lab, srt = 30, adj = 1, xpd = TRUE)
+         labels = plot_date_lab, srt = 40, adj = 1, xpd = TRUE)
     axis(2,cex.axis=1)
     legend("topleft", legend = c("Series", "Trend","Seasonally adjusted"),
-           col = c("green", "black", "red"),
+           col = c(raw_color, trend_color, sa_color),
            lty = c("dashed","dashed","solid"),
            pch = c(4, NA, NA), bty="n",
            horiz=FALSE

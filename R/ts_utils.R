@@ -23,7 +23,4 @@ time_to_date <- function(x){
     dates <- as.Date(dates)
     dates
 }
-sprintf("%08d", c(25499,25500,25501,25502,25503,25504))
-class( c(25499,25500,25501,25502,25503,25504))
-class(months)
-months+1
+
