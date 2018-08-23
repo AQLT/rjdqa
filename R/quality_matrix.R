@@ -1,5 +1,7 @@
 #' @export
 quality_matrix <- function(x, series_name){
+    if(missing(series_name))
+        series_name <- deparse(substitute(x))
     if(!all(c("preprocessing.residuals.nruns",
               "preprocessing.residuals.lruns") %in% names(x$user_defined))){
         my_spec <- RJDemetra::x13_spec(x)
@@ -7,8 +9,7 @@ quality_matrix <- function(x, series_name){
                  userdefined = c("preprocessing.residuals.nruns",
                                  "preprocessing.residuals.lruns"))
     }
-    if(missing(series_name))
-        series_name <- deparse(substitute(sa_obj))
+
     
     dates <- time_to_date(x$final$series)
     span <- x$regarima$model$spec_rslt["T.span"]
@@ -33,9 +34,9 @@ quality_matrix <- function(x, series_name){
     arima_orders <- arima_order_coef(x, regarima_coefs)
     
     cste <- get_cste(x)
-    LY <- get_LY(x)
-    MH <- get_MH(x)
-    TD <- get_TD(x)
+    LY <- get_LY(x, regarima_coefs)
+    MH <- get_MH(x, regarima_coefs)
+    TD <- get_TD(x, regarima_coefs)
     n_outliers <- n_out(regarima_coefs)
     ic <- t(x$regarima$loglik[c("aic", "aicc", "bic", "bicc"), , drop = FALSE])
     arima_tests <- arima_test(x)
@@ -234,7 +235,7 @@ arima_test <- function(x){
 # }
 
 
-get_MH <- function(x){
+get_MH <- function(x, regarima_coefs){
     if(x$regarima$model$spec_rslt["Easter"] == TRUE){
         MH_type <- grep("^Easter \\[.*\\]$", rownames(regarima_coefs),value = TRUE)
         if(length(MH_type) == 0){
@@ -262,7 +263,7 @@ get_cste <- function(x){
     names(cste) <- c("Cste", "Cste (Pvalue)")
     cste
 }
-get_LY <- function(x){
+get_LY <- function(x, regarima_coefs){
     if(x$regarima$model$spec_rslt["Leap year"] == TRUE){
         if("Length of period" %in% rownames(regarima_coefs)){
             LY <- data.frame("Length of period",
@@ -285,7 +286,7 @@ get_LY <- function(x){
     LY
 }
 
-get_TD <- function(x){
+get_TD <- function(x, regarima_coefs){
     td_reg <- grep("(^Monday$)|(^Tuesday$)|(^Wednesday$)|(^Thursday$)|(^Friday$)|(^Saturday$)|(^Week days$)",
                    rownames(regarima_coefs),value = TRUE)
     

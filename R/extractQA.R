@@ -50,7 +50,7 @@ extract_QA <- function(x, ...){
 #' @export
 extract_QA.SA <- function(x, series_name, ...){
     if(missing(series_name))
-        series_name <- deparse(substitute(sa_obj))
+        series_name <- deparse(substitute(x))
     
     arima_tests <- arima_test(x)
     frequency <- frequency(x$final$series[,"y"])
