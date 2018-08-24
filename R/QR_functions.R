@@ -2,7 +2,7 @@
 #'
 #' Permet de calculer un score global à partir d'un bilan qualité
 #'
-#' @param x objet de type \code{QA_matrix} ou \code{mQA_matrix}.
+#' @param x objet de type \code{QR_matrix} ou \code{mQR_matrix}.
 #' @param score_pond formule utilisée pour calculer le score global
 #' @param modalities modalités triées par leur ordre d'importance dans le calcul du score (voir détails).
 #' @param normalize_score_value chiffre indiquant la valeur de référence pour la normalisation des pondérations utilisées lors du
@@ -46,18 +46,18 @@
 #' de la variable "m7" alors la valeur correspondante de le variable 1_highest_score sera égale à
 #' "m7" et celle des autres variables *i*_highest_score seront vides.
 #' @encoding UTF-8
-#' @return Un objet de type \code{\link{QA_matrix}} ou \code{\link{mQA_matrix}}.
+#' @return Un objet de type \code{\link{QR_matrix}} ou \code{\link{mQR_matrix}}.
 #' @examples \dontrun{
 #' QR <- extract_QR()
 #' QR <- compute_score(QR,n_contrib_score = 2)
 #' QR
 #' QR$modalities$score
 #' }
-#' @family QA_matrix functions
+#' @family QR_matrix functions
 #' @name compute_score
 #' @rdname compute_score
 #' @export
-compute_score.QA_matrix <- function(x,
+compute_score.QR_matrix <- function(x,
                                     score_pond = c(qs_residual_sa_on_sa = 6.66,
                                                    f_residual_sa_on_sa = 6.68,
                                                    combined_residual_sa_on_sa = 6.66,
@@ -79,20 +79,20 @@ compute_score.QA_matrix <- function(x,
                                     ...){
     # score_formula_exp <- as.expression(substitute(score_formula))
 
-    QA_modalities <- x$modalities
-    QA_modalities[,] <- lapply(QA_modalities, function(x){
+    QR_modalities <- x$modalities
+    QR_modalities[,] <- lapply(QR_modalities, function(x){
         as.numeric(factor(x, levels = modalities, ordered = TRUE)) - 1
     })
     #On rajoute une ligne qui a la note maximale pour normalizer
-    QA_modalities <- rbind(QA_modalities,
+    QR_modalities <- rbind(QR_modalities,
                            length(modalities) - 1)
-    if(!all(names(score_pond) %in% colnames(QA_modalities)))
+    if(!all(names(score_pond) %in% colnames(QR_modalities)))
         stop("Il manque des variables : vérifiez le paramètre score_pond")
-    QA_modalities <- QA_modalities[, names(score_pond)]
+    QR_modalities <- QR_modalities[, names(score_pond)]
     for(nom_var in names(score_pond)){
-        QA_modalities[, nom_var] <- QA_modalities[, nom_var] * score_pond[nom_var]
+        QR_modalities[, nom_var] <- QR_modalities[, nom_var] * score_pond[nom_var]
     }
-    score <- base::rowSums(QA_modalities,
+    score <- base::rowSums(QR_modalities,
                            na.rm = na.rm)
 
     total_pond_id <- length(score)
@@ -118,12 +118,12 @@ compute_score.QA_matrix <- function(x,
     if(!missing(n_contrib_score) &&
        is.numeric(n_contrib_score) &&
        n_contrib_score >= 1){
-        QA_modalities <- QA_modalities[- total_pond_id, ]
+        QR_modalities <- QR_modalities[- total_pond_id, ]
         n_contrib_score <- round(min(n_contrib_score, length(score_pond)))
 
-        contrib <- t(sapply(1:nrow(QA_modalities),function(i){
-            ligne_i <- QA_modalities[i,]
-            res <- colnames(QA_modalities)[order(ligne_i,
+        contrib <- t(sapply(1:nrow(QR_modalities),function(i){
+            ligne_i <- QR_modalities[i,]
+            res <- colnames(QR_modalities)[order(ligne_i,
                                                  decreasing = TRUE,
                                                  na.last = TRUE)]
             ligne_i <- ligne_i[,res]
@@ -145,8 +145,8 @@ compute_score.QA_matrix <- function(x,
     return(x)
 }
 #' @export
-compute_score.mQA_matrix <- function(x, ...){
-    result <- mQA_matrix(lapply(x, compute_score, ...))
+compute_score.mQR_matrix <- function(x, ...){
+    result <- mQR_matrix(lapply(x, compute_score, ...))
     return(result)
 }
 #' @export
@@ -155,7 +155,7 @@ compute_score <- function(x, ...){
 }
 #' @export
 compute_score.default <- function(x,  ...){
-    stop("Il faut un objet de type QA_matrix ou mQA_matrix")
+    stop("Il faut un objet de type QR_matrix ou mQR_matrix")
 }
 
 
@@ -163,15 +163,15 @@ compute_score.default <- function(x,  ...){
 #'
 #' Permet de pondérer un score déjà calculé en fonction des variables.
 #'
-#' @param x objet de type \code{QA_matrix} ou \code{mQA_matrix}.
+#' @param x objet de type \code{QR_matrix} ou \code{mQR_matrix}.
 #' @param pond pondération à appliquer au score. Il peut s'agir d'un nombre, d'un vecteur de nombres, du nom
-#' d'une des variables du bilan qualité ou d'une liste de pondérations pour les objets \code{mQA_matrix}.
+#' d'une des variables du bilan qualité ou d'une liste de pondérations pour les objets \code{mQR_matrix}.
 #' @examples \dontrun{
 #' QR <- extract_QR()
 #' QR <- compute_score(QR)
 #' weighted_score(QR, 2) # Tous les scores sont multipliés par 2
 #' }
-#' @family QA_matrix functions
+#' @family QR_matrix functions
 #' @return L'objet en entrée avec le score recalculé
 #' @name weighted_score
 #' @rdname weighted_score
@@ -181,10 +181,10 @@ weighted_score <- function(x, pond = 1){
 }
 #' @export
 weighted_score.default <- function(x, pond = 1){
-    stop("Il faut un objet de type QA_matrix ou mQA_matrix")
+    stop("Il faut un objet de type QR_matrix ou mQR_matrix")
 }
 #' @export
-weighted_score.QA_matrix <- function(x, pond = 1){
+weighted_score.QR_matrix <- function(x, pond = 1){
     if(is.character(pond)){
         if(is.na(match(pond, colnames(x$values))))
             stop("La variable ",pond, " n'existe pas")
@@ -199,7 +199,7 @@ weighted_score.QA_matrix <- function(x, pond = 1){
     return(x)
 }
 #' @export
-weighted_score.mQA_matrix <- function(x, pond = 1){
+weighted_score.mQR_matrix <- function(x, pond = 1){
     if(!is.list(pond)){
         result <- lapply(x, weighted_score, pond = pond)
     }else{
@@ -210,15 +210,15 @@ weighted_score.mQA_matrix <- function(x, pond = 1){
 
     }
     names(result) <- names(x)
-    result <- mQA_matrix(result)
+    result <- mQR_matrix(result)
     return(result)
 }
 
-#' Tri des objets QA_matrix et mQA_matrix
+#' Tri des objets QR_matrix et mQR_matrix
 #'
 #' Permet de trier les bilans qualité en fonction d'une ou plusieurs variables.
 #'
-#' @param x objet de type \code{QA_matrix} ou \code{mQA_matrix}.
+#' @param x objet de type \code{QR_matrix} ou \code{mQR_matrix}.
 #' @param decreasing booléen indiquant si les bilans qualité doivent être triés par ordre croissant ou décroissant.
 #' Par défaut le tri est effectué par ordre croissant.
 #' @param sort_variables variables à utiliser pour le tri qui sont présentes dans les tables des modalités.
@@ -228,11 +228,11 @@ weighted_score.mQA_matrix <- function(x, pond = 1){
 #' QR <- compute_score(extract_QR())
 #' sort(QR, sort_variables = "score") #Pour trier par ordre croissant sur le score
 #' }
-#' @family QA_matrix functions
+#' @family QR_matrix functions
 #' @name sort
 #' @rdname sort
 #' @export
-sort.QA_matrix <- function(x, decreasing = FALSE, sort_variables = "score", ...){
+sort.QR_matrix <- function(x, decreasing = FALSE, sort_variables = "score", ...){
     modalities <- x$modalities
     if(!all(!is.na(match(sort_variables,colnames(modalities)))))
         stop("Il y a une erreur dans les noms des variables")
@@ -244,10 +244,10 @@ sort.QA_matrix <- function(x, decreasing = FALSE, sort_variables = "score", ...)
 }
 #' @rdname sort
 #' @export
-sort.mQA_matrix <- function(x, decreasing = FALSE, sort_variables = "score", ...){
+sort.mQR_matrix <- function(x, decreasing = FALSE, sort_variables = "score", ...){
     result <- lapply(x, sort, sort_variables = sort_variables,
                      decreasing = decreasing, ...)
-    result <- mQA_matrix(result)
+    result <- mQR_matrix(result)
     return(result)
 }
 
@@ -255,20 +255,20 @@ sort.mQA_matrix <- function(x, decreasing = FALSE, sort_variables = "score", ...
 
 #' Extraction du score
 #'
-#' Permet d'extraire le score des objets \code{QA_matrix} ou \code{mQA_matrix}.
+#' Permet d'extraire le score des objets \code{QR_matrix} ou \code{mQR_matrix}.
 #'
-#' @param x objet de type \code{QA_matrix} ou \code{mQA_matrix}.
+#' @param x objet de type \code{QR_matrix} ou \code{mQR_matrix}.
 #' @param format_output chaîne de caractères indiquant le format de l'objet en sortie :
 #' soit un \code{data.frame} soit un \code{vector}.
-#' @details Pour les objets \code{QA_matrix}, le score renvoyé est soit l'objet \code{NULL} si aucun score n'a été calculé ou un vecteur.
-#' Pour les objets \code{mQA_matrix} il s'agit d'une liste de scores (\code{NULL} ou un vecteur).
+#' @details Pour les objets \code{QR_matrix}, le score renvoyé est soit l'objet \code{NULL} si aucun score n'a été calculé ou un vecteur.
+#' Pour les objets \code{mQR_matrix} il s'agit d'une liste de scores (\code{NULL} ou un vecteur).
 #' @examples \dontrun{
 #' QR <- extract_QR()
-#' mQR <- mQA_matrix(QR, compute_score(QR))
+#' mQR <- mQR_matrix(QR, compute_score(QR))
 #' extract_score(QR) # NULL
 #' extract_score(mQR) # liste dont le premier élément est NULL
 #' }
-#' @family QA_matrix functions
+#' @family QR_matrix functions
 #' @export
 extract_score <- function(x, format_output = c("data.frame", "vector")){
     UseMethod("extract_score", x)
@@ -276,10 +276,10 @@ extract_score <- function(x, format_output = c("data.frame", "vector")){
 
 #' @export
 extract_score.default <- function(x, format_output){
-    stop("Il faut un objet de type QA_matrix ou mQA_matrix")
+    stop("Il faut un objet de type QR_matrix ou mQR_matrix")
 }
 #' @export
-extract_score.QA_matrix <- function(x, format_output = c("data.frame", "vector")){
+extract_score.QR_matrix <- function(x, format_output = c("data.frame", "vector")){
     score <- x$modalities$score
     if(is.null(score))
         return(NULL)
@@ -295,16 +295,16 @@ extract_score.QA_matrix <- function(x, format_output = c("data.frame", "vector")
     return(res)
 }
 #' @export
-extract_score.mQA_matrix <- function(x, format_output = c("data.frame", "vector")){
+extract_score.mQR_matrix <- function(x, format_output = c("data.frame", "vector")){
     return(lapply(x,extract_score, format_output = format_output))
 }
 
-#' Manipulate indicators of QA_matrix or mQA_matrix 
+#' Manipulate indicators of QR_matrix or mQR_matrix 
 #'
 #' Functions to remove indicators (\code{remove_indicators}) or to retain indicators (\code{retain_indicators}) 
-#' \code{QA_matrix} or \code{mQA_matrix}. The series' name ("series" columns) cannot be removed.
+#' \code{QR_matrix} or \code{mQR_matrix}. The series' name ("series" columns) cannot be removed.
 #'
-#' @param x \code{QA_matrix} or \code{mQA_matrix} objects.
+#' @param x \code{QR_matrix} or \code{mQR_matrix} objects.
 #' @param ... names of the indicators to remove (or retain).
 #' @examples \dontrun{
 #' QR <- compute_score(extract_QR())
@@ -312,19 +312,19 @@ extract_score.mQA_matrix <- function(x, format_output = c("data.frame", "vector"
 #' retain_indicators(QR,c("score","m7")) #Equivalent
 #' score(remove_indicator(QR,"score")) # To remove the score
 #' }
-#' @family var QA_matrix manipulation
-#' @name QA_var_manipulation
-#' @rdname QA_var_manipulation
+#' @family var QR_matrix manipulation
+#' @name QR_var_manipulation
+#' @rdname QR_var_manipulation
 #' @export
 remove_indicators <- function(x, ...){
     UseMethod("remove_indicators", x)
 }
 #' @export
 remove_indicators.default <- function(x, ...){
-    stop("Il faut un objet de type QA_matrix ou mQA_matrix")
+    stop("Il faut un objet de type QR_matrix ou mQR_matrix")
 }
 #' @export
-remove_indicators.QA_matrix <- function(x, ...){
+remove_indicators.QR_matrix <- function(x, ...){
     indicators <- c(...)
     indicators <- setdiff(indicators, "series")
 
@@ -339,20 +339,20 @@ remove_indicators.QA_matrix <- function(x, ...){
     return(x)
 }
 #' @export
-remove_indicators.mQA_matrix <- function(x, ...){
-    return(mQA_matrix(lapply(x, remove_indicators, ...)))
+remove_indicators.mQR_matrix <- function(x, ...){
+    return(mQR_matrix(lapply(x, remove_indicators, ...)))
 }
-#' @rdname QA_var_manipulation
+#' @rdname QR_var_manipulation
 #' @export
 retain_indicators <- function(x, ...){
     UseMethod("retain_indicators", x)
 }
 #' @export
 retain_indicators.default <- function(x, ...){
-    stop("Il faut un objet de type QA_matrix ou mQA_matrix")
+    stop("Il faut un objet de type QR_matrix ou mQR_matrix")
 }
 #' @export
-retain_indicators.QA_matrix <- function(x, ...){
+retain_indicators.QR_matrix <- function(x, ...){
     indicators <- c(...)
     indicators <- c("series", indicators)
 
@@ -367,17 +367,17 @@ retain_indicators.QA_matrix <- function(x, ...){
     return(x)
 }
 #' @export
-retain_indicators.mQA_matrix <- function(x, ...){
-    return(mQA_matrix(lapply(x, retain_indicators, ...)))
+retain_indicators.mQR_matrix <- function(x, ...){
+    return(mQR_matrix(lapply(x, retain_indicators, ...)))
 }
 
 
-#' Combiner par ligne des objets QA_matrix
+#' Combiner par ligne des objets QR_matrix
 #'
-#' Permet de combiner plusieurs objets \code{QA_matrix} en combinant par ligne les paramètres \code{modalities}
+#' Permet de combiner plusieurs objets \code{QR_matrix} en combinant par ligne les paramètres \code{modalities}
 #' et \code{values}.
 #'
-#' @param ... objets \code{QA_matrix} à combiner.
+#' @param ... objets \code{QR_matrix} à combiner.
 #' @param check_formula booléen indiquant s'il faut vérifier la cohérence dans les formule du calcul du score.
 #' Par défaut \code{check_formula = TRUE} : la fonction renvoie une erreur si des scores sont calculés avec des formules différentes.
 #' Si \code{check_formula = FALSE} alors il n'y a pas de vérification et le paramètre \code{score_formula} de l'objet
@@ -389,49 +389,49 @@ retain_indicators.mQA_matrix <- function(x, ...){
 #' rbind(QR1, QR2) # Une erreur est renvoyée
 #' rbind(QR1, QR2, check_formula = FALSE)
 #' }
-#' @family QA_matrix functions
+#' @family QR_matrix functions
 #' @export
-rbind.QA_matrix <- function(..., check_formula = TRUE){
-    list_QA_matrix <- list(...)
-    if(length(list_QA_matrix) == 0)
-        return(QA_matrix())
+rbind.QR_matrix <- function(..., check_formula = TRUE){
+    list_QR_matrix <- list(...)
+    if(length(list_QR_matrix) == 0)
+        return(QR_matrix())
     if(check_formula){
-        list_formula <- sapply(list_QA_matrix,function(x){
-            if(! is.QA_matrix(x))
-                stop("Tous les objets doivent être de type QA_matrix", call. = FALSE)
+        list_formula <- sapply(list_QR_matrix,function(x){
+            if(! is.QR_matrix(x))
+                stop("Tous les objets doivent être de type QR_matrix", call. = FALSE)
             x$score_formula
         })
         list_formula_unique <- unique(list_formula)
-        if( length(list_formula) != length(list_QA_matrix) | length(list_formula_unique) !=1)
+        if( length(list_formula) != length(list_QR_matrix) | length(list_formula_unique) !=1)
             stop("Les formules de calcul du score doivent être identiques")
         if(is.list(list_formula_unique)){
             score_formula <- NULL
         }else{
-            score_formula <- list_QA_matrix[[1]]$formula
+            score_formula <- list_QR_matrix[[1]]$formula
         }
     }else{
         score_formula <- NULL
     }
 
     modalities <- do.call(rbind,
-                          lapply(list_QA_matrix, function(x){
-                              if(! is.QA_matrix(x))
-                                  stop("Tous les objets doivent être de type QA_matrix",call. = FALSE)
+                          lapply(list_QR_matrix, function(x){
+                              if(! is.QR_matrix(x))
+                                  stop("Tous les objets doivent être de type QR_matrix",call. = FALSE)
                               x$modalities
                           }))
     values <- do.call(rbind,
-                      lapply(list_QA_matrix, function(x) x$values))
-    QR <- QA_matrix(modalities = modalities, values = values,
+                      lapply(list_QR_matrix, function(x) x$values))
+    QR <- QR_matrix(modalities = modalities, values = values,
                     score_formula = score_formula)
     return(QR)
 }
 
-#' Ajout d'un indicateur dans les objets QA_matrix
+#' Ajout d'un indicateur dans les objets QR_matrix
 #'
-#' Permet de rajouter un indicateur dans les objets \code{QA_matrix}. Le nom des séries
+#' Permet de rajouter un indicateur dans les objets \code{QR_matrix}. Le nom des séries
 #' (colonne "series") ne peut être enlevé.
 #'
-#' @param x objet de type \code{QA_matrix} ou \code{mQA_matrix}.
+#' @param x objet de type \code{QR_matrix} ou \code{mQR_matrix}.
 #' @param indicator un \code{vector} ou un \code{data.frame} (voir détails).
 #' @param variable_name chaîne de caractères contenant les noms des nouvelles variables.
 #' @param ... autres paramètres de la fonction \code{\link[base]{merge}}.
@@ -448,17 +448,17 @@ rbind.QA_matrix <- function(..., check_formula = TRUE){
 #'  * dans le cas d'un \code{data.frame}, il devra contenir une colonne "series" avec les noms des séries
 #'  correspondantes.
 #'
-#' @family var QA_matrix manipulation
+#' @family var QR_matrix manipulation
 #' @export
 add_indicator <- function(x, indicator, variable_name, ...){
     UseMethod("add_indicator", x)
 }
 #' @export
 add_indicator.default <- function(x, indicator, variable_name, ...){
-    stop("Il faut un objet de type QA_matrix ou mQA_matrix")
+    stop("Il faut un objet de type QR_matrix ou mQR_matrix")
 }
 #' @export
-add_indicator.QA_matrix <- function(x, indicator, variable_name, ...){
+add_indicator.QR_matrix <- function(x, indicator, variable_name, ...){
     if(is.vector(indicator)){
         if(is.null(names(indicator)))
             stop("Le vecteur doit être nommé !")
@@ -494,8 +494,8 @@ add_indicator.QA_matrix <- function(x, indicator, variable_name, ...){
     return(x)
 }
 #' @export
-add_indicator.mQA_matrix <- function(x, indicator, variable_name, ...){
-    return(mQA_matrix(lapply(x, add_indicator, variable_name = variable_name, ...)))
+add_indicator.mQR_matrix <- function(x, indicator, variable_name, ...){
+    return(mQR_matrix(lapply(x, add_indicator, variable_name = variable_name, ...)))
 }
 
 #' Re-encodage en modalités des variables
@@ -503,14 +503,14 @@ add_indicator.mQA_matrix <- function(x, indicator, variable_name, ...){
 #' Permet d'encoder des variables présentes dans la matrice des valeurs en des modalités
 #' qui seront présentent dans la matrice des modalités.
 #'
-#' @param x objet de type \code{QA_matrix} ou \code{mQA_matrix}.
+#' @param x objet de type \code{QR_matrix} ou \code{mQR_matrix}.
 #' @param variable_name vecteur de chaînes de caractères contenant les noms des
 #'  variables à recoder.
 #' @param breaks voir fonction \code{\link[base]{cut}}.
 #' @param labels voir fonction \code{\link[base]{cut}}.
 #' @param ... autres paramètres de la fonction \code{\link[base]{cut}}.
 #'
-#' @family var QA_matrix manipulation
+#' @family var QR_matrix manipulation
 #' @export
 recode_indicator_num <- function(x,
                                  variable_name,
@@ -521,10 +521,10 @@ recode_indicator_num <- function(x,
 }
 #' @export
 recode_indicator_num.default <- function(x, variable_name, breaks, labels, ...){
-    stop("Il faut un objet de type QA_matrix ou mQA_matrix")
+    stop("Il faut un objet de type QR_matrix ou mQR_matrix")
 }
 #' @export
-recode_indicator_num.QA_matrix <- function(x,
+recode_indicator_num.QR_matrix <- function(x,
                                            variable_name,
                                            breaks = c(0, 0.01, 0.05,  0.1, 1),
                                            labels =  c("Good", "Uncertain", "Bad", "Severe"),
@@ -546,12 +546,12 @@ recode_indicator_num.QA_matrix <- function(x,
     return(x)
 }
 #' @export
-recode_indicator_num.mQA_matrix <- function(x,
+recode_indicator_num.mQR_matrix <- function(x,
                                             variable_name,
                                             breaks = c(0, 0.01, 0.05,  0.1, 1),
                                             labels =  c("Good", "Uncertain", "Bad", "Severe"),
                                             ...){
-    return(mQA_matrix(lapply(x,
+    return(mQR_matrix(lapply(x,
                              recode_indicator_num,
                              variable_name = variable_name,
                              breaks = breaks,

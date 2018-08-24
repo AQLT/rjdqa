@@ -1,10 +1,10 @@
 #' Objets bilan qualité
 #'
-#' \code{QA_matrix} permet de créer un objet de type \code{QA_matrix} contenant un bilan qualité.
+#' \code{QR_matrix} permet de créer un objet de type \code{QR_matrix} contenant un bilan qualité.
 #'
-#' \code{mQA_matrix} permet de créer un objet de type \code{mQA_matrix} qui est une liste de bilans qualité (donc d'objets \code{QA_matrix}).
+#' \code{mQR_matrix} permet de créer un objet de type \code{mQR_matrix} qui est une liste de bilans qualité (donc d'objets \code{QR_matrix}).
 #'
-#' \code{is.QA_matrix} et \code{is.mQA_matrix} permettent de tester si un objet est un bilan qualité ou une liste de bilans qualité.
+#' \code{is.QR_matrix} et \code{is.mQR_matrix} permettent de tester si un objet est un bilan qualité ou une liste de bilans qualité.
 #'
 #'
 #' @param modalities un \code{data.frame} contenant les modalités (Good, Bad, etc.)
@@ -12,9 +12,9 @@
 #' @param values un \code{data.frame} contenant les valeurs (p-valeurs des tests, statistiques, etc.)
 #' associées aux variables. Peut donc contenir plus de variables que le paramètre \code{modalities}.
 #' @param score_formula formule utilisée pour calculer le score global (s'il existe).
-#' @param x un objet de type \code{QA_matrix}, \code{mQA_matrix} ou une liste d'objets \code{QA_matrix}.
+#' @param x un objet de type \code{QR_matrix}, \code{mQR_matrix} ou une liste d'objets \code{QR_matrix}.
 #' @param ... des objets du même type que \code{x}.
-#' @details Un objet  de type \code{\link{QA_matrix}} est une liste de trois paramètres :
+#' @details Un objet  de type \code{\link{QR_matrix}} est une liste de trois paramètres :
 #' * le paramètre \code{modalities} est un \code{data.frame} contenant un ensemble de variables sous forme catégorielle
 #'   (par défaut : Good, Uncertain, Bad, Severe).
 #' * le paramètre \code{values}  est un \code{data.frame} contenant les valeurs associées aux indicateurs présents dans
@@ -23,64 +23,64 @@
 #' * le paramètre \code{score_formula} contient la formule utilisée pour calculer le score (une fois le calcul réalisé).
 #'
 #' @encoding UTF-8
-#' @name QA_matrix
-#' @rdname QA_matrix
+#' @name QR_matrix
+#' @rdname QR_matrix
 #' @export
-QA_matrix <- function(modalities = NULL, values = NULL, score_formula = NULL){
-    QA <- list(modalities = modalities, values = values,
+QR_matrix <- function(modalities = NULL, values = NULL, score_formula = NULL){
+    QR <- list(modalities = modalities, values = values,
                score_formula = score_formula)
-    class(QA) <- c("QA_matrix")
-    QA
+    class(QR) <- c("QR_matrix")
+    QR
 }
 #' @export
-#' @rdname QA_matrix
-mQA_matrix <- function(x = list(), ...){
-    UseMethod("mQA_matrix", x)
+#' @rdname QR_matrix
+mQR_matrix <- function(x = list(), ...){
+    UseMethod("mQR_matrix", x)
 }
-#' @rdname QA_matrix
+#' @rdname QR_matrix
 #' @export
-is.QA_matrix <- function(x){
-    inherits(x, "QA_matrix")
-}
-#' @export
-mQA_matrix.QA_matrix <- function(x = QA_matrix(), ...){
-    mQA <- c(list(x), list(...))
-    class(mQA) <- "mQA_matrix"
-    return(mQA)
+is.QR_matrix <- function(x){
+    inherits(x, "QR_matrix")
 }
 #' @export
-mQA_matrix.default <- function(x = list(), ...){
-    mQA <- c(x, list(...))
-    class(mQA) <- "mQA_matrix"
-    return(mQA)
+mQR_matrix.QR_matrix <- function(x = QR_matrix(), ...){
+    mQR <- c(list(x), list(...))
+    class(mQR) <- "mQR_matrix"
+    return(mQR)
 }
 #' @export
-mQA_matrix.mQA_matrix <- function(x = mQA_matrix.default(), ...){
-    mQA <- c(x, ...)
-    class(mQA) <- "mQA_matrix"
-    return(mQA)
+mQR_matrix.default <- function(x = list(), ...){
+    mQR <- c(x, list(...))
+    class(mQR) <- "mQR_matrix"
+    return(mQR)
 }
-#' @rdname QA_matrix
 #' @export
-is.mQA_matrix <- function(x){
-    inherits(x, "mQA_matrix")
+mQR_matrix.mQR_matrix <- function(x = mQR_matrix.default(), ...){
+    mQR <- c(x, ...)
+    class(mQR) <- "mQR_matrix"
+    return(mQR)
+}
+#' @rdname QR_matrix
+#' @export
+is.mQR_matrix <- function(x){
+    inherits(x, "mQR_matrix")
 }
 
 
-#' Printing QA_matrix and mQA_matrix
+#' Printing QR_matrix and mQR_matrix
 #'
-#' Print a QA_matrix or a mQA_matrix.
+#' Print a QR_matrix or a mQR_matrix.
 #'
-#' @param x object of class code{mQA_matrix} or \code{mQA_matrix}.
+#' @param x object of class code{mQR_matrix} or \code{mQR_matrix}.
 #' @param print_variables logical, indicating whether or not the variables names should be printed.
 #' @param print_score_formula logical, indicating whether or not the score formula should be printed.
 #' @param score_statistics logical, indicating whether or not the scores statistics should be printed.
 #' @param ... autres arguments non utilisés.
 #' @encoding UTF-8
-#' @name print.QA_matrix
-#' @rdname print.QA_matrix
+#' @name print.QR_matrix
+#' @rdname print.QR_matrix
 #' @export
-print.QA_matrix <- function(x, print_variables = TRUE, print_score_formula = TRUE, ...){
+print.QR_matrix <- function(x, print_variables = TRUE, print_score_formula = TRUE, ...){
     nb_var <- nrow(x$modalities)
     nb_var_modalities <- ncol(x$modalities)
     nb_var_values <- ncol(x$values)
@@ -151,9 +151,9 @@ print.QA_matrix <- function(x, print_variables = TRUE, print_score_formula = TRU
     }
     return(invisible(x))
 }
-#' @rdname print.QA_matrix
+#' @rdname print.QR_matrix
 #' @export
-print.mQA_matrix <- function(x, score_statistics = TRUE, ...){
+print.mQR_matrix <- function(x, score_statistics = TRUE, ...){
     if(length(x) == 0){
         cat("Liste sans aucun bilan qualité")
         return(invisible(x))

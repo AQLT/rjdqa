@@ -6,7 +6,7 @@ Authors@R: c(
   person("Alain", "Quartier-la-Tente", role = c("aut", "cre"),
                  email = "alain.quartier@yahoo.fr"))
 Description: Add-in to the RJdemetra package on seasonal adjustments.
-    It allows to produce quality assessments outputs (dashboards, quality matrix, etc.).
+    It allows to produce quality assessments outputs (dashboards, quality report matrix, etc.).
 License: EUPL
 Depends:
     R (>= 3.1.1),

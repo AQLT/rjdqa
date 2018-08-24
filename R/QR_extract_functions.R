@@ -1,11 +1,11 @@
-#' Extract a quality assessment matrix
+#' Extract a quality report matrix
 #'
-#' Functions to extracts a quality assessment matrix from a CSV file exported by JDemetra+ (or the JDemetra+ cruncher) or from a seasonal adjustment object create by the RJDemetra package.
+#' Functions to extracts a quality report matrix from a CSV file exported by JDemetra+ (or the JDemetra+ cruncher) or from a seasonal adjustment object create by the RJDemetra package.
 #'
 #' @param x a CSV file containing the diagnostics matrix or a \code{SA} object. By default a dialog box opens to select a CSV file.
 #' @param sep the field separator character in the CSV file (\code{sep = ";"} by default).
 #' @param dec the character used in the file for decimal points (\code{dec = ","} by default).
-#' @param series_name The name of series for the \code{extract_QA.SA} method.
+#' @param series_name The name of series for the \code{extract_QR.SA} method.
 #' By default the name of the \code{x} parameter is used.
 #' @param ... unused argument.
 #'
@@ -18,7 +18,7 @@
 #' lors de la création du
 #' fichier de paramètres).
 #'
-#' Le résultat de cette fonction est un objet \code{\link{QA_matrix}} qui est une liste de trois paramètres :
+#' Le résultat de cette fonction est un objet \code{\link{QR_matrix}} qui est une liste de trois paramètres :
 #' * le paramètre \code{modalities} est un \code{data.frame} contenant un ensemble de variables sous forme catégorielle
 #'   (Good, Uncertain, Bad, Severe).
 #' * le paramètre \code{values} est un \code{data.frame} contenant les valeurs associées aux indicateurs présents dans
@@ -28,27 +28,27 @@
 #'   calculer le score (si le calcul est fait).
 #'
 #' @encoding UTF-8
-#' @return A \code{\link{QA_matrix}} object.
-#' @family QA_matrix functions
+#' @return A \code{\link{QR_matrix}} object.
+#' @family QR_matrix functions
 #' @examples \dontrun{
-#' QA <- extract_QA()
-#' QA
+#' QR <- extract_QR()
+#' QR
 #' # To extract the modalities' matrix:
-#' QA$modalities
+#' QR$modalities
 #' # Ou :
-#' QA[["modalities"]]
+#' QR[["modalities"]]
 #' }
 #' @export
-#' @name extract_QA
-#' @rdname extract_QA
-extract_QA <- function(x, ...){
-    UseMethod("extract_QA", x)
+#' @name extract_QR
+#' @rdname extract_QR
+extract_QR <- function(x, ...){
+    UseMethod("extract_QR", x)
 }
 
-#' @name extract_QA
-#' @rdname extract_QA
+#' @name extract_QR
+#' @rdname extract_QR
 #' @export
-extract_QA.SA <- function(x, series_name, ...){
+extract_QR.SA <- function(x, series_name, ...){
     if(missing(series_name))
         series_name <- deparse(substitute(x))
     
@@ -115,7 +115,7 @@ extract_QA.SA <- function(x, series_name, ...){
     
     #############################################
     
-    QA_global <- data.frame(series = series_name, frequency = frequency,
+    QR_global <- data.frame(series = series_name, frequency = frequency,
                             arima_model = arima_model, arima_tests,
                             decomposition, res_tests,
                             stringsAsFactors = FALSE,row.names = NULL)
@@ -152,20 +152,20 @@ extract_QA.SA <- function(x, series_name, ...){
                           "combined_test", "combined_kw", "combined_stability_test", "combined_evolutive_test",
                           "frequency","arima_model")
 
-    QA_modalities <- QA_global[,modalities_variables]
-    colnames(QA_modalities) <- gsub("_modality","",colnames(QA_modalities))
-    QA_values <- QA_global[,values_variables]
-    rownames(QA_modalities) <- rownames(QA_values) <- NULL
+    QR_modalities <- QR_global[,modalities_variables]
+    colnames(QR_modalities) <- gsub("_modality","",colnames(QR_modalities))
+    QR_values <- QR_global[,values_variables]
+    rownames(QR_modalities) <- rownames(QR_values) <- NULL
     
-    QA_modalities[,-1] <- lapply(QA_modalities[,-1],factor,
+    QR_modalities[,-1] <- lapply(QR_modalities[,-1],factor,
                                  levels = c("Good", "Uncertain", "Bad","Severe"), ordered = TRUE)
-    QA <- QA_matrix(modalities = QA_modalities, values = QA_values)
-    QA
+    QR <- QR_matrix(modalities = QR_modalities, values = QR_values)
+    QR
 }
-#' @name extract_QA
-#' @rdname extract_QA
+#' @name extract_QR
+#' @rdname extract_QR
 #' @export
-extract_QA.default <- function(x, sep = ";", dec = ",", ...){
+extract_QR.default <- function(x, sep = ";", dec = ",", ...){
     if(missing(x) || is.null(x)){
         if(Sys.info()[['sysname']] == "Windows"){
             x <- utils::choose.files(caption = "Sélectionner le fichier contenant la matrice des paramètres",
@@ -247,20 +247,20 @@ extract_QA.default <- function(x, sep = ";", dec = ",", ...){
                     ,missing_variables,"\nRelancez l'export"))
     }
 
-    names_QA_variables <- c("series","qs_residual_sa_on_sa","f_residual_sa_on_sa","combined_residual_sa_on_sa",
+    names_QR_variables <- c("series","qs_residual_sa_on_sa","f_residual_sa_on_sa","combined_residual_sa_on_sa",
                             "combined_residual_sa_on_sa_last_years","combined_residual_sa_on_i",
                             "qs_residual_sa_on_i","f_residual_sa_on_i",
                             "f_residual_td_on_sa","f_residual_td_on_i","residuals_mean",
                             "residuals_independency","residuals_homoskedasticity","residual_normality",
                             "oos_mean","oos_mse","m7","q","q_m2","pct_outliers")
-    QA_modalities <- demetra_m[,modalities_variables]
-    QA_values <- demetra_m[,values_variables]
-    rownames(QA_modalities) <- rownames(QA_values) <- NULL
-    colnames(QA_values)[1:length(names_QA_variables)] <- colnames(QA_modalities) <- names_QA_variables
-    QA_modalities[,-1] <- lapply(QA_modalities[,-1],factor,
+    QR_modalities <- demetra_m[,modalities_variables]
+    QR_values <- demetra_m[,values_variables]
+    rownames(QR_modalities) <- rownames(QR_values) <- NULL
+    colnames(QR_values)[1:length(names_QR_variables)] <- colnames(QR_modalities) <- names_QR_variables
+    QR_modalities[,-1] <- lapply(QR_modalities[,-1],factor,
                                  levels = c("Good", "Uncertain", "Bad","Severe"), ordered = TRUE)
-    QA <- QA_matrix(modalities = QA_modalities, values = QA_values)
-    QA
+    QR <- QR_matrix(modalities = QR_modalities, values = QR_values)
+    QR
 }
 
 extractARIMA <- function(demetra_m){

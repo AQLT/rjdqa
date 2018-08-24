@@ -94,8 +94,9 @@ net_effect <- function(x){
     
     line1 <- sprintf("Observed %.1f%% raw %s from last month",
                      abs(observed_y_evol), y_movement)
-    line2 <- sprintf("Neutral result requires %.1f%% raw %s from last month",
+    line2 <- sprintf("Neutral result requires %.1f%% raw %s",
                      abs(neutral_line_y_evol), neutral_y_movement)
+    line2 <- c(line2, "from last month:")
     if(round(tde_contrib,1) == 0){
         line3 <- "No trading day effect"
     }else{
@@ -248,16 +249,16 @@ plot.net_effect <- function(x,
     par(mai = mai)
 }
 plot_net_effect_text <- function(x){
-    base_inset_x <- 0
+    base_inset_x <- -0.00
     plot.new()
     box()
     legend("topleft", legend = x[1], 
            bty = "n", text.font =  2, inset = c(base_inset_x, 0))
-    legend("topleft", legend = c(rep(NA, 3), x[2]), 
+    legend("topleft", legend = c(rep(NA, 3), x[2:3]), 
            bty = "n", text.font =  2, inset = c(base_inset_x, 0))
-    legend("topleft", legend = c(rep(NA, 4), x[3:5]), 
+    legend("topleft", legend = c(rep(NA, 5), x[4:6]), 
            bty = "n", text.font =  1,inset = c(base_inset_x + 0.05,0))
-    legend("topleft", legend = c(rep(NA, 9), x[6]), 
+    legend("topleft", legend = c(rep(NA, 10), x[7]), 
            bty = "n", text.font =  2, inset = c(base_inset_x, 0))
 }
 plot_net_graph <- function(x, title = "", subtitle = "", arrow_col = "black"){

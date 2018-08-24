@@ -25,31 +25,29 @@ summary_diagnostics.X13<- function(x, digits = 2, decimal.mark = getOption("OutD
                              labels = FALSE, right = FALSE)
     recent_outlier <- rbind(description_outlier(x, 0),description_outlier(x, 1))
     moving_seasonality <- x$diagnostics$combined_test_all$tests_for_stable_seasonality["Evolutive seasonality test", 2]
-    moving_seasonality_c <- cut(moving_seasonality,
-                                breaks = c(0, 0.05, 0.1, Inf),
-                                labels = FALSE, right = FALSE)
+    # moving_seasonality_c <- cut(moving_seasonality,
+    #                             breaks = c(0, 0.05, 0.1, Inf),
+    #                             labels = FALSE, right = FALSE)
     # moving_seasonality_c <- (3:1)[moving_seasonality_c]
     row.names <- c("Adjustability (M7)", "Residual Seasonality (qs-test on sa)",
                    "Residual Seasonality (f-test on sa)",
                    "Residual Trading-days effects (f-test on sa)",
                    "ARIMA autocorrelation (lb test)",
                    "Recent Outliers (current period)",
-                   "Recent Outliers (previous period)",
-                   "Evolutive seasonality test"
+                   "Recent Outliers (previous period)"
+                   # "Evolutive seasonality test"
     )
     value <- c(m7,
                residuals_tests,
-               recent_outlier[,1],
-               moving_seasonality)
-    value[-c(6,7)] <- formatC(c(m7,
-                                residuals_tests,
-                                moving_seasonality),
-                              format = "f", digits = digits,
-                              decimal.mark = decimal.mark)
+               recent_outlier[,1]
+               )
+    value[1:length(c(m7, residuals_tests))] <-
+        formatC(c(m7, residuals_tests),
+                format = "f", digits = digits,
+                decimal.mark = decimal.mark)
     colour <- colours[c(m7_c,
                         residuals_tests_c,
-                        recent_outlier[,2],
-                        moving_seasonality_c)]
+                        recent_outlier[,2])]
     
     summary_diagnostics <- data.frame(Value = value, Indicator = "",
                                       Colour = colour,
