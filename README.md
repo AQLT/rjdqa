@@ -1,9 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-rjdqa <img src="man/figures/logo2.png" align="right" />
-=======================================================
+rjdqa <img src="man/figures/logo.png" align="right" />
+======================================================
 
-[![Travis Build Status](https://travis-ci.org/aqlt/rjdqa.svg?branch=master)](https://travis-ci.org/aqlt/rjdqa)
+[![Travis Build Status](https://travis-ci.org/AQLT/rjdqa.svg?branch=master)](https://travis-ci.org/AQLT/rjdqa)
 
 Overview
 --------

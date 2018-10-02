@@ -10,3 +10,5 @@ r:
 - devel
 
 r_build_args: --no-multiarch
+
+warnings_are_errors: false
