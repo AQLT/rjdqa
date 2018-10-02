@@ -8,7 +8,7 @@ recode_indicator_num(x, variable_name, breaks = c(0, 0.01, 0.05, 0.1, 1),
   labels = c("Good", "Uncertain", "Bad", "Severe"), ...)
 }
 \arguments{
-\item{x}{objet de type \code{QR_matrix} ou \code{mQR_matrix}.}
+\item{x}{objet de type \code{QA_matrix} ou \code{mQA_matrix}.}
 
 \item{variable_name}{vecteur de chaînes de caractères contenant les noms des
 variables à recoder.}
@@ -24,6 +24,6 @@ Permet d'encoder des variables présentes dans la matrice des valeurs en des mod
 qui seront présentent dans la matrice des modalités.
 }
 \seealso{
-Other var QR_matrix manipulation: \code{\link{QR_var_manipulation}},
+Other var QA_matrix manipulation: \code{\link{QA_var_manipulation}},
   \code{\link{add_indicator}}
 }

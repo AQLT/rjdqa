@@ -7,10 +7,10 @@
 weighted_score(x, pond = 1)
 }
 \arguments{
-\item{x}{objet de type \code{QR_matrix} ou \code{mQR_matrix}.}
+\item{x}{objet de type \code{QA_matrix} ou \code{mQA_matrix}.}
 
 \item{pond}{pondération à appliquer au score. Il peut s'agir d'un nombre, d'un vecteur de nombres, du nom
-d'une des variables du bilan qualité ou d'une liste de pondérations pour les objets \code{mQR_matrix}.}
+d'une des variables du bilan qualité ou d'une liste de pondérations pour les objets \code{mQA_matrix}.}
 }
 \value{
 L'objet en entrée avec le score recalculé
@@ -20,15 +20,15 @@ Permet de pondérer un score déjà calculé en fonction des variables.
 }
 \examples{
 \dontrun{
-QR <- extract_QR()
-QR <- compute_score(QR)
-weighted_score(QR, 2) # Tous les scores sont multipliÃ©s par 2
+QA <- extract_QA()
+QA <- compute_score(QA)
+weighted_score(QA, 2) # Tous les scores sont multipliÃ©s par 2
 }
 }
 \seealso{
-Other QR_matrix functions: \code{\link{compute_score}},
-  \code{\link{export_xlsx.QR_matrix}},
-  \code{\link{export_xlsx.mQR_matrix}},
-  \code{\link{extract_QR}}, \code{\link{extract_score}},
-  \code{\link{rbind.QR_matrix}}, \code{\link{sort}}
+Other QA_matrix functions: \code{\link{compute_score}},
+  \code{\link{export_xlsx.QA_matrix}},
+  \code{\link{export_xlsx.mQA_matrix}},
+  \code{\link{extract_QA}}, \code{\link{extract_score}},
+  \code{\link{rbind.QA_matrix}}, \code{\link{sort}}
 }

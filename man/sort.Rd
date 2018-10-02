@@ -2,18 +2,18 @@
 % Please edit documentation in R/QR_functions.R
 \name{sort}
 \alias{sort}
-\alias{sort.QR_matrix}
-\alias{sort.mQR_matrix}
-\title{Tri des objets QR_matrix et mQR_matrix}
+\alias{sort.QA_matrix}
+\alias{sort.mQA_matrix}
+\title{Tri des objets QA_matrix et mQA_matrix}
 \usage{
-\method{sort}{QR_matrix}(x, decreasing = FALSE, sort_variables = "score",
+\method{sort}{QA_matrix}(x, decreasing = FALSE, sort_variables = "score",
   ...)
 
-\method{sort}{mQR_matrix}(x, decreasing = FALSE, sort_variables = "score",
+\method{sort}{mQA_matrix}(x, decreasing = FALSE, sort_variables = "score",
   ...)
 }
 \arguments{
-\item{x}{objet de type \code{QR_matrix} ou \code{mQR_matrix}.}
+\item{x}{objet de type \code{QA_matrix} ou \code{mQA_matrix}.}
 
 \item{decreasing}{booléen indiquant si les bilans qualité doivent être triés par ordre croissant ou décroissant.
 Par défaut le tri est effectué par ordre croissant.}
@@ -30,15 +30,15 @@ Permet de trier les bilans qualité en fonction d'une ou plusieurs variables.
 }
 \examples{
 \dontrun{
-QR <- compute_score(extract_QR())
-sort(QR, sort_variables = "score") #Pour trier par ordre croissant sur le score
+QA <- compute_score(extract_QA())
+sort(QA, sort_variables = "score") #Pour trier par ordre croissant sur le score
 }
 }
 \seealso{
-Other QR_matrix functions: \code{\link{compute_score}},
-  \code{\link{export_xlsx.QR_matrix}},
-  \code{\link{export_xlsx.mQR_matrix}},
-  \code{\link{extract_QR}}, \code{\link{extract_score}},
-  \code{\link{rbind.QR_matrix}},
+Other QA_matrix functions: \code{\link{compute_score}},
+  \code{\link{export_xlsx.QA_matrix}},
+  \code{\link{export_xlsx.mQA_matrix}},
+  \code{\link{extract_QA}}, \code{\link{extract_score}},
+  \code{\link{rbind.QA_matrix}},
   \code{\link{weighted_score}}
 }

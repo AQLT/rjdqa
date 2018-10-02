@@ -1,6 +1,6 @@
 Package: rjdqa
 Type: Package
-Title: Quality assessment for seasonnal adjustment
+Title: Quality assessment for seasonal adjustment
 Version: 0.1.0
 Authors@R: c(
   person("Alain", "Quartier-la-Tente", role = c("aut", "cre"),

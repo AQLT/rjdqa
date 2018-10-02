@@ -1,7 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-rjdqa
-=====
+rjdqa <img src="man/figures/logo2.png" align="right" />
+=======================================================
+
+[![Travis Build Status](https://travis-ci.org/aqlt/rjdqa.svg?branch=master)](https://travis-ci.org/aqlt/rjdqa)
+
+Overview
+--------
 
 rjdqa is an extension of the R package [RJDemetra](https://github.com/nbbrd/rjdemetra), which is an interface to JDemetra+, the seasonal adjustment software [officially recommended](https://ec.europa.eu/eurostat/cros/system/files/Jdemetra_%20release.pdf) to the members of the ESS and the European System of Central Banks. The rjdqa package provides help to the quality assessment by producing:
 
