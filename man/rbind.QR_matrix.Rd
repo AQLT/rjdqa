@@ -23,7 +23,7 @@ et \code{values}.
 QR <- extract_QR()
 QR1 <- compute_score(QR1, score_pond = c(m7 = 2, q = 3, qs_residual_sa_on_sa = 5))
 QR2 <- compute_score(QR1, score_pond = c(m7 = 2, qs_residual_sa_on_sa = 5))
-rbind(QR1, QR2) # Une erreur est renvoyÃ©e
+rbind(QR1, QR2) # Une erreur est renvoyée
 rbind(QR1, QR2, check_formula = FALSE)
 }
 }
@@ -34,3 +34,4 @@ Other QR_matrix functions: \code{\link{compute_score}},
   \code{\link{extract_QR}}, \code{\link{extract_score}},
   \code{\link{sort}}, \code{\link{weighted_score}}
 }
+\concept{QR_matrix functions}

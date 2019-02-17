@@ -1,12 +1,20 @@
 #' @export
 sa_dashboard <- function(x){
-    if(!all(c("decomposition.c17","preprocessing.model.tde_f",
-              "preprocessing.model.mhe_f") %in% names(x$user_defined))){
+    if (inherits(x, "X13") && !all(c("decomposition.c17","preprocessing.model.tde_f",
+                                     "preprocessing.model.mhe_f") %in% names(x$user_defined))) {
         my_spec <- RJDemetra::x13_spec(x)
         x <- RJDemetra::x13(x$final$series[,"y"], my_spec,
-                 userdefined = c("decomposition.c17","preprocessing.model.tde_f",
-                                 "preprocessing.model.mhe_f"))
+                            userdefined = c("decomposition.c17","preprocessing.model.tde_f",
+                                            "preprocessing.model.mhe_f"))
     }
+    if (inherits(x, "TRAMO_SEATS") && !all(c("preprocessing.model.tde_f",
+                                     "preprocessing.model.mhe_f") %in% names(x$user_defined))) {
+        my_spec <- RJDemetra::tramoseats_spec(x)
+        x <- RJDemetra::tramoseats(x$final$series[,"y"], my_spec,
+                                   userdefined = c("preprocessing.model.tde_f",
+                                                   "preprocessing.model.mhe_f"))
+    }
+    
     last_date <- tail(time_to_date(x$final$series[,"y"]), 1)
     last_date <- format(last_date, format = "%Y-%m")
     res <- list(recent_history = recent_history(x),
@@ -20,9 +28,10 @@ sa_dashboard <- function(x){
 }
 #' @export
 plot.sa_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",
+                              subtitle = "",
                               raw_color = "#33A02C",
                               sa_color = "#E31A1C",
-                              trend_color = "black",...){
+                              trend_color = "black", ...){
     r_history <- (x$recent_history)
     diagnostics <- (x$summary_diagnostics)
     td <- (x$trading_day_pattern)
@@ -92,7 +101,7 @@ plot.sa_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",
     # par(mai = c(0.2, 0.82, 0.5, 0.42))
     plot(seas)
     
-    o.par <- par(mai = c(1.02, 0.82, 0.82, 0.42),mar = rep.int(0, 4))
+    o.par <- par(mai = c(1.02, 0.82, 0.82, 0.42), mar = rep.int(0, 4))
     plot.new()
     box()
     text(0.5, 0.5, "Estimated Patterns and Anticipated Movements",font = 2,cex = 1.2)
@@ -110,7 +119,8 @@ plot.sa_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",
     #       outer = TRUE,font = 2,cex = 1.2)
     mtext(sprintf("Reference Month: %s",last_date), side = 3, line = -3, 
           outer = TRUE,font = 3,cex = 0.7,at = 0.95, adj = 1)
-    
+    mtext(subtitle, side = 3, line = -3, 
+          outer = TRUE,font = 3,cex = 0.7,at = 0.1, adj = 1)
     invisible()
 }
 

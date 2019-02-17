@@ -5,8 +5,9 @@
 \title{Export mQR_matrix objects to an Excel file}
 \usage{
 \method{export_xlsx}{mQR_matrix}(x, export_dir = "./",
-  layout_file = c("ByComponent", "ByQRMatrix"), file_extension = c(".xls",
-  ".xlsx"), layout = c("all", "modalities", "values", "combined"), ...)
+  layout_file = c("ByComponent", "ByQRMatrix"),
+  file_extension = c(".xls", ".xlsx"), layout = c("all", "modalities",
+  "values", "combined"), ...)
 }
 \arguments{
 \item{x}{a \code{mQR_matrix} object.}
@@ -35,3 +36,4 @@ Other QR_matrix functions: \code{\link{compute_score}},
   \code{\link{rbind.QR_matrix}}, \code{\link{sort}},
   \code{\link{weighted_score}}
 }
+\concept{QR_matrix functions}

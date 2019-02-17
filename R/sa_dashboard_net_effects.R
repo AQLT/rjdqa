@@ -1,12 +1,14 @@
-
 net_effect <- function(x){
+    UseMethod("net_effect", x)
+}
+net_effect.X13 <- function(x){
     sa <- x$final$series[,"sa"]
     y <- x$final$series[,"y"]
     s <- x$final$series[,"s"]
     
     tde <- x$regarima$model$effects[,"tde"]
     mhe <- x$regarima$model$effects[,"ee"]
-    is_multiplicative <- x$regarima$model$spec_rslt["Log transformation"] == TRUE
+    is_multiplicative <- x$regarima$model$spec_rslt[,"Log transformation"]
     
     observed_sa <- tail(sa, 2)
     observed_y <- tail(y, 2)
@@ -14,16 +16,16 @@ net_effect <- function(x){
     observed_tde <- tail(tde, 2)
     observed_mhe <- tail(mhe, 2)
     
-    observed_sa_evol <- (observed_sa[2]/ observed_sa[1] - 1) * 100
-    observed_y_evol <- (observed_y[2]/ observed_y[1] - 1) * 100
+    observed_sa_evol <- (observed_sa[2] / observed_sa[1] - 1) * 100
+    observed_y_evol <- (observed_y[2] / observed_y[1] - 1) * 100
     
     neutral_line_sa <- rep(observed_sa[1], 2)
-    if(is_multiplicative){
+    if (is_multiplicative) {
         s <- s / (tde * mhe)
         observed_s <- tail(s, 2)
-        observed_s_evol <- (observed_s[2]/ observed_s[1] - 1) * 100
+        observed_s_evol <- (observed_s[2] / observed_s[1] - 1) * 100
         
-        observed_td <- observed_y /observed_tde
+        observed_td <- observed_y / observed_tde
         observed_cal <- observed_y / (observed_tde * observed_mhe)
         
         neutral_line_y <- observed_y * c(1, observed_sa[1] / observed_sa[2])
@@ -32,7 +34,7 @@ net_effect <- function(x){
     }else{
         s <- s - tde - mhe
         observed_s <- tail(s, 2)
-        observed_s_evol <- (observed_s[2]/ observed_s[1] - 1) * 100
+        observed_s_evol <- (observed_s[2] / observed_s[1] - 1) * 100
         
         observed_td <- observed_y - observed_tde
         observed_cal <- observed_y - observed_tde - observed_mhe
@@ -51,9 +53,9 @@ net_effect <- function(x){
     
     y_movement <- c("decrease", "increase")[(observed_y_evol > 0) + 1]
     
-    neutral_line_y_evol <- (neutral_line_y[2]/ neutral_line_y[1] - 1) * 100
-    neutral_line_td_evol <- (neutral_line_td[2]/ neutral_line_td[1] - 1) * 100
-    neutral_line_cal_evol <- (neutral_line_cal[2]/ neutral_line_cal[1] - 1) * 100
+    neutral_line_y_evol <- (neutral_line_y[2] / neutral_line_y[1] - 1) * 100
+    neutral_line_td_evol <- (neutral_line_td[2] / neutral_line_td[1] - 1) * 100
+    neutral_line_cal_evol <- (neutral_line_cal[2] / neutral_line_cal[1] - 1) * 100
     
     
     tde_contrib <- neutral_line_y_evol - neutral_line_td_evol
@@ -97,14 +99,14 @@ net_effect <- function(x){
     line2 <- sprintf("Neutral result requires %.1f%% raw %s",
                      abs(neutral_line_y_evol), neutral_y_movement)
     line2 <- c(line2, "from last month:")
-    if(round(tde_contrib,1) == 0){
+    if(round(tde_contrib, 1) == 0){
         line3 <- "No trading day effect"
     }else{
         tde_contrib_movement <- c("decrease", "increase")[(tde_contrib > 0) + 1]
         line3 <- sprintf("Trading day effects represent %.1f%% raw %s",
                          abs(tde_contrib), tde_contrib_movement)
     }
-    if(round(mhe_contrib,1) == 0){
+    if (round(mhe_contrib, 1) == 0) {
         line4 <- "No moving holiday effect"
     }else{
         mhe_contrib_movement <- c("decrease", "increase")[(mhe_contrib > 0) + 1]
@@ -130,6 +132,115 @@ net_effect <- function(x){
     res
 }
 
+net_effect.TRAMO_SEATS <- function(x){
+    sa <- x$final$series[,"sa"]
+    y <- x$final$series[,"y"]
+    s <- x$final$series[,"s"]
+    
+    tde <- x$regarima$model$effects[,"tde"]
+    mhe <- x$regarima$model$effects[,"ee"]
+    is_multiplicative <- x$regarima$model$spec_rslt[,"Log transformation"]
+    
+    observed_sa <- tail(sa, 2)
+    observed_y <- tail(y, 2)
+    
+    if (is_multiplicative) {
+        tde <- exp(tde)
+        mhe <- exp(mhe)
+    }
+    
+    observed_tde <- tail(tde, 2)
+    observed_mhe <- tail(mhe, 2)
+    
+    observed_sa_evol <- (observed_sa[2] / observed_sa[1] - 1) * 100
+    observed_y_evol <- (observed_y[2] / observed_y[1] - 1) * 100
+    
+    neutral_line_sa <- rep(observed_sa[1], 2)
+    if (is_multiplicative) {
+        s <- s / (tde * mhe)
+        observed_s <- tail(s, 2)
+        observed_s_evol <- (observed_s[2] / observed_s[1] - 1) * 100
+        
+        observed_td <- observed_y / observed_tde
+        observed_cal <- observed_y / (observed_tde * observed_mhe)
+        
+        neutral_line_y <- observed_y * c(1, observed_sa[1] / observed_sa[2])
+        neutral_line_td <- observed_td * c(1, observed_sa[1] / observed_sa[2])
+        neutral_line_cal <- observed_cal * c(1, observed_sa[1] / observed_sa[2])
+    }else{
+        s <- s - tde - mhe
+        observed_s <- tail(s, 2)
+        observed_s_evol <- (observed_s[2] / observed_s[1] - 1) * 100
+        
+        observed_td <- observed_y - observed_tde
+        observed_cal <- observed_y - observed_tde - observed_mhe
+        
+        neutral_line_y <- observed_y + c(0, observed_sa[1] - observed_sa[2])
+        neutral_line_td <- observed_td + c(0, observed_sa[1] - observed_sa[2])
+        neutral_line_cal <- observed_cal + c(0, observed_sa[1] - observed_sa[2])
+    }
+    
+    EM <- sd(tail(rjdqa:::ev.ts(sa) / 100, 5 * frequency(sa)), na.rm = TRUE)
+    
+    upper_bound_sa <- neutral_line_sa * c(1, 1 + EM)
+    lower_bound_sa <- neutral_line_sa * c(1, 1 - EM)
+    upper_bound_y <- neutral_line_y * c(1, 1 + EM)
+    lower_bound_y <- neutral_line_y * c(1, 1 - EM)
+    
+    y_movement <- c("decrease", "increase")[(observed_y_evol > 0) + 1]
+    
+    neutral_line_y_evol <- (neutral_line_y[2] / neutral_line_y[1] - 1) * 100
+    neutral_line_td_evol <- (neutral_line_td[2] / neutral_line_td[1] - 1) * 100
+    neutral_line_cal_evol <- (neutral_line_cal[2] / neutral_line_cal[1] - 1) * 100
+    
+    
+    tde_contrib <- neutral_line_y_evol - neutral_line_td_evol
+    mhe_contrib <- neutral_line_td_evol - neutral_line_cal_evol
+    observed_s_evol <- neutral_line_cal_evol
+    
+    
+    neutral_y_movement <- c("decrease", "increase")[(neutral_line_y_evol > 0) + 1]
+    s_movement <- c("decrease", "increase")[(observed_s_evol > 0) + 1]
+    
+    neutral_cal_movement <- c("decrease", "increase")[(neutral_line_cal_evol > 0) + 1]
+    
+    line1 <- sprintf("Observed %.1f%% raw %s from last month",
+                     abs(observed_y_evol), y_movement)
+    line2 <- sprintf("Neutral result requires %.1f%% raw %s",
+                     abs(neutral_line_y_evol), neutral_y_movement)
+    line2 <- c(line2, "from last month:")
+    if(round(tde_contrib, 1) == 0){
+        line3 <- "No trading day effect"
+    }else{
+        tde_contrib_movement <- c("decrease", "increase")[(tde_contrib > 0) + 1]
+        line3 <- sprintf("Trading day effects represent %.1f%% raw %s",
+                         abs(tde_contrib), tde_contrib_movement)
+    }
+    if (round(mhe_contrib, 1) == 0) {
+        line4 <- "No moving holiday effect"
+    }else{
+        mhe_contrib_movement <- c("decrease", "increase")[(mhe_contrib > 0) + 1]
+        line4 <- sprintf("Moving holiday effects represent %.1f%% raw %s",
+                         abs(mhe_contrib), mhe_contrib_movement)
+    }
+    line5 <- sprintf("Seasonal effects represent %.1f%% raw %s",
+                     abs(observed_s_evol), s_movement)
+    line6 <- sprintf("SA movement of %+.1f%% from last month",
+                     observed_sa_evol)
+    res <- list(raw_data = list(observed = observed_y, neutral_line = neutral_line_y,
+                                lower_bound = lower_bound_y, upper_bound = upper_bound_y,
+                                frequency = frequency(y)),
+                sa_data = list(observed = observed_sa, neutral_line = neutral_line_sa,
+                               lower_bound = lower_bound_sa, upper_bound = upper_bound_sa,
+                               frequency = frequency(sa)),
+                text = c(line1, line2,
+                         line3, line4,
+                         line5, line6)
+    )
+    class(res) <- c("net_effect", class(res))
+    
+    res
+}
 # net_effect <- function(x){
 #     sa <- x$final$series[,"sa"]
 #     y <- x$final$series[,"y"]

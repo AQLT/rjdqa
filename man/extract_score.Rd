@@ -24,7 +24,7 @@ Pour les objets \code{mQR_matrix} il s'agit d'une liste de scores (\code{NULL} o
 QR <- extract_QR()
 mQR <- mQR_matrix(QR, compute_score(QR))
 extract_score(QR) # NULL
-extract_score(mQR) # liste dont le premier Ã©lÃ©ment est NULL
+extract_score(mQR) # liste dont le premier élément est NULL
 }
 }
 \seealso{
@@ -34,3 +34,4 @@ Other QR_matrix functions: \code{\link{compute_score}},
   \code{\link{extract_QR}}, \code{\link{rbind.QR_matrix}},
   \code{\link{sort}}, \code{\link{weighted_score}}
 }
+\concept{QR_matrix functions}

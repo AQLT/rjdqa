@@ -5,7 +5,7 @@ seasonal_pattern <- function(x){
     sa <- window(sa, start = last_date - 1 + deltat(sa))
     freq <- frequency(sa)
     estimated_values <- as.numeric(sa)
-    is_multiplicative <- x$regarima$model$spec_rslt["Log transformation"] == TRUE
+    is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
     evolution <- c(tail(sa, 2),
                    head(x$final$forecasts[,"s_f"],1))
     if(!is_multiplicative){

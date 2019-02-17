@@ -22,7 +22,7 @@ Permet de pondérer un score déjà calculé en fonction des variables.
 \dontrun{
 QR <- extract_QR()
 QR <- compute_score(QR)
-weighted_score(QR, 2) # Tous les scores sont multipliÃ©s par 2
+weighted_score(QR, 2) # Tous les scores sont multipliés par 2
 }
 }
 \seealso{
@@ -32,3 +32,4 @@ Other QR_matrix functions: \code{\link{compute_score}},
   \code{\link{extract_QR}}, \code{\link{extract_score}},
   \code{\link{rbind.QR_matrix}}, \code{\link{sort}}
 }
+\concept{QR_matrix functions}

@@ -4,9 +4,9 @@
 \alias{export_xlsx.QR_matrix}
 \title{Export QR_matrix objects to an Excel file}
 \usage{
-\method{export_xlsx}{QR_matrix}(x, layout = c("all", "modalities", "values",
-  "combined"), create = TRUE, clear_sheet = TRUE, auto_format = TRUE,
-  file_name, sheet_names, ...)
+\method{export_xlsx}{QR_matrix}(x, layout = c("all", "modalities",
+  "values", "combined"), create = TRUE, clear_sheet = TRUE,
+  auto_format = TRUE, file_name, sheet_names, ...)
 }
 \arguments{
 \item{x}{a \code{QR_matrix} object.}
@@ -40,3 +40,4 @@ Other QR_matrix functions: \code{\link{compute_score}},
   \code{\link{rbind.QR_matrix}}, \code{\link{sort}},
   \code{\link{weighted_score}}
 }
+\concept{QR_matrix functions}

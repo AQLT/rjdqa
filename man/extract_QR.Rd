@@ -3,9 +3,7 @@
 \encoding{UTF-8}
 \name{extract_QR}
 \alias{extract_QR}
-\alias{extract_QR}
 \alias{extract_QR.SA}
-\alias{extract_QR}
 \alias{extract_QR.default}
 \title{Extract a quality report matrix}
 \usage{
@@ -70,3 +68,4 @@ Other QR_matrix functions: \code{\link{compute_score}},
   \code{\link{rbind.QR_matrix}}, \code{\link{sort}},
   \code{\link{weighted_score}}
 }
+\concept{QR_matrix functions}

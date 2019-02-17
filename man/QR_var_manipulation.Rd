@@ -31,3 +31,4 @@ score(remove_indicator(QR,"score")) # To remove the score
 Other var QR_matrix manipulation: \code{\link{add_indicator}},
   \code{\link{recode_indicator_num}}
 }
+\concept{var QR_matrix manipulation}

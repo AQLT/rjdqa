@@ -1,63 +1,63 @@
 #' @export
-quality_matrix <- function(x, series_name){
-    if(missing(series_name))
-        series_name <- deparse(substitute(x))
-    if(!all(c("preprocessing.residuals.nruns",
-              "preprocessing.residuals.lruns") %in% names(x$user_defined))){
-        my_spec <- RJDemetra::x13_spec(x)
-        x <- RJDemetra::x13(x$final$series[,"y"], my_spec,
-                 userdefined = c("preprocessing.residuals.nruns",
-                                 "preprocessing.residuals.lruns"))
-    }
-
-    
-    dates <- time_to_date(x$final$series)
-    span <- x$regarima$model$spec_rslt["T.span"]
-    
-    regarima_coefs <- summary(x$regarima)
-    regarima_coefs <- rbind(regarima_coefs$coefficients[[1]],
-                            regarima_coefs$coefficients[[2]],
-                            regarima_coefs$coefficients[[3]],
-                            regarima_coefs$coefficients[[4]])
-    
-    period <- frequency(x$final$series)
-    n_obs <- length(dates)
-    n_efff_obs <- x$regarima$loglik["neffectiveobs",]
-    missing <- sum(is.na(x$final$series[,"y"]))
-    n_obs <- n_obs - missing
-    start <- gsub("(^from )|( to.*$)", "", span)
-    end <- gsub("^.* to ", "", span)
-    
-    method <- class(x)[2]
-    log_transformation <- x$regarima$model$spec_rslt["Log transformation"] == TRUE
-    nb_params <- x$regarima$loglik["np",]
-    arima_orders <- arima_order_coef(x, regarima_coefs)
-    
-    cste <- get_cste(x)
-    LY <- get_LY(x, regarima_coefs)
-    MH <- get_MH(x, regarima_coefs)
-    TD <- get_TD(x, regarima_coefs)
-    n_outliers <- n_out(regarima_coefs)
-    ic <- t(x$regarima$loglik[c("aic", "aicc", "bic", "bicc"), , drop = FALSE])
-    arima_tests <- arima_test(x)
-    
-    decomposition <- get_decomposition_info(x)
-    #OOS test
-    res_tests <- get_residual_tests(x)
-    
-    results <- data.frame(period = period, Nobs = n_obs, Missing = missing,
-                          Start = start, End = end, Method = method,
-                          Log_transformation = log_transformation,
-                          NEffObs = n_efff_obs, NbParams = nb_params,
-                          cste, arima_orders, LY, MH, TD, n_outliers, ic,
-                          arima_tests, res_tests, decomposition,
-                          row.names = series_name,
-                          check.names = FALSE,
-                          stringsAsFactors = FALSE
-    )
-    results
-
-}
+# quality_matrix <- function(x, series_name){
+#     if(missing(series_name))
+#         series_name <- deparse(substitute(x))
+#     if(!all(c("preprocessing.residuals.nruns",
+#               "preprocessing.residuals.lruns") %in% names(x$user_defined))){
+#         my_spec <- RJDemetra::x13_spec(x)
+#         x <- RJDemetra::x13(x$final$series[,"y"], my_spec,
+#                  userdefined = c("preprocessing.residuals.nruns",
+#                                  "preprocessing.residuals.lruns"))
+#     }
+# 
+#     
+#     dates <- time_to_date(x$final$series)
+#     span <- x$regarima$model$spec_rslt["T.span"]
+#     
+#     regarima_coefs <- summary(x$regarima)
+#     regarima_coefs <- rbind(regarima_coefs$coefficients[[1]],
+#                             regarima_coefs$coefficients[[2]],
+#                             regarima_coefs$coefficients[[3]],
+#                             regarima_coefs$coefficients[[4]])
+#     
+#     period <- frequency(x$final$series)
+#     n_obs <- length(dates)
+#     n_efff_obs <- x$regarima$loglik["neffectiveobs",]
+#     missing <- sum(is.na(x$final$series[,"y"]))
+#     n_obs <- n_obs - missing
+#     start <- gsub("(^from )|( to.*$)", "", span)
+#     end <- gsub("^.* to ", "", span)
+#     
+#     method <- class(x)[2]
+#     log_transformation <- x$regarima$model$spec_rslt["Log transformation"] == TRUE
+#     nb_params <- x$regarima$loglik["np",]
+#     arima_orders <- arima_order_coef(x, regarima_coefs)
+#     
+#     cste <- get_cste(x)
+#     LY <- get_LY(x, regarima_coefs)
+#     MH <- get_MH(x, regarima_coefs)
+#     TD <- get_TD(x, regarima_coefs)
+#     n_outliers <- n_out(regarima_coefs)
+#     ic <- t(x$regarima$loglik[c("aic", "aicc", "bic", "bicc"), , drop = FALSE])
+#     arima_tests <- arima_test(x)
+#     
+#     decomposition <- get_decomposition_info(x)
+#     #OOS test
+#     res_tests <- get_residual_tests(x)
+#     
+#     results <- data.frame(period = period, Nobs = n_obs, Missing = missing,
+#                           Start = start, End = end, Method = method,
+#                           Log_transformation = log_transformation,
+#                           NEffObs = n_efff_obs, NbParams = nb_params,
+#                           cste, arima_orders, LY, MH, TD, n_outliers, ic,
+#                           arima_tests, res_tests, decomposition,
+#                           row.names = series_name,
+#                           check.names = FALSE,
+#                           stringsAsFactors = FALSE
+#     )
+#     results
+# 
+# }
 get_decomposition_info <- function(x){
     UseMethod("get_decomposition_info", x)
 }
@@ -189,7 +189,10 @@ arima_test <- function(x){
     residuals <- na.omit(ts.union(residuals, lag(residuals, -12)))
     
     tests <- x$regarima$residuals.stat[["tests"]]
-    dh <- RJDemetra::doornik_hansen_test(x)
+    
+    dh <- dh <- doornik_hansen(n = x$regarima$loglik["neffectiveobs", ],		
+                               skewness = tests["skewness", "Statistic"],		
+                               kurtosis = tests["kurtosis", "Statistic"])	
     nruns <- x$user_defined$preprocessing.residuals.nrun[2]
     lruns <- x$user_defined$preprocessing.residuals.lruns[2]
     if(is.null(nruns)){
@@ -212,31 +215,30 @@ arima_test <- function(x){
     result
 }
 # 
-# doornik_hansen <- function(n, skewness, kurtosis){
-#     beta <- (3 * (n^2 + 27*n - 70) * (n+1) * (n+3)) / ((n-2)*(n+5)*(n+7)*(n+9))
-#     omega2 <- -1 + sqrt(2*(beta - 1))
-#     y <- skewness * sqrt(((omega2 - 1) * (n+1) * (n+3))/(12*(n-2)))
-#     delta <- 1/sqrt(log(sqrt(omega2)))
-#     z1 <- delta * log(y+sqrt(y^2+1))
-#     
-#     delta <- (n-3)*(n+1)*(n^2+15*n-4)
-#     a <- (n-2)*(n+5)*(n+7)*(n^2+27*n-70)/(6*delta)
-#     c <- (n-7)*(n+5)*(n+7)*(n^2+2*n-5)/(6*delta)
-#     k <- (n+5)*(n+7)*(n^3+37*n^2+11*n-313)/(12*delta)
-#     alpha <- a+ c * skewness^2
-#     chi <- 2 * k *(kurtosis - 1 - skewness^2)
-#     z2 <- sqrt(9*alpha) *(1/(9*alpha) + (chi/(2*alpha))^(1/3)-1)
-#     
-#     DH <- z1^2+z2^2
-#     p_val <- 1 - pchisq(DH, 2)
-#     result <- c(DH, p_val)
-#     names(result) <- c("Estimate", "Pr(>|t|)")
-#     result
-# }
+doornik_hansen <- function(n, skewness, kurtosis){
+    beta <- (3 * (n^2 + 27*n - 70) * (n + 1) * (n+3)) / ((n-2)*(n+5)*(n+7)*(n+9))
+    omega2 <- -1 + sqrt(2*(beta - 1))
+    y <- skewness * sqrt(((omega2 - 1) * (n + 1) * (n+3))/(12*(n-2)))
+    delta <- 1/sqrt(log(sqrt(omega2)))
+    z1 <- delta * log(y+sqrt(y^2+1))
 
+    delta <- (n-3)*(n+1)*(n^2+15*n-4)
+    a <- (n-2)*(n+5)*(n+7)*(n^2+27*n-70)/(6*delta)
+    c <- (n-7)*(n+5)*(n+7)*(n^2+2*n-5)/(6*delta)
+    k <- (n+5)*(n+7)*(n^3+37*n^2+11*n-313)/(12*delta)
+    alpha <- a+ c * skewness^2
+    chi <- 2 * k *(kurtosis - 1 - skewness^2)
+    z2 <- sqrt(9*alpha) *(1/(9*alpha) + (chi/(2*alpha))^(1/3)-1)
+
+    DH <- z1^2+z2^2
+    p_val <- 1 - pchisq(DH, 2)
+    result <- c(DH, p_val)
+    names(result) <- c("Estimate", "Pr(>|t|)")
+    result
+}
 
 get_MH <- function(x, regarima_coefs){
-    if(x$regarima$model$spec_rslt["Easter"] == TRUE){
+    if(x$regarima$model$spec_rslt[, "Easter"]){
         MH_type <- grep("^Easter \\[.*\\]$", rownames(regarima_coefs),value = TRUE)
         if(length(MH_type) == 0){
             MH <- data.frame("", NA, NA,
@@ -254,7 +256,7 @@ get_MH <- function(x, regarima_coefs){
     MH
 }
 get_cste <- function(x){
-    if(x$regarima$model$spec_rslt["Mean"] == TRUE){
+    if(x$regarima$model$spec_rslt[, "Mean"]){
         cste <- regarima_coefs["Mean", c("Estimate", "Pr(>|t|)"), drop = FALSE]
     }else{
         cste <- data.frame(Estimate = NA, `Pr(>|t|)` = NA)
@@ -264,7 +266,7 @@ get_cste <- function(x){
     cste
 }
 get_LY <- function(x, regarima_coefs){
-    if(x$regarima$model$spec_rslt["Leap year"] == TRUE){
+    if(x$regarima$model$spec_rslt[, "Leap year"]){
         if("Length of period" %in% rownames(regarima_coefs)){
             LY <- data.frame("Length of period",
                              regarima_coefs["Length of period", c("Estimate", "Pr(>|t|)"), drop = FALSE],
@@ -320,8 +322,8 @@ get_TD <- function(x, regarima_coefs){
 get_residual_tests <- function(x){
     variance_decomposition <- t(x$diagnostics$variance_decomposition)
     if(class(x)[2] == "X13"){
-        result_combined_test <- x$diagnostics$combined_test_all$combined_seasonality_test
-        combined_tests <- t(x$diagnostics$combined_test_all$tests_for_stable_seasonality[,"P.value", drop = FALSE])
+        result_combined_test <- x$diagnostics$combined_test$combined_seasonality_test
+        combined_tests <- t(x$diagnostics$combined_test$tests_for_stable_seasonality[,"P.value", drop = FALSE])
     }else{
         result_combined_test <- ""
         combined_tests <- data.frame(NA, NA, NA)

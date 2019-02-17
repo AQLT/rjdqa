@@ -9,15 +9,16 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures//README-",
-  fig.align="center"
-  
-  ,
+  fig.align = "center",
   fig.path = "man/figures/README-"
 )
 ```
 
 
 # rjdqa
+
+[![](https://img.shields.io/badge/lifecycle-experimental-orange.svg?logo=github)](https://www.tidyverse.org/lifecycle/#experimental)
+
 
 rjdqa is an extension of the R package [RJDemetra](https://github.com/nbbrd/rjdemetra), which is an interface to JDemetra+, the seasonal adjustment software [officially recommended](https://ec.europa.eu/eurostat/cros/system/files/Jdemetra_%20release.pdf) to the members of the ESS and the European System of Central Banks. The rjdqa package provides help to the quality assessment by producing:
 
@@ -33,7 +34,7 @@ You can install rjdqa from github with:
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
 ## First install the RJDemetra package:
-# devtools::install_github("nbbrd/rjdemetra", args = "--no-multiarch")
+# devtools::install_github("jdemetraéé/rjdemetra", args = "--no-multiarch")
 devtools::install_github("AQLT/rjdqa", args = "--no-multiarch")
 ```
 
@@ -45,7 +46,9 @@ devtools::install_github("AQLT/rjdqa", args = "--no-multiarch")
 ```{r dashboard_exemple, fig.height = 8, fig.width = 10}
 library(RJDemetra)
 library(rjdqa)
-sa_model <- x13_def(myseries, "RSA5c")
+sa_model <- x13_def(ipi_c_eu[, "FR"], "RSA5c")
+sa_model_tramoseats <- tramoseats_def(ipi_c_eu[,"FR"])
 dashboard_data <- sa_dashboard(sa_model)
-plot(dashboard_data)
+plot(dashboard_data, main = "My first seasonal adjustment dashboard",
+     subtitle = "SA with X13")
 ```
