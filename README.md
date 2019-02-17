@@ -1,9 +1,13 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rjdqa
+# rjdqa <img src="man/figures/logo.png" align="right" />
 
+[![Travis Build
+Status](https://travis-ci.org/AQLT/rjdqa.svg?branch=master)](https://travis-ci.org/AQLT/rjdqa)
 [![](https://img.shields.io/badge/lifecycle-experimental-orange.svg?logo=github)](https://www.tidyverse.org/lifecycle/#experimental)
+
+## Overview
 
 rjdqa is an extension of the R package
 [RJDemetra](https://github.com/nbbrd/rjdemetra), which is an interface
@@ -29,7 +33,7 @@ You can install rjdqa from github with:
 ``` r
 # install.packages("devtools")
 ## First install the RJDemetra package:
-# devtools::install_github("nbbrd/rjdemetra", args = "--no-multiarch")
+# devtools::install_github("jdemetraéé/rjdemetra", args = "--no-multiarch")
 devtools::install_github("AQLT/rjdqa", args = "--no-multiarch")
 ```
 
@@ -40,9 +44,9 @@ devtools::install_github("AQLT/rjdqa", args = "--no-multiarch")
 ``` r
 library(RJDemetra)
 library(rjdqa)
-sa_model <- x13_def(ipi_c_eu[,"FR"], "RSA5c")
+sa_model <- x13_def(ipi_c_eu[, "FR"], "RSA5c")
 sa_model_tramoseats <- tramoseats_def(ipi_c_eu[,"FR"])
-dashboard_data <- sa_dashboard(sa_model_tramoseats)
+dashboard_data <- sa_dashboard(sa_model)
 plot(dashboard_data, main = "My first seasonal adjustment dashboard",
      subtitle = "SA with X13")
 ```

@@ -2,12 +2,12 @@
 % Please edit documentation in R/QR_functions.R
 \name{add_indicator}
 \alias{add_indicator}
-\title{Ajout d'un indicateur dans les objets QR_matrix}
+\title{Ajout d'un indicateur dans les objets QA_matrix}
 \usage{
 add_indicator(x, indicator, variable_name, ...)
 }
 \arguments{
-\item{x}{objet de type \code{QR_matrix} ou \code{mQR_matrix}.}
+\item{x}{objet de type \code{QA_matrix} ou \code{mQA_matrix}.}
 
 \item{indicator}{un \code{vector} ou un \code{data.frame} (voir détails).}
 
@@ -16,7 +16,7 @@ add_indicator(x, indicator, variable_name, ...)
 \item{...}{autres paramètres de la fonction \code{\link[base]{merge}}.}
 }
 \description{
-Permet de rajouter un indicateur dans les objets \code{QR_matrix}. Le nom des séries
+Permet de rajouter un indicateur dans les objets \code{QA_matrix}. Le nom des séries
 (colonne "series") ne peut être enlevé.
 }
 \details{
@@ -33,7 +33,7 @@ cas il faut que les valeurs à rajouter puissent être associées aux bonnes sé
  correspondantes.
 }
 \seealso{
-Other var QR_matrix manipulation: \code{\link{QR_var_manipulation}},
+Other var QA_matrix manipulation: \code{\link{QA_var_manipulation}},
   \code{\link{recode_indicator_num}}
 }
-\concept{var QR_matrix manipulation}
+\concept{var QA_matrix manipulation}

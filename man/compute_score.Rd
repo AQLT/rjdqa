@@ -3,10 +3,10 @@
 \encoding{UTF-8}
 \name{compute_score}
 \alias{compute_score}
-\alias{compute_score.QR_matrix}
+\alias{compute_score.QA_matrix}
 \title{Calcul d'un score global}
 \usage{
-\method{compute_score}{QR_matrix}(x, score_pond = c(qs_residual_sa_on_sa
+\method{compute_score}{QA_matrix}(x, score_pond = c(qs_residual_sa_on_sa
   = 6.66, f_residual_sa_on_sa = 6.68, combined_residual_sa_on_sa = 6.66,
   combined_residual_sa_on_sa_last_years = 15, combined_residual_sa_on_i =
   3.33, qs_residual_sa_on_i = 3.33, f_residual_sa_on_i = 3.34,
@@ -17,7 +17,7 @@
   na.rm = FALSE, n_contrib_score, ...)
 }
 \arguments{
-\item{x}{objet de type \code{QR_matrix} ou \code{mQR_matrix}.}
+\item{x}{objet de type \code{QA_matrix} ou \code{mQA_matrix}.}
 
 \item{score_pond}{formule utilisée pour calculer le score global}
 
@@ -35,7 +35,7 @@ si non spécifié alors aucune variable n'est créée.}
 \item{...}{autres paramètres non utilisés.}
 }
 \value{
-Un objet de type \code{\link{QR_matrix}} ou \code{\link{mQR_matrix}}.
+Un objet de type \code{\link{QA_matrix}} ou \code{\link{mQA_matrix}}.
 }
 \description{
 Permet de calculer un score global à partir d'un bilan qualité
@@ -77,17 +77,17 @@ de la variable "m7" alors la valeur correspondante de le variable 1_highest_scor
 }
 \examples{
 \dontrun{
-QR <- extract_QR()
-QR <- compute_score(QR,n_contrib_score = 2)
-QR
-QR$modalities$score
+QA <- extract_QA()
+QA <- compute_score(QA,n_contrib_score = 2)
+QA
+QA$modalities$score
 }
 }
 \seealso{
-Other QR_matrix functions: \code{\link{export_xlsx.QR_matrix}},
-  \code{\link{export_xlsx.mQR_matrix}},
-  \code{\link{extract_QR}}, \code{\link{extract_score}},
-  \code{\link{rbind.QR_matrix}}, \code{\link{sort}},
+Other QA_matrix functions: \code{\link{export_xlsx.QA_matrix}},
+  \code{\link{export_xlsx.mQA_matrix}},
+  \code{\link{extract_QA}}, \code{\link{extract_score}},
+  \code{\link{rbind.QA_matrix}}, \code{\link{sort}},
   \code{\link{weighted_score}}
 }
-\concept{QR_matrix functions}
+\concept{QA_matrix functions}

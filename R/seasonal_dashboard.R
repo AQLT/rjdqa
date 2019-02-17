@@ -1,3 +1,4 @@
+#
 #' @export
 sa_dashboard <- function(x){
     if (inherits(x, "X13") && !all(c("decomposition.c17","preprocessing.model.tde_f",
@@ -26,6 +27,7 @@ sa_dashboard <- function(x){
     class(res) <- c("sa_dashboard")
     res
 }
+#' Plot a seasonal adjustment dashboard
 #' @export
 plot.sa_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",
                               subtitle = "",

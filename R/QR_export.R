@@ -1,9 +1,9 @@
-#' Export QR_matrix objects to an Excel file
+#' Export QA_matrix objects to an Excel file
 #'
-#' Function to export a quality report matrix  (\code{QR_matrix}) to an Excel file.
+#' Function to export a quality assessment matrix  (\code{QA_matrix}) to an Excel file.
 #'
-#' @param x a \code{QR_matrix} object.
-#' @param layout QR_matrix' component to export. By default \code{layout = "all"}: the modalities matrix
+#' @param x a \code{QA_matrix} object.
+#' @param layout QA_matrix' component to export. By default \code{layout = "all"}: the modalities matrix
 #' (\code{"modalities"}) and the values matrix (\code{"values"}) are export. To add 
 #' the additional variables of the values matrix to the modalities matrix, use \code{layout = "combined"}.
 #' @param create boolean indicating whether to create a new Excel file or not (\code{TRUE} by default).
@@ -15,9 +15,9 @@
 #' @param sheet_names nom des feuilles Excel en sortie. Si non spécifié alors le nom correspond à la composante exportée.
 #' Si le paramètre est spécifié alors les éventuelles feuilles contenant ces noms sont supprimées.
 #' @param ... autres paramètres non utilisés.
-#' @family QR_matrix functions
+#' @family QA_matrix functions
 #' @export
-export_xlsx.QR_matrix <- function(x, layout = c("all","modalities", "values", "combined"),
+export_xlsx.QA_matrix <- function(x, layout = c("all","modalities", "values", "combined"),
                                   create = TRUE, clear_sheet = TRUE, auto_format = TRUE,
                                   file_name, sheet_names, ...) {
     layout <- match.arg(layout)
@@ -77,25 +77,25 @@ export_xlsx <- function(x, ...){
 }
 #' @export
 export_xlsx.default <- function(x, ...){
-    stop("Il faut un objet de type QR_matrix ou mQR_matrix")
+    stop("Il faut un objet de type QA_matrix ou mQA_matrix")
 }
 
-#' Export mQR_matrix objects to an Excel file
+#' Export mQA_matrix objects to an Excel file
 #'
-#' Function to export a list of quality report matrix  (\code{mQR_matrix}) to an Excel file.
+#' Function to export a list of quality assessment matrix  (\code{mQA_matrix}) to an Excel file.
 #'
-#' @param x a \code{mQR_matrix} object.
+#' @param x a \code{mQA_matrix} object.
 #' @param export_dir folder to export the result.
 #' @param layout_file export parameter. By default (\code{layout_file = "ByComponent"}) an Excel by component
-#' of the quality report matrix (modalities and/or values matrix) whose each sheet correspond to a QR_matrix. \code{layout_file = "ByQRMatrix"} to export 
-#' one file per QR_matrix.
+#' of the quality assessment matrix (modalities and/or values matrix) whose each sheet correspond to a QA_matrix. \code{layout_file = "ByQAMatrix"} to export 
+#' one file per QA_matrix.
 #' @param file_extension the files' extension (\code{".xls"} or \code{".xlsx"}).
-#' @param ... other parameters of the \code{\link{export_xlsx.QR_matrix}} function.
-#' @inheritParams export_xlsx.QR_matrix
-#' @family QR_matrix functions
+#' @param ... other parameters of the \code{\link{export_xlsx.QA_matrix}} function.
+#' @inheritParams export_xlsx.QA_matrix
+#' @family QA_matrix functions
 #' @export
-export_xlsx.mQR_matrix <- function(x, export_dir = "./",
-                                   layout_file = c("ByComponent","ByQRMatrix"),
+export_xlsx.mQA_matrix <- function(x, export_dir = "./",
+                                   layout_file = c("ByComponent","ByQAMatrix"),
                                    file_extension = c(".xls",".xlsx"),
                                    layout = c("all","modalities", "values", "combined"),
                                    ...){
@@ -105,22 +105,22 @@ export_xlsx.mQR_matrix <- function(x, export_dir = "./",
     layout_file <- match.arg(layout_file)
     layout <- match.arg(layout)
 
-    QR_matrix_names <- names(x)
+    QA_matrix_names <- names(x)
 
-    if(is.null(QR_matrix_names)){
-        QR_matrix_names <- paste0("QR_",1:length(x))
+    if(is.null(QA_matrix_names)){
+        QA_matrix_names <- paste0("QA_",1:length(x))
     }else{
-        QR_matrix_names[is.na(QR_matrix_names)] <- ""
-        if(!is.na(match("", QR_matrix_names)))
-            QR_matrix_names[match("", QR_matrix_names)] <- paste0("QR_",
-                                                                  match("", QR_matrix_names))
+        QA_matrix_names[is.na(QA_matrix_names)] <- ""
+        if(!is.na(match("", QA_matrix_names)))
+            QA_matrix_names[match("", QA_matrix_names)] <- paste0("QA_",
+                                                                  match("", QA_matrix_names))
     }
 
 
-    if(layout_file == "ByQRMatrix"){
+    if(layout_file == "ByQAMatrix"){
         #On exporte un fichier par bilan :
         files_name <- normalizePath(file.path(export_dir,
-                                             paste0(QR_matrix_names, file_extension)),
+                                             paste0(QA_matrix_names, file_extension)),
             mustWork = FALSE)
         for(i in 1:length(x)){
             export_xlsx(x[[i]],layout = layout, file_name = files_name[i], ...)
@@ -139,11 +139,11 @@ export_xlsx.mQR_matrix <- function(x, export_dir = "./",
             file.path(export_dir,paste0(files_name, file_extension)),
             mustWork = FALSE)
         for(i in 1:length(x)){
-            #Indice sur les QR_matrix
+            #Indice sur les QA_matrix
             for(j in 1:length(final_layout)){
                 #Indice sur les composantes
                 export_xlsx(x[[i]],layout = final_layout[j], file_name = files[j],
-                            sheet_names = QR_matrix_names[i],
+                            sheet_names = QA_matrix_names[i],
                             ...)
             }
         }

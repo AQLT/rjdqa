@@ -7,31 +7,31 @@
 extract_score(x, format_output = c("data.frame", "vector"))
 }
 \arguments{
-\item{x}{objet de type \code{QR_matrix} ou \code{mQR_matrix}.}
+\item{x}{objet de type \code{QA_matrix} ou \code{mQA_matrix}.}
 
 \item{format_output}{chaîne de caractères indiquant le format de l'objet en sortie :
 soit un \code{data.frame} soit un \code{vector}.}
 }
 \description{
-Permet d'extraire le score des objets \code{QR_matrix} ou \code{mQR_matrix}.
+Permet d'extraire le score des objets \code{QA_matrix} ou \code{mQA_matrix}.
 }
 \details{
-Pour les objets \code{QR_matrix}, le score renvoyé est soit l'objet \code{NULL} si aucun score n'a été calculé ou un vecteur.
-Pour les objets \code{mQR_matrix} il s'agit d'une liste de scores (\code{NULL} ou un vecteur).
+Pour les objets \code{QA_matrix}, le score renvoyé est soit l'objet \code{NULL} si aucun score n'a été calculé ou un vecteur.
+Pour les objets \code{mQA_matrix} il s'agit d'une liste de scores (\code{NULL} ou un vecteur).
 }
 \examples{
 \dontrun{
-QR <- extract_QR()
-mQR <- mQR_matrix(QR, compute_score(QR))
-extract_score(QR) # NULL
-extract_score(mQR) # liste dont le premier élément est NULL
+QA <- extract_QA()
+mQA <- mQA_matrix(QA, compute_score(QA))
+extract_score(QA) # NULL
+extract_score(mQA) # liste dont le premier élément est NULL
 }
 }
 \seealso{
-Other QR_matrix functions: \code{\link{compute_score}},
-  \code{\link{export_xlsx.QR_matrix}},
-  \code{\link{export_xlsx.mQR_matrix}},
-  \code{\link{extract_QR}}, \code{\link{rbind.QR_matrix}},
+Other QA_matrix functions: \code{\link{compute_score}},
+  \code{\link{export_xlsx.QA_matrix}},
+  \code{\link{export_xlsx.mQA_matrix}},
+  \code{\link{extract_QA}}, \code{\link{rbind.QA_matrix}},
   \code{\link{sort}}, \code{\link{weighted_score}}
 }
-\concept{QR_matrix functions}
+\concept{QA_matrix functions}
