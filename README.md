@@ -6,6 +6,7 @@
 [![Travis Build
 Status](https://travis-ci.org/AQLT/rjdqa.svg?branch=master)](https://travis-ci.org/AQLT/rjdqa)
 [![](https://img.shields.io/badge/lifecycle-experimental-orange.svg?logo=github)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rjdqa)](https://cran.r-project.org/package=rjdqa)
 
 ## Overview
 

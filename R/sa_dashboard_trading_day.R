@@ -20,30 +20,29 @@ trading_day_pattern.X13 <- function(x){
     evolution_row_names <- sprintf("%s %s",
                                    c("Previous", "Current", "Next"),
                                    period)
-    if(length(td_reg) == 0)
-        return(list(estimated_values = c(Monday = 0, Tuesday = 0, Wednesday = 0, Thursday = 0, Friday = 0, 
-                                         Saturday = 0, Contrast = 0),
-                    evolution = data.frame(Evolution = c(0,0,0),
-                                           row.names = evolution_row_names)))
+    if(length(td_reg) == 0){
+        result <- list(estimated_values = c(Monday = 0, Tuesday = 0, Wednesday = 0, Thursday = 0, Friday = 0, 
+                                            Saturday = 0, Contrast = 0),
+                       evolution = data.frame(Evolution = c(0,0,0),
+                                              row.names = evolution_row_names))
+    }else{
+        estimated_values <- reg_coefficients[td_reg,1]*100
+        is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
+        evolution <- c(tail(x$regarima$model$effects[,"tde"],2),
+                       head(x$user_defined$preprocessing.model.tde_f,1))
+        if (!is_multiplicative){
+            series_mean <- mean(x$final$series[,"y"],
+                                na.rm = TRUE)
+            estimated_values <- estimated_values / series_mean
+            evolution <- evolution/series_mean + 1 
+        }
         
-        
-    estimated_values <- reg_coefficients[td_reg,1]*100
-    is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
-    evolution <- c(tail(x$regarima$model$effects[,"tde"],2),
-                   head(x$user_defined$preprocessing.model.tde_f,1))
-    if (!is_multiplicative){
-        series_mean <- mean(x$final$series[,"y"],
-                            na.rm = TRUE)
-        estimated_values <- estimated_values / series_mean
-        evolution <- evolution/series_mean + 1 
+        estimated_values <- c(estimated_values, Contrast = -sum(estimated_values))
+        evolution <- (evolution - 1)*100
+        evolution <- data.frame(Evolution = evolution,
+                                row.names = evolution_row_names)
+        result <- list(estimated_values = estimated_values, evolution = evolution)
     }
-    
-    estimated_values <- c(estimated_values, Contrast = -sum(estimated_values))
-    evolution <- (evolution - 1)*100
-    evolution <- data.frame(Evolution = evolution,
-                            row.names = evolution_row_names)
-    result <- list(estimated_values = estimated_values, evolution = evolution)
-    
     class(result) <- c("trading_day_pattern", class(result))
     result
 }
@@ -67,32 +66,32 @@ trading_day_pattern.TRAMO_SEATS <- function(x){
     evolution_row_names <- sprintf("%s %s",
                                    c("Previous", "Current", "Next"),
                                    period)
-    if(length(td_reg) == 0)
-        return(list(estimated_values = c(Monday = 0, Tuesday = 0, Wednesday = 0, Thursday = 0, Friday = 0, 
-                                         Saturday = 0, Contrast = 0),
-                    evolution = data.frame(Evolution = c(0,0,0),
-                                           row.names = evolution_row_names)))
-    
-    
-    estimated_values <- reg_coefficients[td_reg,1]*100
-    is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
-    evolution <- c(tail(x$regarima$model$effects[,"tde"],2),
-                   head(x$user_defined$preprocessing.model.tde_f,1))
-    if (!is_multiplicative){
-        series_mean <- mean(x$final$series[,"y"],
-                            na.rm = TRUE)
-        estimated_values <- estimated_values / series_mean
-        evolution <- evolution/series_mean + 1 
+    if(length(td_reg) == 0){
+        result <- list(estimated_values = c(Monday = 0, Tuesday = 0, Wednesday = 0, Thursday = 0, Friday = 0, 
+                                            Saturday = 0, Contrast = 0),
+                       evolution = data.frame(Evolution = c(0,0,0),
+                                              row.names = evolution_row_names))
     }else{
-        evolution[1:2] <- exp(evolution[1:2])
+        estimated_values <- reg_coefficients[td_reg,1]*100
+        is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
+        evolution <- c(tail(x$regarima$model$effects[,"tde"],2),
+                       head(x$user_defined$preprocessing.model.tde_f,1))
+        if (!is_multiplicative){
+            series_mean <- mean(x$final$series[,"y"],
+                                na.rm = TRUE)
+            estimated_values <- estimated_values / series_mean
+            evolution <- evolution/series_mean + 1 
+        }else{
+            evolution[1:2] <- exp(evolution[1:2])
+        }
+        
+        estimated_values <- c(estimated_values, Contrast = -sum(estimated_values))
+        evolution <- (evolution - 1)*100
+        evolution <- data.frame(Evolution = evolution,
+                                row.names = evolution_row_names)
+        result <- list(estimated_values = estimated_values, evolution = evolution)
     }
-    
-    estimated_values <- c(estimated_values, Contrast = -sum(estimated_values))
-    evolution <- (evolution - 1)*100
-    evolution <- data.frame(Evolution = evolution,
-                            row.names = evolution_row_names)
-    result <- list(estimated_values = estimated_values, evolution = evolution)
-    
+
     class(result) <- c("trading_day_pattern", class(result))
     result
 }
