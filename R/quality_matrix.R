@@ -1,4 +1,3 @@
-#' @export
 # quality_matrix <- function(x, series_name){
 #     if(missing(series_name))
 #         series_name <- deparse(substitute(x))

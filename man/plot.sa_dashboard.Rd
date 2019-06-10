@@ -8,6 +8,9 @@
   subtitle = "", raw_color = "#33A02C", sa_color = "#E31A1C",
   trend_color = "black", ...)
 }
+\arguments{
+\item{x}{a \code{"sa_dashboard"} object}
+}
 \description{
 Plot a seasonal adjustment dashboard
 }

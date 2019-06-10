@@ -1,4 +1,14 @@
-#
+#' Compute data for a seasonal adjustment dashboard
+#' 
+#' Function to compute the data to produce a seasonal adjustment dashboard
+#' 
+#' @param x a seasonal adjustment model made by 'RJDemetra' (object of class \code{"SA"}).
+#' 
+#' @examples 
+#' sa_model <- x13(ipi_c_eu[, "FR"], "RSA5c")
+#' dashboard_data <- sa_dashboard(sa_model)
+#' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
+#'      subtitle = "SA with X13")
 #' @export
 sa_dashboard <- function(x){
     if (inherits(x, "X13") && !all(c("decomposition.c17","preprocessing.model.tde_f",
@@ -28,6 +38,22 @@ sa_dashboard <- function(x){
     res
 }
 #' Plot a seasonal adjustment dashboard
+#' 
+#' Function to plot a dashboard of a seasonal adjustment model
+#' 
+#' @param x a \code{"sa_dashboard"} object.
+#' @param main main title.
+#' @param subtitle subtitle.
+#' @param raw_color color for the raw series.
+#' @param sa_color color for the seasonal adjusted series.
+#' @param trend_color color for the trend.
+#' @param ...
+#' @examples 
+#' sa_model <- x13(ipi_c_eu[, "FR"], "RSA5c")
+#' dashboard_data <- sa_dashboard(sa_model)
+#' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
+#'      subtitle = "SA with X13")
+#' @seealso \code{\link{sa_dashboard}}.
 #' @export
 plot.sa_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",
                               subtitle = "",

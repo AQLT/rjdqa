@@ -45,8 +45,8 @@ devtools::install_github("AQLT/rjdqa", args = "--no-multiarch")
 ``` r
 library(RJDemetra)
 library(rjdqa)
-sa_model <- x13_def(ipi_c_eu[, "FR"], "RSA5c")
-sa_model_tramoseats <- tramoseats_def(ipi_c_eu[,"FR"])
+sa_model <- x13(ipi_c_eu[, "FR"], "RSA5c")
+sa_model_tramoseats <- tramoseats(ipi_c_eu[,"FR"])
 dashboard_data <- sa_dashboard(sa_model)
 plot(dashboard_data, main = "My first seasonal adjustment dashboard",
      subtitle = "SA with X13")

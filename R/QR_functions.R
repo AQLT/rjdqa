@@ -1,4 +1,4 @@
-#' Calcul d'un score global
+#' Compute a score
 #'
 #' Permet de calculer un score global à partir d'un bilan qualité
 #'

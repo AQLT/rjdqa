@@ -4,7 +4,7 @@
 \name{compute_score}
 \alias{compute_score}
 \alias{compute_score.QA_matrix}
-\title{Calcul d'un score global}
+\title{Compute a score}
 \usage{
 \method{compute_score}{QA_matrix}(x, score_pond = c(qs_residual_sa_on_sa
   = 6.66, f_residual_sa_on_sa = 6.68, combined_residual_sa_on_sa = 6.66,
