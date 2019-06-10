@@ -91,31 +91,30 @@ n_out <- function(regarima_coefs){
 arima_order_coef <- function(x, regarima_coefs){
     arima_orders <- x$regarima$arma
     
-    for(i in 1:6){
-        if(i>arima_orders["p"]){
+    for (i in 1:6) {
+        if (i > arima_orders["p"]) {
             assign(sprintf("phi%i",i), c(Estimate = NA, `Pr(>|t|)` = NA) )
         }else{
             assign(sprintf("phi%i",i),
                    regarima_coefs[sprintf("Phi(%i)",i), c("Estimate", "Pr(>|t|)")])
         }
-        if(i>arima_orders["q"]){
+        if (i > arima_orders["q"]) {
             assign(sprintf("theta%i",i), c(Estimate = NA, `Pr(>|t|)` = NA) )
         }else{
             assign(sprintf("theta%i",i),
                    regarima_coefs[sprintf("Theta(%i)",i), c("Estimate", "Pr(>|t|)")])
         }
     }
-    if(arima_orders["bp"] == 0){
+    if (arima_orders["bp"] == 0) {
         bphi1 <- c(Estimate = NA, `Pr(>|t|)` = NA) 
     }else{
         bphi1 <- regarima_coefs["BPhi(1)", c("Estimate", "Pr(>|t|)")]
     }
-    if(arima_orders["bq"] == 0){
+    if (arima_orders["bq"] == 0) {
         btheta1 <- c(Estimate = NA, `Pr(>|t|)` = NA) 
     }else{
         btheta1 <- regarima_coefs["BTheta(1)", c("Estimate", "Pr(>|t|)")]
     }
-
     
     result <- matrix(c(arima_orders,
                 phi1, phi2, phi3, phi4, phi5, phi6,
@@ -194,10 +193,10 @@ arima_test <- function(x){
                                kurtosis = tests["kurtosis", "Statistic"])	
     nruns <- x$user_defined$preprocessing.residuals.nrun[2]
     lruns <- x$user_defined$preprocessing.residuals.lruns[2]
-    if(is.null(nruns)){
+    if (is.null(nruns)) {
         nruns <- NA
     }
-    if(is.null(lruns)){
+    if (is.null(lruns)) {
         lruns <- NA
     }
     result <- c(tests[c("skewness","kurtosis", "mean"), "P.value"],
