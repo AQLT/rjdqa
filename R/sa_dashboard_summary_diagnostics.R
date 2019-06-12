@@ -165,3 +165,12 @@ plot.summary_diagnostics <- function(x, ...){
                   vlines = TRUE,bg = bg_color, xjust = 0.5, yjust = 0.5)
     title("Summary of Key Diagnostics", line = -3)
 }
+
+#' @importFrom RJDemetra x13 x13_spec
+#' @importFrom graphics arrows axis barplot box layout legend lines mtext par plot plot.new strwidth text title points
+#' @importFrom stats cor cycle deltat frequency lag na.omit pchisq pt sd start time ts ts.union window
+#' @importFrom utils as.roman head read.csv tail globalVariables head tail
+utils::globalVariables(c("TD1", "TD2", "TD3", "TD4", "TD5", "TD6", "TD7",
+                          "phi1", "phi2", "phi3", "phi4", "phi5", "phi6",
+                         "regarima_coefs","theta1", "theta2", "theta3", "theta4", "theta5", "theta6"))
+

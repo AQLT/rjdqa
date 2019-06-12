@@ -1,7 +1,7 @@
-recent_history <- function(x, nb_last_obs = 24){
+recent_history <- function(x, n_recent_obs = 24){
     result <- x$final$series[,c("y","t","sa")]
-    start <- tail(time(result), nb_last_obs)[1]
-    result <- ts(tail(result, nb_last_obs), start = start, frequency = frequency(result))
+    start <- tail(time(result), n_recent_obs)[1]
+    result <- ts(tail(result, n_recent_obs), start = start, frequency = frequency(result))
     class(result) <- c("recent_history", class(result))
     result
 }

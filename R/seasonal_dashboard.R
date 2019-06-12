@@ -3,14 +3,40 @@
 #' Function to compute the data to produce a seasonal adjustment dashboard
 #' 
 #' @param x a seasonal adjustment model made by 'RJDemetra' (object of class \code{"SA"}).
+#' @param n_recent_obs number of observation in the recent history panel (see details). By default \code{n_recent_obs = 24} (last 2 years for monthly data).
 #' 
 #' @examples 
-#' sa_model <- x13(ipi_c_eu[, "FR"], "RSA5c")
+#' sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
 #' dashboard_data <- sa_dashboard(sa_model)
 #' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
 #'      subtitle = "SA with X13")
+#'      
+#' @details 
+#' \code{sa_model()} reproduces Statistics Canada dashboard used to provide a snapshot snapshot of an single seasonal adjustment model at a point in time and to point out some possible problems (see references). 
+#' 
+#' The dashboard is divided into four sections:
+#' \itemize{
+#' \item Recent History (top left panel): plot of the raw series, the seasonal adjusted series and the trend for the most recent periods (\code{n_recent_obs} last observations: 24 by default).  It is intended to identify trend direction, overall volatility and obvious outliers.
+#' \item Summary of Key Diagnostics (top right panel): 
+#' \itemize{
+#' \item Adjustability (only for X13 models): M7 statistic. Colors: red if M7 > 1.75, yellow if 1.25 < M7 < 1.75 and green if M7 < 1.25.
+#' \item Residual seasonality: qs (auto-correlations at seasonal lags) and f (Friedman) test on seasonal adjusted series. Colors: red if p-value < 0.01, yellow if 0.01 < p-value < 0.05 and green if p-value > 0.05.
+#' \item Residual trading-days effects: f (Friedman) test on seasonal adjusted serie.  Colors: red if p-value < 0.01, yellow if 0.01 < p-value < 0.05 and green if p-value > 0.05.
+#' \item Independence of RegARIMA residuals: Ljung-Box test. Colors: red if p-value < 0.01, yellow if 0.01 < p-value < 0.05 and green if p-value > 0.05.
+#' \item Recent outliers on last (t) and penultimate (t-1) observation. Colors: Red if there is an extreme value (only for X13: when table C17 equals to 0), yellow if there is an outlier in the RegARIMA model and green otherwise.
+#' }
+#' \item Estimated Patterns and Anticipated Movements (middle panel): estimated trading day, moving holiday and seasonal pattern.  It presents expected movement in unadjusted series based on the current and previous period.
+#' \item Net Effect of Seasonal Adjustment (bottom panel): movement in the raw series, compared to typical ranges centered around “neutral” value (when the seasonal adjusted series of the last period is equal to the penultimate period).  It also shows the movement in the seasonally adjusted series, compared to typical ranges.
+#' }
+#' 
+#' @references
+#' KIRCHNER R., LADIRAY D., MAZZI G. L. (2018), "Quality Measures and Reporting for Seasonal Adjustment", edited by G. L. Mazzi, co-edited by D. Ladiray, European Union, Luxembourg. \url{ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-001}
+#' 
+#' MATTHEWS S. (2016), "Quality Assurance of Seasonal Adjustment for a Large System of Time Series", 36th International Symposium on Forecasting Santander, Spain.
+#' 
+#' 
 #' @export
-sa_dashboard <- function(x){
+sa_dashboard <- function(x, n_recent_obs = 24){
     if (inherits(x, "X13") && !all(c("decomposition.c17","preprocessing.model.tde_f",
                                      "preprocessing.model.mhe_f") %in% names(x$user_defined))) {
         my_spec <- RJDemetra::x13_spec(x)
@@ -28,7 +54,7 @@ sa_dashboard <- function(x){
     
     last_date <- tail(time_to_date(x$final$series[,"y"]), 1)
     last_date <- format(last_date, format = "%Y-%m")
-    res <- list(recent_history = recent_history(x),
+    res <- list(recent_history = recent_history(x, n_recent_obs = n_recent_obs),
          summary_diagnostics = summary_diagnostics(x),
          trading_day_pattern = trading_day_pattern(x),
          moving_holiday_pattern = moving_holiday_pattern(x),
@@ -47,12 +73,35 @@ sa_dashboard <- function(x){
 #' @param raw_color color for the raw series.
 #' @param sa_color color for the seasonal adjusted series.
 #' @param trend_color color for the trend.
-#' @param ...
+#' @param ... other parameters (unused).
 #' @examples 
-#' sa_model <- x13(ipi_c_eu[, "FR"], "RSA5c")
+#' sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
 #' dashboard_data <- sa_dashboard(sa_model)
 #' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
 #'      subtitle = "SA with X13")
+#' @details 
+#' \code{sa_model()} reproduces Statistics Canada dashboard used to provide a snapshot snapshot of an single seasonal adjustment model at a point in time and to point out some possible problems (see references). 
+#' 
+#' The dashboard is divided into four sections:
+#' \itemize{
+#' \item Recent History (top left panel): plot of the raw series, the seasonal adjusted series and the trend for the most recent periods (\code{n_recent_obs} last observations: 24 by default).  It is intended to identify trendF direction, overall volatility and obvious outliers.
+#' \item Summary of Key Diagnostics (top right panel): 
+#' \itemize{
+#' \item Adjustability (only for X13 models): M7 statistic. Colors: red if M7 > 1.75, yellow if 1.25 < M7 < 1.75 and green if M7 < 1.25.
+#' \item Residual seasonality: qs (auto-correlations at seasonal lags) and f (Friedman) test on seasonal adjusted series. Colors: red if p-value < 0.01, yellow if 0.01 < p-value < 0.05 and green if p-value > 0.05.
+#' \item Residual trading-days effects: f (Friedman) test on seasonal adjusted serie.  Colors: red if p-value < 0.01, yellow if 0.01 < p-value < 0.05 and green if p-value > 0.05.
+#' \item Independence of RegARIMA residuals: Ljung-Box test. Colors: red if p-value < 0.01, yellow if 0.01 < p-value < 0.05 and green if p-value > 0.05.
+#' \item Recent outliers on last (t) and penultimate (t-1) observation. Colors: Red if there is an extreme value (only for X13: when table C17 equals to 0), yellow if there is an outlier in the RegARIMA model and green otherwise.
+#' }
+#' \item Estimated Patterns and Anticipated Movements (middle panel): estimated trading day, moving holiday and seasonal pattern.  It presents expected movement in unadjusted series based on the current and previous period.
+#' \item Net Effect of Seasonal Adjustment (bottom panel): movement in the raw series, compared to typical ranges centered around “neutral” value (when the seasonal adjusted series of the last period is equal to the penultimate period).  It also shows the movement in the seasonally adjusted series, compared to typical ranges.
+#' }
+#' 
+#' @references
+#' KIRCHNER R., LADIRAY D., MAZZI G. L. (2018), "Quality Measures and Reporting for Seasonal Adjustment", edited by G. L. Mazzi, co-edited by D. Ladiray, European Union, Luxembourg. \url{ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-001}
+#' 
+#' MATTHEWS S. (2016), "Quality Assurance of Seasonal Adjustment for a Large System of Time Series", 36th International Symposium on Forecasting Santander, Spain.
+#' 
 #' @seealso \code{\link{sa_dashboard}}.
 #' @export
 plot.sa_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",

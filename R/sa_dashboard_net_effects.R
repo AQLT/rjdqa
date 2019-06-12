@@ -180,7 +180,7 @@ net_effect.TRAMO_SEATS <- function(x){
         neutral_line_cal <- observed_cal + c(0, observed_sa[1] - observed_sa[2])
     }
     
-    EM <- sd(tail(rjdqa:::ev.ts(sa) / 100, 5 * frequency(sa)), na.rm = TRUE)
+    EM <- sd(tail(ev.ts(sa) / 100, 5 * frequency(sa)), na.rm = TRUE)
     
     upper_bound_sa <- neutral_line_sa * c(1, 1 + EM)
     lower_bound_sa <- neutral_line_sa * c(1, 1 - EM)
