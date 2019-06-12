@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot a seasonal adjustment dashboard — plot.sa_dashboard • rjdqa</title>
+<title>Compute data for a seasonal adjustment dashboard — sa_dashboard • rjdqa</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Plot a seasonal adjustment dashboard — plot.sa_dashboard" />
+<meta property="og:title" content="Compute data for a seasonal adjustment dashboard — sa_dashboard" />
 
-<meta property="og:description" content="Function to plot a dashboard of a seasonal adjustment model" />
+<meta property="og:description" content="Function to compute the data to produce a seasonal adjustment dashboard" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -101,52 +101,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot a seasonal adjustment dashboard</h1>
+    <h1>Compute data for a seasonal adjustment dashboard</h1>
     <small class="dont-index">Source: <a href='https://github.com/AQLT/rjdqa/blob/master/R/seasonal_dashboard.R'><code>R/seasonal_dashboard.R</code></a></small>
-    <div class="hidden name"><code>plot.sa_dashboard.Rd</code></div>
+    <div class="hidden name"><code>sa_dashboard.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Function to plot a dashboard of a seasonal adjustment model</p>
+    <p>Function to compute the data to produce a seasonal adjustment dashboard</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for sa_dashboard</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"Seasonal Adjustment Dashboard"</span>,
-  <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>raw_color</span> <span class='kw'>=</span> <span class='st'>"#33A02C"</span>, <span class='kw'>sa_color</span> <span class='kw'>=</span> <span class='st'>"#E31A1C"</span>,
-  <span class='kw'>trend_color</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>sa_dashboard</span>(<span class='no'>x</span>, <span class='kw'>n_recent_obs</span> <span class='kw'>=</span> <span class='fl'>24</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a <code>"sa_dashboard"</code> object.</p></td>
+      <td><p>a seasonal adjustment model made by 'RJDemetra' (object of class <code>"SA"</code>).</p></td>
     </tr>
     <tr>
-      <th>main</th>
-      <td><p>main title.</p></td>
-    </tr>
-    <tr>
-      <th>subtitle</th>
-      <td><p>subtitle.</p></td>
-    </tr>
-    <tr>
-      <th>raw_color</th>
-      <td><p>color for the raw series.</p></td>
-    </tr>
-    <tr>
-      <th>sa_color</th>
-      <td><p>color for the seasonal adjusted series.</p></td>
-    </tr>
-    <tr>
-      <th>trend_color</th>
-      <td><p>color for the trend.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>other parameters (unused).</p></td>
+      <th>n_recent_obs</th>
+      <td><p>number of observation in the recent history panel (see details). By default <code>n_recent_obs = 24</code> (last 2 years for monthly data).</p></td>
     </tr>
     </table>
     
@@ -154,7 +131,7 @@
 
     <p><code>sa_model()</code> reproduces Statistics Canada dashboard used to provide a snapshot snapshot of an single seasonal adjustment model at a point in time and to point out some possible problems (see references).</p>
 <p>The dashboard is divided into four sections:</p><ul>
-<li><p>Recent History (top left panel): plot of the raw series, the seasonal adjusted series and the trend for the most recent periods (<code>n_recent_obs</code> last observations: 24 by default).  It is intended to identify trendF direction, overall volatility and obvious outliers.</p></li>
+<li><p>Recent History (top left panel): plot of the raw series, the seasonal adjusted series and the trend for the most recent periods (<code>n_recent_obs</code> last observations: 24 by default).  It is intended to identify trend direction, overall volatility and obvious outliers.</p></li>
 <li><p>Summary of Key Diagnostics (top right panel):</p><ul>
 <li><p>Adjustability (only for X13 models): M7 statistic. Colors: red if M7 &gt; 1.75, yellow if 1.25 &lt; M7 &lt; 1.75 and green if M7 &lt; 1.25.</p></li>
 <li><p>Residual seasonality: qs (auto-correlations at seasonal lags) and f (Friedman) test on seasonal adjusted series. Colors: red if p-value &lt; 0.01, yellow if 0.01 &lt; p-value &lt; 0.05 and green if p-value &gt; 0.05.</p></li>
@@ -171,16 +148,13 @@
     <p>KIRCHNER R., LADIRAY D., MAZZI G. L. (2018), "Quality Measures and Reporting for Seasonal Adjustment", edited by G. L. Mazzi, co-edited by D. Ladiray, European Union, Luxembourg. <a href='ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-001'>ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-001</a></p>
 <p>MATTHEWS S. (2016), "Quality Assurance of Seasonal Adjustment for a Large System of Time Series", 36th International Symposium on Forecasting Santander, Spain.</p>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='sa_dashboard.html'>sa_dashboard</a></code>.</p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>sa_model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>RJDemetra</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/RJDemetra/topics/x13'>x13</a></span>(<span class='kw pkg'>RJDemetra</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/RJDemetra/topics/ipi_c_eu'>ipi_c_eu</a></span>[, <span class='st'>"FR"</span>], <span class='st'>"RSA5c"</span>)
-<span class='no'>dashboard_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sa_dashboard.html'>sa_dashboard</a></span>(<span class='no'>sa_model</span>)
+<span class='no'>dashboard_data</span> <span class='kw'>&lt;-</span> <span class='fu'>sa_dashboard</span>(<span class='no'>sa_model</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>dashboard_data</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"My first seasonal adjustment dashboard"</span>,
-     <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"SA with X13"</span>)</div><div class='img'><img src='plot.sa_dashboard-1.png' alt='' width='700' height='433' /></div></pre>
+     <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"SA with X13"</span>)</div><div class='img'><img src='sa_dashboard-1.png' alt='' width='700' height='433' /></div><div class='input'>     
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -190,8 +164,6 @@
       <li><a href="#details">Details</a></li>
 
       <li><a href="#references">References</a></li>
-
-      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

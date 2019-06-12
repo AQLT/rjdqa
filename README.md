@@ -17,12 +17,12 @@ recommended](https://ec.europa.eu/eurostat/cros/system/files/Jdemetra_%20release
 to the members of the ESS and the European System of Central Banks. The
 rjdqa package provides help to the quality assessment by producing:
 
-  - A dashboard of a seasonal adjustment model. Its objective it’s to
-    provide a simple snapshot of an single seasonal adjustment model at
-    a point in time and to point out some possible problems.  
-  - A quality report matrix. Its objective it’s to help the analyst
-    during production, when there is very few time to detect and fix
-    potential problems, by highlighting problematic series and
+  - A dashboard of a seasonal adjustment model. Its goal is to provide a
+    simple snapshot of an single seasonal adjustment model at a point in
+    time and to point out some possible problems.  
+  - A quality report matrix (in a future release). Its goal is to help
+    the analyst during production, when there is very few time to detect
+    and fix potential problems, by highlighting problematic series and
     prioritising the list of series to be checked.
 
 ## Installation
@@ -33,8 +33,6 @@ You can install rjdqa from github with:
 
 ``` r
 # install.packages("devtools")
-## First install the RJDemetra package:
-# devtools::install_github("jdemetraéé/rjdemetra", args = "--no-multiarch")
 devtools::install_github("AQLT/rjdqa", args = "--no-multiarch")
 ```
 
