@@ -12,7 +12,6 @@ Depends:
     R (>= 3.1.1),
     RJDemetra,
 Imports:
-    methods,
     plotrix,
     utils,
     graphics,
