@@ -1,17 +1,16 @@
 Package: rjdqa
 Type: Package
-Title: Quality assessment for seasonal adjustment
+Title: Quality Assessment for Seasonal Adjustment
 Version: 0.1.0
 Authors@R: c(
   person("Alain", "Quartier-la-Tente", role = c("aut", "cre"),
                  email = "alain.quartier@yahoo.fr"))
-Description: Add-in to the RJdemetra package on seasonal adjustments.
+Description: Add-in to the 'RJDemetra' package on seasonal adjustments.
     It allows to produce quality assessments outputs (dashboards, quality report matrix, etc.).
 License: EUPL
 Depends:
     R (>= 3.1.1),
     RJDemetra,
-Remotes: nbbrd/rjdemetra
 Imports:
     methods,
     plotrix,
