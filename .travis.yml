@@ -9,6 +9,7 @@ r:
 - release
 - devel
 
-r_build_args: --no-multiarch --run-donttest
+r_build_args: --no-multiarch
+r_check_args: --run-donttest
 
 warnings_are_errors: false
