@@ -15,7 +15,6 @@ Remotes: nbbrd/rjdemetra
 Imports:
     methods,
     plotrix,
-    XLConnect,
     utils,
     graphics,
     stats

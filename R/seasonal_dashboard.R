@@ -5,12 +5,6 @@
 #' @param x a seasonal adjustment model made by 'RJDemetra' (object of class \code{"SA"}).
 #' @param n_recent_obs number of observation in the recent history panel (see details). By default \code{n_recent_obs = 24} (last 2 years for monthly data).
 #' 
-#' @examples 
-#' sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
-#' dashboard_data <- sa_dashboard(sa_model)
-#' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
-#'      subtitle = "SA with X13")
-#'      
 #' @details 
 #' \code{sa_model()} reproduces Statistics Canada dashboard used to provide a snapshot snapshot of an single seasonal adjustment model at a point in time and to point out some possible problems (see references). 
 #' 
@@ -34,7 +28,13 @@
 #' 
 #' MATTHEWS S. (2016), "Quality Assurance of Seasonal Adjustment for a Large System of Time Series", 36th International Symposium on Forecasting Santander, Spain.
 #' 
-#' 
+#' @examples \donttest{
+#' sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
+#' dashboard_data <- sa_dashboard(sa_model)
+#' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
+#'      subtitle = "SA with X13")
+#' }
+#' @seealso \code{\link{plot.sa_dashboard}}.
 #' @export
 sa_dashboard <- function(x, n_recent_obs = 24){
     if (inherits(x, "X13") && !all(c("decomposition.c17","preprocessing.model.tde_f",
@@ -74,11 +74,7 @@ sa_dashboard <- function(x, n_recent_obs = 24){
 #' @param sa_color color for the seasonal adjusted series.
 #' @param trend_color color for the trend.
 #' @param ... other parameters (unused).
-#' @examples 
-#' sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
-#' dashboard_data <- sa_dashboard(sa_model)
-#' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
-#'      subtitle = "SA with X13")
+#' 
 #' @details 
 #' \code{sa_model()} reproduces Statistics Canada dashboard used to provide a snapshot snapshot of an single seasonal adjustment model at a point in time and to point out some possible problems (see references). 
 #' 
@@ -101,7 +97,12 @@ sa_dashboard <- function(x, n_recent_obs = 24){
 #' KIRCHNER R., LADIRAY D., MAZZI G. L. (2018), "Quality Measures and Reporting for Seasonal Adjustment", edited by G. L. Mazzi, co-edited by D. Ladiray, European Union, Luxembourg. \url{ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-001}
 #' 
 #' MATTHEWS S. (2016), "Quality Assurance of Seasonal Adjustment for a Large System of Time Series", 36th International Symposium on Forecasting Santander, Spain.
-#' 
+#' @examples \donttest{
+#' sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
+#' dashboard_data <- sa_dashboard(sa_model)
+#' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
+#'      subtitle = "SA with X13")
+#' }
 #' @seealso \code{\link{sa_dashboard}}.
 #' @export
 plot.sa_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",

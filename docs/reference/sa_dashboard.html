@@ -148,13 +148,16 @@
     <p>KIRCHNER R., LADIRAY D., MAZZI G. L. (2018), "Quality Measures and Reporting for Seasonal Adjustment", edited by G. L. Mazzi, co-edited by D. Ladiray, European Union, Luxembourg. <a href='ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-001'>ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-001</a></p>
 <p>MATTHEWS S. (2016), "Quality Assurance of Seasonal Adjustment for a Large System of Time Series", 36th International Symposium on Forecasting Santander, Spain.</p>
     
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='plot.sa_dashboard.html'>plot.sa_dashboard</a></code>.</p></div>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>sa_model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>RJDemetra</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/RJDemetra/topics/x13'>x13</a></span>(<span class='kw pkg'>RJDemetra</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/RJDemetra/topics/ipi_c_eu'>ipi_c_eu</a></span>[, <span class='st'>"FR"</span>], <span class='st'>"RSA5c"</span>)
 <span class='no'>dashboard_data</span> <span class='kw'>&lt;-</span> <span class='fu'>sa_dashboard</span>(<span class='no'>sa_model</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>dashboard_data</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"My first seasonal adjustment dashboard"</span>,
-     <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"SA with X13"</span>)</div><div class='img'><img src='sa_dashboard-1.png' alt='' width='700' height='433' /></div><div class='input'>     
-</div></pre>
+     <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"SA with X13"</span>)</div><div class='img'><img src='sa_dashboard-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -164,6 +167,8 @@
       <li><a href="#details">Details</a></li>
 
       <li><a href="#references">References</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
