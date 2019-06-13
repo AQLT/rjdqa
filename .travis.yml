@@ -10,6 +10,6 @@ r:
 - devel
 
 r_build_args: --no-multiarch
-r_check_args: --run-donttest
+r_check_args: --as-cran --run-donttest
 
 warnings_are_errors: false
