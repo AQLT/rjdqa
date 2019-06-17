@@ -28,12 +28,12 @@
 #' 
 #' MATTHEWS S. (2016), "Quality Assurance of Seasonal Adjustment for a Large System of Time Series", 36th International Symposium on Forecasting Santander, Spain.
 #' 
-#' @examples \donttest{
+#' @examples
 #' sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
 #' dashboard_data <- sa_dashboard(sa_model)
 #' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
 #'      subtitle = "SA with X13")
-#' }
+#' 
 #' @seealso \code{\link{plot.sa_dashboard}}.
 #' @export
 sa_dashboard <- function(x, n_recent_obs = 24){
@@ -97,12 +97,12 @@ sa_dashboard <- function(x, n_recent_obs = 24){
 #' KIRCHNER R., LADIRAY D., MAZZI G. L. (2018), "Quality Measures and Reporting for Seasonal Adjustment", edited by G. L. Mazzi, co-edited by D. Ladiray, European Union, Luxembourg. \url{https://ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-001}
 #' 
 #' MATTHEWS S. (2016), "Quality Assurance of Seasonal Adjustment for a Large System of Time Series", 36th International Symposium on Forecasting Santander, Spain.
-#' @examples \donttest{
+#' @examples
 #' sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
 #' dashboard_data <- sa_dashboard(sa_model)
 #' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
 #'      subtitle = "SA with X13")
-#' }
+#' 
 #' @seealso \code{\link{sa_dashboard}}.
 #' @export
 plot.sa_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",

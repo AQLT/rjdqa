@@ -45,12 +45,11 @@ The dashboard is divided into four sections:
 }
 }
 \examples{
-\donttest{
 sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
 dashboard_data <- sa_dashboard(sa_model)
 plot(dashboard_data, main = "My first seasonal adjustment dashboard",
      subtitle = "SA with X13")
-}
+
 }
 \references{
 KIRCHNER R., LADIRAY D., MAZZI G. L. (2018), "Quality Measures and Reporting for Seasonal Adjustment", edited by G. L. Mazzi, co-edited by D. Ladiray, European Union, Luxembourg. \url{https://ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-001}

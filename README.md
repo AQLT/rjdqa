@@ -6,6 +6,12 @@
 [![Travis Build
 Status](https://img.shields.io/travis/AQLT/rjdqa.svg?logo=travis)](https://travis-ci.org/AQLT/rjdqa)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rjdqa)](https://cran.r-project.org/package=rjdqa)
+[![CRAN last
+release](http://www.r-pkg.org/badges/last-release/rjdqa)](https://cran.r-project.org/package=rjdqa)
+[![CRAN monthly
+downloads](http://cranlogs.r-pkg.org/badges/rjdqa?color=lightgrey)](https://cran.r-project.org/package=rjdqa)
+[![CRAN
+downloads](http://cranlogs.r-pkg.org/badges/grand-total/rjdqa?color=lightgrey)](https://cran.r-project.org/package=rjdqa)
 
 ## Overview
 
