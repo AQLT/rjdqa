@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rjdqa</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -90,9 +90,12 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>rjdqa relies on RJDemetra that requires Java SE 8 or later version.</p>
-<p>You can install rjdqa from github with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"AQLT/rjdqa"</span>, <span class="dt">args =</span> <span class="st">"--no-multiarch"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Install release version from CRAN</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"rjdqa"</span>)</a>
+<a class="sourceLine" id="cb1-3" title="3"></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="co"># Install development version from GitHub</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb1-6" title="6">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"AQLT/rjdqa"</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="usage" class="section level1">
@@ -103,10 +106,10 @@
 <a href="#create-a-dashboard" class="anchor"></a>Create a dashboard</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(RJDemetra)</a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rjdqa)</a>
-<a class="sourceLine" id="cb2-3" title="3">sa_model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/RJDemetra/topics/x13">x13</a></span>(ipi_c_eu[, <span class="st">"FR"</span>], <span class="st">"RSA5c"</span>)</a>
-<a class="sourceLine" id="cb2-4" title="4">sa_model_tramoseats &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/RJDemetra/topics/tramoseats">tramoseats</a></span>(ipi_c_eu[,<span class="st">"FR"</span>])</a>
+<a class="sourceLine" id="cb2-3" title="3">sa_model &lt;-<span class="st"> </span><span class="kw">x13</span>(ipi_c_eu[, <span class="st">"FR"</span>], <span class="st">"RSA5c"</span>)</a>
+<a class="sourceLine" id="cb2-4" title="4">sa_model_tramoseats &lt;-<span class="st"> </span><span class="kw">tramoseats</span>(ipi_c_eu[,<span class="st">"FR"</span>])</a>
 <a class="sourceLine" id="cb2-5" title="5">dashboard_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/sa_dashboard.html">sa_dashboard</a></span>(sa_model)</a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/RJDemetra/topics/plot">plot</a></span>(dashboard_data, <span class="dt">main =</span> <span class="st">"My first seasonal adjustment dashboard"</span>,</a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(dashboard_data, <span class="dt">main =</span> <span class="st">"My first seasonal adjustment dashboard"</span>,</a>
 <a class="sourceLine" id="cb2-7" title="7">     <span class="dt">subtitle =</span> <span class="st">"SA with X13"</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-dashboard_exemple-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
@@ -117,6 +120,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=rjdqa">https://​cloud.r-project.org/​package=rjdqa</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/AQLT/rjdqa">https://​github.com/​AQLT/​rjdqa</a>
 </li>
 </ul>

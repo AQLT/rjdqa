@@ -34,11 +34,13 @@ rjdqa package provides help to the quality assessment by producing:
 
 rjdqa relies on RJDemetra that requires Java SE 8 or later version.
 
-You can install rjdqa from github with:
-
 ``` r
+# Install release version from CRAN
+install.packages("rjdqa")
+
+# Install development version from GitHub
 # install.packages("devtools")
-devtools::install_github("AQLT/rjdqa", args = "--no-multiarch")
+devtools::install_github("AQLT/rjdqa")
 ```
 
 # Usage

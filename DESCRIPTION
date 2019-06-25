@@ -1,7 +1,7 @@
 Package: rjdqa
 Type: Package
 Title: Quality Assessment for Seasonal Adjustment
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
   person("Alain", "Quartier-la-Tente", role = c("aut", "cre"),
                  email = "alain.quartier@yahoo.fr"))
@@ -15,7 +15,8 @@ Imports:
     plotrix,
     utils,
     graphics,
-    stats
+    stats,
+    XLConnect
 Encoding: UTF-8
 URL: https://github.com/AQLT/rjdqa
 LazyData: true
