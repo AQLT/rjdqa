@@ -8,17 +8,17 @@
 #                  userdefined = c("preprocessing.residuals.nruns",
 #                                  "preprocessing.residuals.lruns"))
 #     }
-# 
-#     
+#
+#
 #     dates <- time_to_date(x$final$series)
 #     span <- x$regarima$model$spec_rslt["T.span"]
-#     
+#
 #     regarima_coefs <- summary(x$regarima)
 #     regarima_coefs <- rbind(regarima_coefs$coefficients[[1]],
 #                             regarima_coefs$coefficients[[2]],
 #                             regarima_coefs$coefficients[[3]],
 #                             regarima_coefs$coefficients[[4]])
-#     
+#
 #     period <- frequency(x$final$series)
 #     n_obs <- length(dates)
 #     n_efff_obs <- x$regarima$loglik["neffectiveobs",]
@@ -26,12 +26,12 @@
 #     n_obs <- n_obs - missing
 #     start <- gsub("(^from )|( to.*$)", "", span)
 #     end <- gsub("^.* to ", "", span)
-#     
+#
 #     method <- class(x)[2]
 #     log_transformation <- x$regarima$model$spec_rslt["Log transformation"] == TRUE
 #     nb_params <- x$regarima$loglik["np",]
 #     arima_orders <- arima_order_coef(x, regarima_coefs)
-#     
+#
 #     cste <- get_cste(x)
 #     LY <- get_LY(x, regarima_coefs)
 #     MH <- get_MH(x, regarima_coefs)
@@ -39,11 +39,11 @@
 #     n_outliers <- n_out(regarima_coefs)
 #     ic <- t(x$regarima$loglik[c("aic", "aicc", "bic", "bicc"), , drop = FALSE])
 #     arima_tests <- arima_test(x)
-#     
+#
 #     decomposition <- get_decomposition_info(x)
 #     #OOS test
 #     res_tests <- get_residual_tests(x)
-#     
+#
 #     results <- data.frame(period = period, Nobs = n_obs, Missing = missing,
 #                           Start = start, End = end, Method = method,
 #                           Log_transformation = log_transformation,
@@ -55,7 +55,7 @@
 #                           stringsAsFactors = FALSE
 #     )
 #     results
-# 
+#
 # }
 get_decomposition_info <- function(x){
     UseMethod("get_decomposition_info", x)
@@ -63,7 +63,7 @@ get_decomposition_info <- function(x){
 get_decomposition_info.X13 <- function(x){
     decomp <- x$decomposition
     mstats <- decomp$mstats
-    
+
     trend_filter <- decomp$t_filter
     seas_filter <- decomp$s_filter
     ic_ratio <- NA
@@ -90,7 +90,7 @@ n_out <- function(regarima_coefs){
 
 arima_order_coef <- function(x, regarima_coefs){
     arima_orders <- x$regarima$arma
-    
+
     for (i in 1:6) {
         if (i > arima_orders["p"]) {
             assign(sprintf("phi%i",i), c(Estimate = NA, `Pr(>|t|)` = NA) )
@@ -106,16 +106,16 @@ arima_order_coef <- function(x, regarima_coefs){
         }
     }
     if (arima_orders["bp"] == 0) {
-        bphi1 <- c(Estimate = NA, `Pr(>|t|)` = NA) 
+        bphi1 <- c(Estimate = NA, `Pr(>|t|)` = NA)
     }else{
         bphi1 <- regarima_coefs["BPhi(1)", c("Estimate", "Pr(>|t|)")]
     }
     if (arima_orders["bq"] == 0) {
-        btheta1 <- c(Estimate = NA, `Pr(>|t|)` = NA) 
+        btheta1 <- c(Estimate = NA, `Pr(>|t|)` = NA)
     }else{
         btheta1 <- regarima_coefs["BTheta(1)", c("Estimate", "Pr(>|t|)")]
     }
-    
+
     result <- matrix(c(arima_orders,
                 phi1, phi2, phi3, phi4, phi5, phi6,
                 theta1, theta2, theta3, theta4, theta5, theta6,
@@ -128,7 +128,7 @@ arima_order_coef <- function(x, regarima_coefs){
                        )
     result
 }
-# 
+#
 # regarima_coef <- function(x){
 #     arima_coef <- x$regarima$arima.coefficients
 #     reg_coef <- x$regarima$regression.coefficients
@@ -137,14 +137,14 @@ arima_order_coef <- function(x, regarima_coefs){
 #     usr_spec <- x$regarima$specification$regression$userdef$specification
 #     out <- s_preOut(x)
 #     var <- s_preVar(x)$description
-#     
+#
 #     fvar <- fout <- NULL
-#     
+#
 #     if (!is.null(arima_coef)){
 #         a_tvalues=matrix(2*(1 - pt(abs(arima_coef[,3]), loglik[3])),ncol=1)
 #         colnames(a_tvalues)=c("Pr(>|t|)")
 #         arima_coef <- cbind(arima_coef,a_tvalues)
-#         
+#
 #     }
 #     if (!is.null(reg_coef)){
 #         r_tvalues=matrix(2*(1 - pt(abs(reg_coef[,3]), loglik[3])),ncol=1)
@@ -185,12 +185,12 @@ arima_order_coef <- function(x, regarima_coefs){
 arima_test <- function(x){
     residuals <- x$regarima$residuals
     residuals <- na.omit(ts.union(residuals, lag(residuals, -12)))
-    
+
     tests <- x$regarima$residuals.stat[["tests"]]
-    
-    dh <- dh <- doornik_hansen(n = x$regarima$loglik["neffectiveobs", ],		
-                               skewness = tests["skewness", "Statistic"],		
-                               kurtosis = tests["kurtosis", "Statistic"])	
+
+    dh <- dh <- doornik_hansen(n = x$regarima$loglik["neffectiveobs", ],
+                               skewness = tests["skewness", "Statistic"],
+                               kurtosis = tests["kurtosis", "Statistic"])
     nruns <- x$user_defined$preprocessing.residuals.nrun[2]
     lruns <- x$user_defined$preprocessing.residuals.lruns[2]
     if (is.null(nruns)) {
@@ -203,7 +203,7 @@ arima_test <- function(x){
                  dh[2], tests[c("ljung box",
                                 "ljung box (squared residuals)",
                                 "ljung box (residuals at seasonal lags)"), "P.value"],
-                cor(residuals[,1], residuals[,2]), 
+                cor(residuals[,1], residuals[,2]),
                 nruns,
                 lruns
     )
@@ -212,7 +212,7 @@ arima_test <- function(x){
                        "seaslb","autocorr12", "nruns", "lruns")
     result
 }
-# 
+#
 doornik_hansen <- function(n, skewness, kurtosis){
     beta <- (3 * (n^2 + 27*n - 70) * (n + 1) * (n+3)) / ((n-2)*(n+5)*(n+7)*(n+9))
     omega2 <- -1 + sqrt(2*(beta - 1))
@@ -240,7 +240,7 @@ get_MH <- function(x, regarima_coefs){
         MH_type <- grep("^Easter \\[.*\\]$", rownames(regarima_coefs),value = TRUE)
         if(length(MH_type) == 0){
             MH <- data.frame("", NA, NA,
-                             stringsAsFactors = FALSE) 
+                             stringsAsFactors = FALSE)
         }else{
             MH <- data.frame(MH_type,
                              regarima_coefs[MH_type, c("Estimate", "Pr(>|t|)"), drop = FALSE],
@@ -248,7 +248,7 @@ get_MH <- function(x, regarima_coefs){
         }
     }else{
         MH <- data.frame("", NA, NA,
-                         stringsAsFactors = FALSE) 
+                         stringsAsFactors = FALSE)
     }
     names(MH) <- c("MovingHoliday", "MH1", "PvalMH1")
     MH
@@ -280,7 +280,7 @@ get_LY <- function(x, regarima_coefs){
         }
     }else{
         LY <- data.frame("", NA, NA,
-                         stringsAsFactors = FALSE) 
+                         stringsAsFactors = FALSE)
     }
     colnames(LY) <- c("LY","LeapYear", "PvalLeapYear")
     LY
@@ -289,7 +289,7 @@ get_LY <- function(x, regarima_coefs){
 get_TD <- function(x, regarima_coefs){
     td_reg <- grep("(^Monday$)|(^Tuesday$)|(^Wednesday$)|(^Thursday$)|(^Friday$)|(^Saturday$)|(^Week days$)",
                    rownames(regarima_coefs),value = TRUE)
-    
+
     if(length(td_reg) > 0){
         for(i in 1:length(td_reg)){
             assign(sprintf("TD%i", i),
@@ -309,9 +309,9 @@ get_TD <- function(x, regarima_coefs){
     result <- data.frame(TD1, TD2, TD3, TD4, TD5, TD6, TD7,
                          td_joint_ftest,
                          stringsAsFactors = FALSE)
-    colnames(result) <- c("TradingDay1", "TD1", "TD1(Pvalue)", "TradingDay2", "TD2", 
-                          "TD2(Pvalue)", "TradingDay3", "TD3", "TD3(Pvalue)", "TradingDay4", 
-                          "TD4", "TD4(Pvalue)", "TradingDay5", "TD5", "TD5(Pvalue)", "TradingDay6", 
+    colnames(result) <- c("TradingDay1", "TD1", "TD1(Pvalue)", "TradingDay2", "TD2",
+                          "TD2(Pvalue)", "TradingDay3", "TD3", "TD3(Pvalue)", "TradingDay4",
+                          "TD4", "TD4(Pvalue)", "TradingDay5", "TD5", "TD5(Pvalue)", "TradingDay6",
                           "TD6", "TD6(Pvalue)", "TradingDay7", "TD7", "TD7(Pvalue)",
                           "TDJointFTest")
     result
@@ -326,8 +326,8 @@ get_residual_tests <- function(x){
         result_combined_test <- ""
         combined_tests <- data.frame(NA, NA, NA)
     }
-    
-    res_tests <- t(x$diagnostics$residuals_test[c("qs test on sa", "f-test on sa (seasonal dummies)", "qs test on i", 
+
+    res_tests <- t(x$diagnostics$residuals_test[c("qs test on sa", "f-test on sa (seasonal dummies)", "qs test on i",
                                                   "f-test on i (seasonal dummies)", "f-test on sa (td)", "f-test on i (td)"),
                                                 "P.value", drop = FALSE])
     res_tests <- data.frame(variance_decomposition,
