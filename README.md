@@ -43,6 +43,10 @@ install.packages("rjdqa")
 devtools::install_github("AQLT/rjdqa")
 ```
 
+If you have troubles with the installation of RJDemetra or rjdqa, check
+the [installation
+manual](https://github.com/jdemetra/rjdemetra/wiki/Installation-manual).
+
 # Usage
 
 ## Create a dashboard
