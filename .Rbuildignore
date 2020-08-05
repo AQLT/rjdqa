@@ -1,3 +1,4 @@
+^appveyor\.yml$
 ^docs$
 ^_pkgdown\.yml$
 ^.*\.Rproj$
@@ -5,3 +6,7 @@
 ^README\.Rmd$
 ^README-.*\.png$
 .travis.yml
+^doc$
+cran-comments.md
+TODO.R
+^revdep$
