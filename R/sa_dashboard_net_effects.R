@@ -9,6 +9,10 @@ net_effect.X13 <- function(x){
     tde <- x$regarima$model$effects[,"tde"]
     mhe <- x$regarima$model$effects[,"ee"]
     is_multiplicative <- x$regarima$model$spec_rslt[,"Log transformation"]
+    # if (is_multiplicative) {
+    #     tde <- exp(tde)
+    #     mhe <- exp(mhe)
+    # }
     
     observed_sa <- tail(sa, 2)
     observed_y <- tail(y, 2)
@@ -20,22 +24,17 @@ net_effect.X13 <- function(x){
     observed_y_evol <- (observed_y[2] / observed_y[1] - 1) * 100
     
     neutral_line_sa <- rep(observed_sa[1], 2)
+    
     if (is_multiplicative) {
-        s <- s / (tde * mhe)
-        observed_s <- tail(s, 2)
-        observed_s_evol <- (observed_s[2] / observed_s[1] - 1) * 100
-        
-        observed_td <- observed_y / observed_tde
-        observed_cal <- observed_y / (observed_tde * observed_mhe)
+        s <- s / (exp(tde + mhe))
+        observed_td <- observed_y / exp(observed_tde)
+        observed_cal <- observed_y / exp(observed_tde + observed_mhe)
         
         neutral_line_y <- observed_y * c(1, observed_sa[1] / observed_sa[2])
         neutral_line_td <- observed_td * c(1, observed_sa[1] / observed_sa[2])
         neutral_line_cal <- observed_cal * c(1, observed_sa[1] / observed_sa[2])
     }else{
         s <- s - tde - mhe
-        observed_s <- tail(s, 2)
-        observed_s_evol <- (observed_s[2] / observed_s[1] - 1) * 100
-        
         observed_td <- observed_y - observed_tde
         observed_cal <- observed_y - observed_tde - observed_mhe
         
@@ -43,6 +42,33 @@ net_effect.X13 <- function(x){
         neutral_line_td <- observed_td + c(0, observed_sa[1] - observed_sa[2])
         neutral_line_cal <- observed_cal + c(0, observed_sa[1] - observed_sa[2])
     }
+    observed_s <- tail(s, 2)
+    observed_s_evol <- (observed_s[2] / observed_s[1] - 1) * 100
+    
+    # if (is_multiplicative) {
+    #     s <- s / (tde * mhe)
+    #     observed_s <- tail(s, 2)
+    #     observed_s_evol <- (observed_s[2] / observed_s[1] - 1) * 100
+    #     
+    #     observed_td <- observed_y / observed_tde
+    #     observed_cal <- observed_y / (observed_tde * observed_mhe)
+    #     
+    #     neutral_line_y <- observed_y * c(1, observed_sa[1] / observed_sa[2])
+    #     neutral_line_td <- observed_td * c(1, observed_sa[1] / observed_sa[2])
+    #     neutral_line_cal <- observed_cal * c(1, observed_sa[1] / observed_sa[2])
+    #     
+    # }else{
+    #     s <- s - tde - mhe
+    #     observed_s <- tail(s, 2)
+    #     observed_s_evol <- (observed_s[2] / observed_s[1] - 1) * 100
+    #     
+    #     observed_td <- observed_y - observed_tde
+    #     observed_cal <- observed_y - observed_tde - observed_mhe
+    #     
+    #     neutral_line_y <- observed_y + c(0, observed_sa[1] - observed_sa[2])
+    #     neutral_line_td <- observed_td + c(0, observed_sa[1] - observed_sa[2])
+    #     neutral_line_cal <- observed_cal + c(0, observed_sa[1] - observed_sa[2])
+    # }
     
     EM <- sd(tail(ev(sa) / 100, 5 * frequency(sa)), na.rm = TRUE)
     

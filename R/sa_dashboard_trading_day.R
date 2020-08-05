@@ -1,58 +1,17 @@
 trading_day_pattern <- function(x){
-    UseMethod("trading_day_pattern", x)
-}
-trading_day_pattern.X13 <- function(x){
     if(!all(c("preprocessing.model.tde_f") %in% names(x$user_defined))){
-        my_spec <- RJDemetra::x13_spec(x)
-        x <- RJDemetra::x13(x$final$series[,"y"], my_spec,userdefined = "preprocessing.model.tde_f")
-    }
-    
-    reg_coefficients <- x$regarima$regression.coefficients
-    regression_var_names <- rownames(reg_coefficients)
-    freq <- frequency(x$final$series[,"y"])
-    td_reg <- grep("(Monday)|(Tuesday)|(Wednesday)|(Thursday)|(Friday)|(Saturday)|(Week days)",
-                   regression_var_names)
-    if(freq == 12){
-        period <- "Month"
-    }else{
-        period <- "Quarter"
-    }
-    evolution_row_names <- sprintf("%s %s",
-                                   c("Previous", "Current", "Next"),
-                                   period)
-    if(length(td_reg) == 0){
-        result <- list(estimated_values = c(Monday = 0, Tuesday = 0, Wednesday = 0, Thursday = 0, Friday = 0, 
-                                            Saturday = 0, Contrast = 0),
-                       evolution = data.frame(Evolution = c(0,0,0),
-                                              row.names = evolution_row_names))
-    }else{
-        estimated_values <- reg_coefficients[td_reg,1]*100
-        is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
-        evolution <- c(tail(x$regarima$model$effects[,"tde"],2),
-                       head(x$user_defined$preprocessing.model.tde_f,1))
-        if (!is_multiplicative){
-            series_mean <- mean(x$final$series[,"y"],
-                                na.rm = TRUE)
-            estimated_values <- estimated_values / series_mean
-            evolution <- evolution/series_mean + 1 
+        if(inherits(x, "X13")){
+            my_spec <- RJDemetra::x13_spec(x)
+            x <- RJDemetra::x13(x$final$series[,"y"], my_spec,
+                                userdefined = "preprocessing.model.tde_f")
+        }else if(inherits(x, "TRAMO_SEATS ")){
+            my_spec <- RJDemetra::tramoseats_spec(x)
+            x <- RJDemetra::tramoseats(x$final$series[,"y"], my_spec,
+                                       userdefined = "preprocessing.model.tde_f")
+        }else{
+            stop("Wrong type of object")
         }
-        
-        estimated_values <- c(estimated_values, Contrast = -sum(estimated_values))
-        evolution <- (evolution - 1)*100
-        evolution <- data.frame(Evolution = evolution,
-                                row.names = evolution_row_names)
-        result <- list(estimated_values = estimated_values, evolution = evolution)
     }
-    class(result) <- c("trading_day_pattern", class(result))
-    result
-}
-
-trading_day_pattern.TRAMO_SEATS <- function(x){
-    if(!all(c("preprocessing.model.tde_f") %in% names(x$user_defined))){
-        my_spec <- RJDemetra::tramoseats_spec(x)
-        x <- RJDemetra::tramoseats(x$final$series[,"y"], my_spec, userdefined = "preprocessing.model.tde_f")
-    }
-    
     reg_coefficients <- x$regarima$regression.coefficients
     regression_var_names <- rownames(reg_coefficients)
     freq <- frequency(x$final$series[,"y"])
@@ -91,10 +50,107 @@ trading_day_pattern.TRAMO_SEATS <- function(x){
                                 row.names = evolution_row_names)
         result <- list(estimated_values = estimated_values, evolution = evolution)
     }
-
+    
     class(result) <- c("trading_day_pattern", class(result))
     result
 }
+# trading_day_pattern.X13 <- function(x){
+#     if(!all(c("preprocessing.model.tde_f") %in% names(x$user_defined))){
+#         my_spec <- RJDemetra::x13_spec(x)
+#         x <- RJDemetra::x13(x$final$series[,"y"], my_spec,userdefined = "preprocessing.model.tde_f")
+#     }
+#     
+#     reg_coefficients <- x$regarima$regression.coefficients
+#     regression_var_names <- rownames(reg_coefficients)
+#     freq <- frequency(x$final$series[,"y"])
+#     td_reg <- grep("(Monday)|(Tuesday)|(Wednesday)|(Thursday)|(Friday)|(Saturday)|(Week days)",
+#                    regression_var_names)
+#     if(freq == 12){
+#         period <- "Month"
+#     }else{
+#         period <- "Quarter"
+#     }
+#     evolution_row_names <- sprintf("%s %s",
+#                                    c("Previous", "Current", "Next"),
+#                                    period)
+#     if(length(td_reg) == 0){
+#         result <- list(estimated_values = c(Monday = 0, Tuesday = 0, Wednesday = 0, Thursday = 0, Friday = 0, 
+#                                             Saturday = 0, Contrast = 0),
+#                        evolution = data.frame(Evolution = c(0,0,0),
+#                                               row.names = evolution_row_names))
+#     }else{
+#         estimated_values <- reg_coefficients[td_reg,1]*100
+#         is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
+#         evolution <- c(tail(x$regarima$model$effects[,"tde"],2),
+#                        head(x$user_defined$preprocessing.model.tde_f,1))
+#         if (!is_multiplicative){
+#             series_mean <- mean(x$final$series[,"y"],
+#                                 na.rm = TRUE)
+#             estimated_values <- estimated_values / series_mean
+#             evolution <- evolution/series_mean + 1 
+#         }else{
+#             evolution[1:2] <- exp(evolution[1:2])
+#         }
+#         
+#         estimated_values <- c(estimated_values, Contrast = -sum(estimated_values))
+#         evolution <- (evolution - 1)*100
+#         evolution <- data.frame(Evolution = evolution,
+#                                 row.names = evolution_row_names)
+#         result <- list(estimated_values = estimated_values, evolution = evolution)
+#     }
+#     
+#     class(result) <- c("trading_day_pattern", class(result))
+#     result
+# }
+# 
+# trading_day_pattern.TRAMO_SEATS <- function(x){
+#     if(!all(c("preprocessing.model.tde_f") %in% names(x$user_defined))){
+#         my_spec <- RJDemetra::tramoseats_spec(x)
+#         x <- RJDemetra::tramoseats(x$final$series[,"y"], my_spec, userdefined = "preprocessing.model.tde_f")
+#     }
+#     
+#     reg_coefficients <- x$regarima$regression.coefficients
+#     regression_var_names <- rownames(reg_coefficients)
+#     freq <- frequency(x$final$series[,"y"])
+#     td_reg <- grep("(Monday)|(Tuesday)|(Wednesday)|(Thursday)|(Friday)|(Saturday)|(Week days)",
+#                    regression_var_names)
+#     if(freq == 12){
+#         period <- "Month"
+#     }else{
+#         period <- "Quarter"
+#     }
+#     evolution_row_names <- sprintf("%s %s",
+#                                    c("Previous", "Current", "Next"),
+#                                    period)
+#     if(length(td_reg) == 0){
+#         result <- list(estimated_values = c(Monday = 0, Tuesday = 0, Wednesday = 0, Thursday = 0, Friday = 0, 
+#                                             Saturday = 0, Contrast = 0),
+#                        evolution = data.frame(Evolution = c(0,0,0),
+#                                               row.names = evolution_row_names))
+#     }else{
+#         estimated_values <- reg_coefficients[td_reg,1]*100
+#         is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
+#         evolution <- c(tail(x$regarima$model$effects[,"tde"],2),
+#                        head(x$user_defined$preprocessing.model.tde_f,1))
+#         if (!is_multiplicative){
+#             series_mean <- mean(x$final$series[,"y"],
+#                                 na.rm = TRUE)
+#             estimated_values <- estimated_values / series_mean
+#             evolution <- evolution/series_mean + 1 
+#         }else{
+#             evolution[1:2] <- exp(evolution[1:2])
+#         }
+#         
+#         estimated_values <- c(estimated_values, Contrast = -sum(estimated_values))
+#         evolution <- (evolution - 1)*100
+#         evolution <- data.frame(Evolution = evolution,
+#                                 row.names = evolution_row_names)
+#         result <- list(estimated_values = estimated_values, evolution = evolution)
+#     }
+# 
+#     class(result) <- c("trading_day_pattern", class(result))
+#     result
+# }
 
 plot.trading_day_pattern <- function(x, decimal.mark = getOption("OutDec"),
                                      ...){
