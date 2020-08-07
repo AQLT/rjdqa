@@ -33,7 +33,8 @@ The dashboard is divided into four sections:
 }
 }
 \examples{
-sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
+data <- window(RJDemetra::ipi_c_eu[, "FR"], start = 2003)
+sa_model <- RJDemetra::x13(data, "RSA5c")
 dashboard_data <- sa_dashboard(sa_model)
 plot(dashboard_data, main = "My first seasonal adjustment dashboard",
      subtitle = "SA with X13")

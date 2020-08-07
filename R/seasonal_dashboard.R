@@ -29,7 +29,8 @@
 #' MATTHEWS S. (2016), "Quality Assurance of Seasonal Adjustment for a Large System of Time Series", 36th International Symposium on Forecasting Santander, Spain.
 #' 
 #' @examples
-#' sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
+#' data <- window(RJDemetra::ipi_c_eu[, "FR"], start = 2003)
+#' sa_model <- RJDemetra::x13(data, "RSA5c")
 #' dashboard_data <- sa_dashboard(sa_model)
 #' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
 #'      subtitle = "SA with X13")
@@ -98,7 +99,8 @@ sa_dashboard <- function(x, n_recent_obs = 24){
 #' 
 #' MATTHEWS S. (2016), "Quality Assurance of Seasonal Adjustment for a Large System of Time Series", 36th International Symposium on Forecasting Santander, Spain.
 #' @examples
-#' sa_model <- RJDemetra::x13(RJDemetra::ipi_c_eu[, "FR"], "RSA5c")
+#' data <- window(RJDemetra::ipi_c_eu[, "FR"], start = 2003)
+#' sa_model <- RJDemetra::x13(data, "RSA5c")
 #' dashboard_data <- sa_dashboard(sa_model)
 #' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
 #'      subtitle = "SA with X13")
