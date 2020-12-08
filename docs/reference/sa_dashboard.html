@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">rjdqa</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -128,7 +128,7 @@
     <p>Function to compute the data to produce a seasonal adjustment dashboard</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sa_dashboard</span>(<span class='no'>x</span>, <span class='kw'>n_recent_obs</span> <span class='kw'>=</span> <span class='fl'>24</span>)</pre>
+    <pre class="usage"><span class='fu'>sa_dashboard</span><span class='op'>(</span><span class='va'>x</span>, n_recent_obs <span class='op'>=</span> <span class='fl'>24</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,10 +149,10 @@
 <p>The dashboard is divided into four sections:</p><ul>
 <li><p>Recent History (top left panel): plot of the raw series, the seasonal adjusted series and the trend for the most recent periods (<code>n_recent_obs</code> last observations: 24 by default).  It is intended to identify trend direction, overall volatility and obvious outliers.</p></li>
 <li><p>Summary of Key Diagnostics (top right panel):</p><ul>
-<li><p>Adjustability (only for X13 models): M7 statistic. Colors: red if M7 &gt; 1.75, yellow if 1.25 &lt; M7 &lt; 1.75 and green if M7 &lt; 1.25.</p></li>
-<li><p>Residual seasonality: qs (auto-correlations at seasonal lags) and f (Friedman) test on seasonal adjusted series. Colors: red if p-value &lt; 0.01, yellow if 0.01 &lt; p-value &lt; 0.05 and green if p-value &gt; 0.05.</p></li>
-<li><p>Residual trading-days effects: f (Friedman) test on seasonal adjusted serie.  Colors: red if p-value &lt; 0.01, yellow if 0.01 &lt; p-value &lt; 0.05 and green if p-value &gt; 0.05.</p></li>
-<li><p>Independence of RegARIMA residuals: Ljung-Box test. Colors: red if p-value &lt; 0.01, yellow if 0.01 &lt; p-value &lt; 0.05 and green if p-value &gt; 0.05.</p></li>
+<li><p>Adjustability (only for X13 models): M7 statistic. Colors: red if M7 \(\ge\) 1.75, yellow if 1.25 \(\le\) M7 &lt; 1.75 and green if M7 &lt; 1.25.</p></li>
+<li><p>Residual seasonality: qs (auto-correlations at seasonal lags) and f (Friedman) test on seasonal adjusted series. Colors: red if p-value \(\le\) 0.01, yellow if 0.01 &lt; p-value \(\le\) 0.05 and green if p-value &gt; 0.05.</p></li>
+<li><p>Residual trading-days effects: f (Friedman) test on seasonal adjusted serie.  Colors: red if p-value \(\le\) 0.01, yellow if 0.01 &lt; p-value \(\le\) 0.05 and green if p-value &gt; 0.05.</p></li>
+<li><p>Independence of RegARIMA residuals: Ljung-Box test. Colors: red if p-value \(\le\) 0.01, yellow if 0.01 &lt; p-value \(\le\) 0.05 and green if p-value &gt; 0.05.</p></li>
 <li><p>Recent outliers on last (t) and penultimate (t-1) observation. Colors: Red if there is an extreme value (only for X13: when table C17 equals to 0), yellow if there is an outlier in the RegARIMA model and green otherwise.</p></li>
 </ul></li>
 <li><p>Estimated Patterns and Anticipated Movements (middle panel): estimated trading day, moving holiday and seasonal pattern.  It presents expected movement in unadjusted series based on the current and previous period.</p></li>
@@ -168,11 +168,12 @@
     <div class='dont-index'><p><code><a href='plot.sa_dashboard.html'>plot.sa_dashboard</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/window.html'>window</a></span>(<span class='kw pkg'>RJDemetra</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/RJDemetra/man/ipi_c_eu.html'>ipi_c_eu</a></span>[, <span class='st'>"FR"</span>], <span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>2003</span>)
-<span class='no'>sa_model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>RJDemetra</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RJDemetra/man/x13.html'>x13</a></span>(<span class='no'>data</span>, <span class='st'>"RSA5c"</span>)
-<span class='no'>dashboard_data</span> <span class='kw'>&lt;-</span> <span class='fu'>sa_dashboard</span>(<span class='no'>sa_model</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>dashboard_data</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"My first seasonal adjustment dashboard"</span>,
-     <span class='kw'>subtitle</span> <span class='kw'>=</span> <span class='st'>"SA with X13"</span>)</div><div class='img'><img src='sa_dashboard-1.png' alt='' width='700' height='433' /></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/window.html'>window</a></span><span class='op'>(</span><span class='fu'>RJDemetra</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/RJDemetra/man/ipi_c_eu.html'>ipi_c_eu</a></span><span class='op'>[</span>, <span class='st'>"FR"</span><span class='op'>]</span>, start <span class='op'>=</span> <span class='fl'>2003</span><span class='op'>)</span>
+<span class='va'>sa_model</span> <span class='op'>&lt;-</span> <span class='fu'>RJDemetra</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RJDemetra/man/x13.html'>x13</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='st'>"RSA5c"</span><span class='op'>)</span>
+<span class='va'>dashboard_data</span> <span class='op'>&lt;-</span> <span class='fu'>sa_dashboard</span><span class='op'>(</span><span class='va'>sa_model</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/RJDemetra/man/plot.html'>plot</a></span><span class='op'>(</span><span class='va'>dashboard_data</span>, main <span class='op'>=</span> <span class='st'>"My first seasonal adjustment dashboard"</span>,
+     subtitle <span class='op'>=</span> <span class='st'>"SA with X13"</span><span class='op'>)</span>
+</div><div class='img'><img src='sa_dashboard-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -189,7 +190,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
