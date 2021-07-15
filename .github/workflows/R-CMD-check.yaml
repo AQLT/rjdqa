@@ -15,11 +15,17 @@ name: R-CMD-check
 jobs:
   R-CMD-check:
     runs-on: macOS-latest
+    strategy:
+      matrix:
+        r-version: [3.5, 3.6, oldrel, release, devel]
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
-      - uses: r-lib/actions/setup-r@v1
+      - name: Set up R ${{ matrix.r-version }}
+        uses: r-lib/actions/setup-r@ffe45a39586f073cc2e9af79c4ba563b657dc6e3
+        with:
+          r-version: ${{ matrix.r-version }}
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"))
@@ -28,5 +34,5 @@ jobs:
       - name: Check
         run: |
           options(crayon.enabled = TRUE)
-          rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
+          rcmdcheck::rcmdcheck(args = "--no-manual--as-cran --run-donttest", error_on = "error")
         shell: Rscript {0}
