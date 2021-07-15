@@ -3,8 +3,7 @@
 
 # rjdqa <img src="man/figures/logo.png" align="right" />
 
-[![Travis Build
-Status](https://img.shields.io/travis/AQLT/rjdqa.svg?logo=travis)](https://travis-ci.org/AQLT/rjdqa)
+[![R-CMD-check](https://github.com/AQLT/rjdqa/workflows/R-CMD-check/badge.svg)](https://github.com/AQLT/rjdqa/actions)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rjdqa)](https://cran.r-project.org/package=rjdqa)
 [![CRAN last
 release](http://www.r-pkg.org/badges/last-release/rjdqa)](https://cran.r-project.org/package=rjdqa)
@@ -22,10 +21,10 @@ recommended](https://ec.europa.eu/eurostat/cros/system/files/Jdemetra_%20release
 to the members of the ESS and the European System of Central Banks. The
 rjdqa package provides help to the quality assessment by producing:
 
-  - A dashboard of a seasonal adjustment model. Its goal is to provide a
+-   A dashboard of a seasonal adjustment model. Its goal is to provide a
     simple snapshot of an single seasonal adjustment model at a point in
     time and to point out some possible problems.  
-  - A quality report matrix (in a future release). Its goal is to help
+-   A quality report matrix (in a future release). Its goal is to help
     the analyst during production, when there is very few time to detect
     and fix potential problems, by highlighting problematic series and
     prioritising the list of series to be checked.
