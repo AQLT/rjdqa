@@ -17,7 +17,7 @@ jobs:
     runs-on: macOS-latest
     strategy:
       matrix:
-        r-version: [3.5, 3.6, oldrel, release, devel]
+        r-version: ['3.5', '3.6', 'oldrel', 'release', 'devel']
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
