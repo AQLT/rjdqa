@@ -9,6 +9,7 @@ Authors@R: c(
 Description: Add-in to the 'RJDemetra' package on seasonal adjustments.
     It allows to produce quality assessments outputs (dashboards, quality report matrix, etc.).
 License: EUPL
+SystemRequirements: Java SE between 8 and 15.
 Depends:
     R (>= 3.1.1),
     RJDemetra,
