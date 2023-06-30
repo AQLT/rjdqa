@@ -38,6 +38,11 @@
 #' @seealso \code{\link{plot.sa_dashboard}}.
 #' @export
 sa_dashboard <- function(x, n_recent_obs = 24){
+    if (inherits(x, "jSA")) {
+        x <- RJDemetra::jSA2R(x, 
+                              userdefined = c("decomposition.c17","preprocessing.model.tde_f",
+                                              "preprocessing.model.mhe_f"))
+    }
     if (inherits(x, "X13") && !all(c("decomposition.c17","preprocessing.model.tde_f",
                                      "preprocessing.model.mhe_f") %in% names(x$user_defined))) {
         my_spec <- RJDemetra::x13_spec(x)
