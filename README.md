@@ -1,10 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rjdqa <img src="man/figures/logo.png" align="right" />
+# rjdqa
+
+<!-- <img src="man/figures/logo.png" align="right" /> -->
 
 [![R-CMD-check](https://github.com/AQLT/rjdqa/workflows/R-CMD-check/badge.svg)](https://github.com/AQLT/rjdqa/actions)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/rjdqa)](https://cran.r-project.org/package=rjdqa)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rjdqa)](https://cran.r-project.org/package=rjdqa)
 [![CRAN last
 release](http://www.r-pkg.org/badges/last-release/rjdqa)](https://cran.r-project.org/package=rjdqa)
 [![CRAN monthly
@@ -19,15 +21,8 @@ rjdqa is an extension of the R package
 interface to JDemetra+, the seasonal adjustment software [officially
 recommended](https://ec.europa.eu/eurostat/cros/system/files/Jdemetra_%20release.pdf)
 to the members of the ESS and the European System of Central Banks. The
-rjdqa package provides help to the quality assessment by producing:
-
--   A dashboard of a seasonal adjustment model. Its goal is to provide a
-    simple snapshot of an single seasonal adjustment model at a point in
-    time and to point out some possible problems.  
--   A quality report matrix (in a future release). Its goal is to help
-    the analyst during production, when there is very few time to detect
-    and fix potential problems, by highlighting problematic series and
-    prioritising the list of series to be checked.
+rjdqa package provides help to the quality assessment by producing
+different dashboards.
 
 ## Installation
 
@@ -48,16 +43,36 @@ manual](https://github.com/jdemetra/rjdemetra/wiki/Installation-manual).
 
 # Usage
 
-## Create a dashboard
+## Create Statistics Canada dashboard
+
+The function `sa_dashboard()` reproduces Statistics Canada dashboard.
+See :
+
+KIRCHNER R., LADIRAY D., MAZZI G. L. (2018), “Quality Measures and
+Reporting for Seasonal Adjustment”, edited by G. L. Mazzi, co-edited by
+D. Ladiray, European Union, Luxembourg.
+<https://ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-001>
+
+MATTHEWS S. (2016), “Quality Assurance of Seasonal Adjustment for a
+Large System of Time Series”, 36th International Symposium on
+Forecasting Santander, Spain.
 
 ``` r
 library(RJDemetra)
 library(rjdqa)
 sa_model <- x13(ipi_c_eu[, "FR"], "RSA5c")
-sa_model_tramoseats <- tramoseats(ipi_c_eu[,"FR"])
 dashboard_data <- sa_dashboard(sa_model)
-plot(dashboard_data, main = "My first seasonal adjustment dashboard",
+plot(dashboard_data, main = "Statistics Canada dashboard",
      subtitle = "SA with X13")
 ```
 
-<img src="man/figures/README-dashboard_exemple-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-stat_cana_dash-1.png" style="display: block; margin: auto;" />
+
+## Simple dashboard
+
+``` r
+dashboard_data <- simple_dashboard(sa_model)
+plot(dashboard_data, main = "Simple dashboard - IPI FR")
+```
+
+<img src="man/figures/README-simple_dash-1.png" style="display: block; margin: auto;" />

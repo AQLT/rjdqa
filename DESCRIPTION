@@ -9,17 +9,17 @@ Authors@R: c(
 Description: Add-in to the 'RJDemetra' package on seasonal adjustments.
     It allows to produce quality assessments outputs (dashboards, quality report matrix, etc.).
 License: EUPL
-SystemRequirements: Java SE between 8 and 15.
+SystemRequirements: Java (>= 8)
 Depends:
     R (>= 3.1.1),
     RJDemetra,
 Imports:
     plotrix,
+    ggdemetra,
     utils,
     graphics,
-    stats,
-    XLConnect
+    stats
 Encoding: UTF-8
 URL: https://github.com/AQLT/rjdqa
-LazyData: true
-RoxygenNote: 7.1.1
+LazyData: false
+RoxygenNote: 7.2.3
