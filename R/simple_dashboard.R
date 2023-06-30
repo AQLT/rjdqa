@@ -4,7 +4,7 @@
 #' Function to compute the data to produce a simple seasonal adjustment dashboard
 #' 
 #' @inheritParams sa_dashboard
-#' @params digits number of digits used in the tables.
+#' @param digits number of digits used in the tables.
 #' 
 #' @examples
 #' data <- window(RJDemetra::ipi_c_eu[, "FR"], start = 2003)

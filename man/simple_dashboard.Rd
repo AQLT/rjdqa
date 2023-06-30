@@ -8,6 +8,8 @@ simple_dashboard(x, digits = 2)
 }
 \arguments{
 \item{x}{a seasonal adjustment model made by 'RJDemetra' (object of class \code{"SA"}).}
+
+\item{digits}{number of digits used in the tables.}
 }
 \description{
 Function to compute the data to produce a simple seasonal adjustment dashboard
