@@ -23,7 +23,12 @@ simple_dashboard <- function(x, digits = 2) {
     nb_format <- paste0("%.", digits, "f")
     
     # Raw, trend, sa
-    data_plot <- do.call(ts.union, RJDemetra::get_indicators(x, c("y", "t", "sa", "y_f", "t_f", "sa_f")))
+    data_plot <- RJDemetra::get_indicators(x, c("y", "t", "sa", "y_f", "t_f", "sa_f"))
+    
+    last_date <- tail(time_to_date(data_plot[[1]]), 1)
+    last_date <- format(last_date, format = "%Y-%m")
+    
+    data_plot <- do.call(ts.union, data_plot)
     # add observed data for plots
     data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y_f", "t_f", "sa_f")] <-
         data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y", "t", "sa")]
@@ -122,8 +127,6 @@ simple_dashboard <- function(x, digits = 2) {
         colnames(decomp_stats)[ncol(qstats)+1] <- "   "
     }
     
-    last_date <- tail(time_to_date(data_plot), 1)
-    last_date <- format(last_date, format = "%Y-%m")
     res <- list(main_plot = data_plot,
          siratio_plot = ggdemetra::siratio(x),
          summary_text = summary_text,
