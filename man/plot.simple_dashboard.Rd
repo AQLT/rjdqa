@@ -4,7 +4,14 @@
 \alias{plot.simple_dashboard}
 \title{Plot a simple seasonal adjustment dashboard}
 \usage{
-\method{plot}{simple_dashboard}(x, main = "Simple Dashboard", subtitle = NULL, reference_date = TRUE, ...)
+\method{plot}{simple_dashboard}(
+  x,
+  main = "Simple Dashboard",
+  subtitle = NULL,
+  color_series = c(y = "#F0B400", t = "#1E6C0B", sa = "#155692"),
+  reference_date = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{a \code{"sa_dashboard"} object.}
@@ -12,6 +19,8 @@
 \item{main}{main title.}
 
 \item{subtitle}{subtitle.}
+
+\item{color_series}{Color of the raw time series, the trend and the seasonally adjusted component.}
 
 \item{reference_date}{boolean indicating if the reference date should be printed.}
 

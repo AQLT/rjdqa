@@ -4,7 +4,7 @@
 \alias{simple_dashboard}
 \title{Compute data for a simple seasonal adjustment}
 \usage{
-simple_dashboard(x)
+simple_dashboard(x, digits = 2)
 }
 \arguments{
 \item{x}{a seasonal adjustment model made by 'RJDemetra' (object of class \code{"SA"}).}

@@ -4,6 +4,7 @@
 #' Function to compute the data to produce a simple seasonal adjustment dashboard
 #' 
 #' @inheritParams sa_dashboard
+#' @params digits number of digits used in the tables.
 #' 
 #' @examples
 #' data <- window(RJDemetra::ipi_c_eu[, "FR"], start = 2003)
@@ -13,18 +14,20 @@
 #' 
 #' @seealso \code{\link{plot.sa_dashboard}}.
 #' @export
-simple_dashboard <- function(x) {
-    if (!inherits(x, "jSA"))
+simple_dashboard <- function(x, digits = 2) {
+    if (inherits(x, "TRAMO_SEATS")) {
+        x <- RJDemetra::jtramoseats(RJDemetra::get_ts(x), RJDemetra::tramoseats_spec(x))
+    } else if (inherits(x, "X13")) {
         x <- RJDemetra::jx13(RJDemetra::get_ts(x), RJDemetra::x13_spec(x))
+    }
+    nb_format <- paste0("%.", digits, "f")
     
     # Raw, trend, sa
     data_plot <- do.call(ts.union, RJDemetra::get_indicators(x, c("y", "t", "sa", "y_f", "t_f", "sa_f")))
     # add observed data for plots
     data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y_f", "t_f", "sa_f")] <-
         data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y", "t", "sa")]
-    # data_plot <- data.frame(x = c(time(data_plot)), as.matrix(data_plot))
-    
-    color_plot <- c(y = "#F0B400", t = "#1E6C0B", sa = "#155692")
+
     # Global info on model
     arima_ord <- sprintf("ARIMA(%s)(%s)",
                          paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("p", "d", "q")))), collapse = ","),
@@ -45,28 +48,28 @@ simple_dashboard <- function(x) {
                           sprintf("Trading days effect (%s)", ntd)),
                    ifelse(is_easter, "Easter effect",
                           "No easter effect"))
-    # nombre doutliers
+    # nb outliers
     out <- sprintf("%s detected outliers", RJDemetra::get_indicators(x, "preprocessing.model.nout")[[1]])
     summary_text <- c(est_span, transform, tde, out, arima_ord)
     
     
-    # Stats sur la qualite de la decomposition
+    # Stats on quality of decomposition
     qstats <- list2DF(RJDemetra::get_indicators(x, "mstats.Q", "mstats.Q-M2"))
     colnames(qstats) <- c("Q", "Q-M2")
-    # Stats sur la decomposition de la variance
+    # Stats on variance decomp
     var_decomp <- RJDemetra::get_indicators(x, "diagnostics.variancedecomposition")[[1]]
     names(var_decomp) <- c("Cycle", "Seasonal", "Irregular", "TDH", "Others", "Total")
     var_decomp <- as.data.frame(t(data.frame(var_decomp*100)))
-    var_decomp <- var_decomp[,-ncol(var_decomp)] # on enlève la colonne total
-    # Sais sur la serie linearisee
-    liste_ind_seas <- c(Fisher = "diagnostics.seas-lin-f",
-                        "Ljung-Box" = "diagnostics.seas-lin-qs",
+    var_decomp <- var_decomp
+    # Tests on linearised series
+    liste_ind_seas <- c("F-test" = "diagnostics.seas-lin-f",
+                        "QS-test" = "diagnostics.seas-lin-qs",
                         "Kruskal-Wallis" = "diagnostics.seas-lin-kw",
                         "Friedman" = "diagnostics.seas-lin-friedman",
                         "Combined" = "diagnostics.combined.all.summary")
-    # Tests residuels
-    liste_ind_res_seas <- c(Fisher = "diagnostics.seas-sa-f",
-                            "Ljung-Box" = "diagnostics.seas-sa-qs",
+    # residuals tests
+    liste_ind_res_seas <- c("F-test" = "diagnostics.seas-sa-f",
+                            "QS-test" = "diagnostics.seas-sa-qs",
                             "Kruskal-Wallis" = "diagnostics.seas-sa-kw",
                             "Friedman" = "diagnostics.seas-sa-friedman",
                             "Combined" = "diagnostics.seas-sa-combined")
@@ -74,15 +77,15 @@ simple_dashboard <- function(x) {
         c("Residual TD" = "diagnostics.td-sa-last")
     seas_test <- list2DF(lapply(RJDemetra::get_indicators(x, liste_ind_seas), function(x) {
         if(length(x) > 1)
-            x <- sprintf("%.02f", x[2])
+            x <- sprintf(nb_format, x[2])
         x
     }))
     seas_res_test <- list2DF(lapply(RJDemetra::get_indicators(x, liste_ind_res_seas), function(x) {
         if(length(x) > 1)
-            x <- sprintf("%.02f", x[2])
+            x <- sprintf(nb_format, x[2])
         x
     }))
-    td_res_test <- data.frame(sprintf("%.02f", RJDemetra::get_indicators(x, liste_ind_res_jo)[[1]][2]),
+    td_res_test <- data.frame(sprintf(nb_format, RJDemetra::get_indicators(x, liste_ind_res_jo)[[1]][2]),
                               "", "", "", "" )
     names(seas_test) <- names(seas_res_test) <-
         names(td_res_test) <- names(liste_ind_seas)
@@ -106,11 +109,18 @@ simple_dashboard <- function(x) {
                          "white",
                          rep("grey90", ncol(var_decomp)
                          ))
-    qstats[,] <- lapply(qstats, sprintf, fmt = "%.2f")
-    var_decomp[,] <- lapply(var_decomp, sprintf, fmt = "%.2f")
+    qstats[,] <- lapply(qstats, sprintf, fmt = nb_format)
+    var_decomp[,] <- lapply(var_decomp, sprintf, fmt = nb_format)
     
-    decomp_stats <- cbind(qstats," " , var_decomp)
-    colnames(decomp_stats)[ncol(qstats)+1] <- " "
+    if (nrow(qstats) == 0) {
+        # TRAMO-SEATS
+        decomp_stats <- var_decomp
+        decomp_stats_color <- unlist(decomp_stats_color[-c(1:3)])
+    } else {
+        # X-13
+        decomp_stats <- cbind(qstats, "   " , var_decomp)
+        colnames(decomp_stats)[ncol(qstats)+1] <- "   "
+    }
     
     last_date <- tail(time_to_date(data_plot), 1)
     last_date <- format(last_date, format = "%Y-%m")
@@ -130,6 +140,8 @@ simple_dashboard <- function(x) {
 #' Function to plot a simple dashboard of a seasonal adjustment model.
 #' 
 #' @inheritParams plot.sa_dashboard 
+#' @param color_series Color of the raw time series, the trend and the seasonally adjusted component.
+#' 
 #' @examples
 #' data <- window(RJDemetra::ipi_c_eu[, "FR"], start = 2003)
 #' sa_model <- RJDemetra::jx13(data, "RSA5c")
@@ -140,6 +152,7 @@ simple_dashboard <- function(x) {
 #' @export
 plot.simple_dashboard <- function(x, main = "Simple Dashboard",
                               subtitle = NULL,
+                              color_series = c(y = "#F0B400", t = "#1E6C0B", sa = "#155692"),
                               reference_date = TRUE,...){
     main_plot = x$main_plot
     siratio_plot = x$siratio_plot
@@ -172,7 +185,7 @@ plot.simple_dashboard <- function(x, main = "Simple Dashboard",
     
     par(mai = c(0, 0.4, 0.2, 0.1))
     stats::plot.ts(main_plot,plot.type = "single",
-            col = rep(c(y = "#F0B400", t = "#1E6C0B", sa = "#155692"), 2),
+            col = rep(color_series, 2),
             lty = rep(c(1,2), each = 3),
             xlab = NULL,
             ylab = NULL,
