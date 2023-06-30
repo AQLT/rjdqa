@@ -1,6 +1,6 @@
-#' Compute data for a seasonal adjustment dashboard
+#' Compute data for the Statistics Canada seasonal adjustment dashboard
 #' 
-#' Function to compute the data to produce a seasonal adjustment dashboard
+#' Function to compute the data to produce the Statistics Canada seasonal adjustment dashboard
 #' 
 #' @param x a seasonal adjustment model made by 'RJDemetra' (object of class \code{"SA"}).
 #' @param n_recent_obs number of observation in the recent history panel (see details). By default \code{n_recent_obs = 24} (last 2 years for monthly data).
@@ -64,13 +64,14 @@ sa_dashboard <- function(x, n_recent_obs = 24){
     class(res) <- c("sa_dashboard")
     res
 }
-#' Plot a seasonal adjustment dashboard
+#' Plot a Statistics Canada seasonal adjustment dashboard
 #' 
-#' Function to plot a dashboard of a seasonal adjustment model
+#' Function to plot Statistics Canada dashboard of a seasonal adjustment model.
 #' 
 #' @param x a \code{"sa_dashboard"} object.
 #' @param main main title.
 #' @param subtitle subtitle.
+#' @param reference_date boolean indicating if the reference date should be printed.
 #' @param raw_color color for the raw series.
 #' @param sa_color color for the seasonal adjusted series.
 #' @param trend_color color for the trend.
@@ -109,6 +110,7 @@ sa_dashboard <- function(x, n_recent_obs = 24){
 #' @export
 plot.sa_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",
                               subtitle = "",
+                              reference_date = TRUE,
                               raw_color = "#33A02C",
                               sa_color = "#E31A1C",
                               trend_color = "black", ...){
@@ -197,8 +199,9 @@ plot.sa_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",
     #       outer = TRUE,font = 2)
     # mtext("Seasonal Adjustment Dashboard", side = 3, line = -2,
     #       outer = TRUE,font = 2,cex = 1.2)
-    mtext(sprintf("Reference Month: %s",last_date), side = 3, line = -3, 
-          outer = TRUE,font = 3,cex = 0.7,at = 0.95, adj = 1)
+    if (reference_date)
+        mtext(sprintf("Reference Date: %s",last_date), side = 3, line = -3, 
+              outer = TRUE,font = 3,cex = 0.7,at = 0.95, adj = 1)
     mtext(subtitle, side = 3, line = -3, 
           outer = TRUE,font = 3,cex = 0.7,at = 0.1, adj = 1)
     invisible()

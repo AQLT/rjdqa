@@ -2,12 +2,13 @@
 % Please edit documentation in R/seasonal_dashboard.R
 \name{plot.sa_dashboard}
 \alias{plot.sa_dashboard}
-\title{Plot a seasonal adjustment dashboard}
+\title{Plot a Statistics Canada seasonal adjustment dashboard}
 \usage{
 \method{plot}{sa_dashboard}(
   x,
   main = "Seasonal Adjustment Dashboard",
   subtitle = "",
+  reference_date = TRUE,
   raw_color = "#33A02C",
   sa_color = "#E31A1C",
   trend_color = "black",
@@ -21,6 +22,8 @@
 
 \item{subtitle}{subtitle.}
 
+\item{reference_date}{boolean indicating if the reference date should be printed.}
+
 \item{raw_color}{color for the raw series.}
 
 \item{sa_color}{color for the seasonal adjusted series.}
@@ -30,7 +33,7 @@
 \item{...}{other parameters (unused).}
 }
 \description{
-Function to plot a dashboard of a seasonal adjustment model
+Function to plot Statistics Canada dashboard of a seasonal adjustment model.
 }
 \details{
 \code{sa_model()} reproduces Statistics Canada dashboard used to provide a snapshot snapshot of an single seasonal adjustment model at a point in time and to point out some possible problems (see references). 

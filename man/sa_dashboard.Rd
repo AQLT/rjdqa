@@ -2,7 +2,7 @@
 % Please edit documentation in R/seasonal_dashboard.R
 \name{sa_dashboard}
 \alias{sa_dashboard}
-\title{Compute data for a seasonal adjustment dashboard}
+\title{Compute data for the Statistics Canada seasonal adjustment dashboard}
 \usage{
 sa_dashboard(x, n_recent_obs = 24)
 }
@@ -12,7 +12,7 @@ sa_dashboard(x, n_recent_obs = 24)
 \item{n_recent_obs}{number of observation in the recent history panel (see details). By default \code{n_recent_obs = 24} (last 2 years for monthly data).}
 }
 \description{
-Function to compute the data to produce a seasonal adjustment dashboard
+Function to compute the data to produce the Statistics Canada seasonal adjustment dashboard
 }
 \details{
 \code{sa_model()} reproduces Statistics Canada dashboard used to provide a snapshot snapshot of an single seasonal adjustment model at a point in time and to point out some possible problems (see references). 
