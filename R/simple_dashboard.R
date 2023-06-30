@@ -209,7 +209,7 @@ plot.simple_dashboard <- function(x, main = "Simple Dashboard",
                            bg = residuals_tests$colors, 
                            xjust = 0.5, yjust = 0.5)
     if (reference_date) 
-        mtext(sprintf("Reference date: %s",last_date), side = 3, line = -3, 
+        mtext(sprintf("Reference Date: %s",last_date), side = 3, line = -3, 
               outer = TRUE,font = 3,cex = 0.7,at = 0.95, adj = 1)
     mtext(subtitle, side = 3, line = -3, 
           outer = TRUE,font = 3,cex = 0.7,at = 0.1, adj = 1)
