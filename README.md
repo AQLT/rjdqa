@@ -16,12 +16,9 @@ downloads](http://cranlogs.r-pkg.org/badges/grand-total/rjdqa?color=lightgrey)](
 
 ## Overview
 
-rjdqa is an extension of the R package
-[RJDemetra](https://github.com/jdemetra/rjdemetra), which is an
-interface to JDemetra+, the seasonal adjustment software [officially
-recommended](https://ec.europa.eu/eurostat/cros/system/files/Jdemetra_%20release.pdf)
-to the members of the ESS and the European System of Central Banks. The
-rjdqa package provides help to the quality assessment by producing
+rjdqa is an extension of the R package [RJDemetra](https://github.com/jdemetra/rjdemetra), which is an interface to JDemetra+, the seasonal adjustment software [officially recommended](<https://cros-legacy.ec.europa.eu/system/files/Jdemetra_ release.pdf>)` to the members of the ESS and the European System of Central Banks.
+
+The rjdqa package provides help to the quality assessment by producing
 different dashboards.
 
 ## Installation
@@ -59,6 +56,7 @@ Forecasting Santander, Spain.
 
 ``` r
 library(RJDemetra)
+#> Warning: le package 'RJDemetra' a été compilé avec la version R 4.2.3
 library(rjdqa)
 sa_model <- x13(ipi_c_eu[, "FR"], "RSA5c")
 dashboard_data <- sa_dashboard(sa_model)
