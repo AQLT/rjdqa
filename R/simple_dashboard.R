@@ -3,7 +3,7 @@
 #' 
 #' Function to compute the data to produce a simple seasonal adjustment dashboard
 #' 
-#' @inheritParams sa_dashboard
+#' @inheritParams sc_dashboard
 #' @param digits number of digits used in the tables.
 #' 
 #' @examples
@@ -12,7 +12,7 @@
 #' dashboard_data <- simple_dashboard(sa_model)
 #' plot(dashboard_data, main = "Simple dashboard IPI - FR")
 #' 
-#' @seealso \code{\link{plot.sa_dashboard}}.
+#' @seealso \code{\link{plot.sc_dashboard}}.
 #' @export
 simple_dashboard <- function(x, digits = 2) {
     if (inherits(x, "TRAMO_SEATS")) {
@@ -142,7 +142,7 @@ simple_dashboard <- function(x, digits = 2) {
 #' 
 #' Function to plot a simple dashboard of a seasonal adjustment model.
 #' 
-#' @inheritParams plot.sa_dashboard 
+#' @inheritParams plot.sc_dashboard 
 #' @param color_series Color of the raw time series, the trend and the seasonally adjusted component.
 #' 
 #' @examples

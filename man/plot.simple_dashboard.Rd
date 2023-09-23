@@ -14,7 +14,7 @@
 )
 }
 \arguments{
-\item{x}{a \code{"sa_dashboard"} object.}
+\item{x}{a \code{"sc_dashboard"} object.}
 
 \item{main}{main title.}
 

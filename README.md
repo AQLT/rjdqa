@@ -45,7 +45,7 @@ manual](https://github.com/jdemetra/rjdemetra/wiki/Installation-manual).
 
 ## Create Statistics Canada dashboard
 
-The function `sa_dashboard()` reproduces Statistics Canada dashboard.
+The function `sc_dashboard()` reproduces Statistics Canada dashboard.
 See :
 
 KIRCHNER R., LADIRAY D., MAZZI G. L. (2018), “Quality Measures and
@@ -61,7 +61,7 @@ Forecasting Santander, Spain.
 library(RJDemetra)
 library(rjdqa)
 sa_model <- x13(ipi_c_eu[, "FR"], "RSA5c")
-dashboard_data <- sa_dashboard(sa_model)
+dashboard_data <- sc_dashboard(sa_model)
 plot(dashboard_data, main = "Statistics Canada dashboard",
      subtitle = "SA with X13")
 ```

@@ -31,13 +31,13 @@
 #' @examples
 #' data <- window(RJDemetra::ipi_c_eu[, "FR"], start = 2003)
 #' sa_model <- RJDemetra::x13(data, "RSA5c")
-#' dashboard_data <- sa_dashboard(sa_model)
-#' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
+#' sc_dashboard_data <- sc_dashboard(sa_model)
+#' plot(sc_dashboard_data, main = "My first seasonal adjustment dashboard",
 #'      subtitle = "SA with X13")
 #' 
-#' @seealso \code{\link{plot.sa_dashboard}}.
+#' @seealso \code{\link{plot.sc_dashboard}}.
 #' @export
-sa_dashboard <- function(x, n_recent_obs = 24){
+sc_dashboard <- function(x, n_recent_obs = 24){
     if (inherits(x, "jSA")) {
         x <- RJDemetra::jSA2R(x, 
                               userdefined = c("decomposition.c17","preprocessing.model.tde_f",
@@ -66,14 +66,27 @@ sa_dashboard <- function(x, n_recent_obs = 24){
          moving_holiday_pattern = moving_holiday_pattern(x),
          seasonal_pattern = seasonal_pattern(x),
          net_effect = net_effect(x), last_date = last_date)
-    class(res) <- c("sa_dashboard")
+    class(res) <- c("sc_dashboard")
     res
+}
+
+#' Deprecated functions
+#'
+#' @description
+#' Use [sc_dashboard] instead of [sa_dashboard()].
+#'
+#' @inheritParams sc_dashboard
+#' @export
+#' @name deprecated-rjdqa
+sa_dashboard <- function(x, n_recent_obs = 24){
+    .Deprecated("sc_dashboard")
+    sc_dashboard(x = x, n_recent_obs = n_recent_obs)
 }
 #' Plot a Statistics Canada seasonal adjustment dashboard
 #' 
 #' Function to plot Statistics Canada dashboard of a seasonal adjustment model.
 #' 
-#' @param x a \code{"sa_dashboard"} object.
+#' @param x a \code{"sc_dashboard"} object.
 #' @param main main title.
 #' @param subtitle subtitle.
 #' @param reference_date boolean indicating if the reference date should be printed.
@@ -107,13 +120,13 @@ sa_dashboard <- function(x, n_recent_obs = 24){
 #' @examples
 #' data <- window(RJDemetra::ipi_c_eu[, "FR"], start = 2003)
 #' sa_model <- RJDemetra::x13(data, "RSA5c")
-#' dashboard_data <- sa_dashboard(sa_model)
+#' dashboard_data <- sc_dashboard(sa_model)
 #' plot(dashboard_data, main = "My first seasonal adjustment dashboard",
 #'      subtitle = "SA with X13")
 #' 
-#' @seealso \code{\link{sa_dashboard}}.
+#' @seealso \code{\link{sc_dashboard}}.
 #' @export
-plot.sa_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",
+plot.sc_dashboard <- function(x, main = "Seasonal Adjustment Dashboard",
                               subtitle = "",
                               reference_date = TRUE,
                               raw_color = "#33A02C",

@@ -22,5 +22,5 @@ plot(dashboard_data, main = "Simple dashboard IPI - FR")
 
 }
 \seealso{
-\code{\link{plot.sa_dashboard}}.
+\code{\link{plot.sc_dashboard}}.
 }

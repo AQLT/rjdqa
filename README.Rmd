@@ -48,7 +48,7 @@ If you have troubles with the installation of RJDemetra or rjdqa, check the [ins
 
 ## Create Statistics Canada dashboard
 
-The function `sa_dashboard()` reproduces Statistics Canada dashboard.
+The function `sc_dashboard()` reproduces Statistics Canada dashboard.
 See :
 
 KIRCHNER R., LADIRAY D., MAZZI G. L. (2018), "Quality Measures and Reporting for Seasonal Adjustment", edited by G. L. Mazzi, co-edited by D. Ladiray, European Union, Luxembourg. <https://ec.europa.eu/eurostat/web/products-manuals-and-guidelines/-/KS-GQ-18-001>
@@ -60,7 +60,7 @@ MATTHEWS S. (2016), "Quality Assurance of Seasonal Adjustment for a Large System
 library(RJDemetra)
 library(rjdqa)
 sa_model <- x13(ipi_c_eu[, "FR"], "RSA5c")
-dashboard_data <- sa_dashboard(sa_model)
+dashboard_data <- sc_dashboard(sa_model)
 plot(dashboard_data, main = "Statistics Canada dashboard",
      subtitle = "SA with X13")
 ```
