@@ -56,7 +56,6 @@ Forecasting Santander, Spain.
 
 ``` r
 library(RJDemetra)
-#> Warning: le package 'RJDemetra' a été compilé avec la version R 4.2.3
 library(rjdqa)
 sa_model <- x13(ipi_c_eu[, "FR"], "RSA5c")
 dashboard_data <- sc_dashboard(sa_model)
