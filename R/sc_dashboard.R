@@ -70,18 +70,7 @@ sc_dashboard <- function(x, n_recent_obs = 24){
     res
 }
 
-#' Deprecated functions
-#'
-#' @description
-#' Use [sc_dashboard] instead of [sa_dashboard()].
-#'
-#' @inheritParams sc_dashboard
-#' @export
-#' @name deprecated-rjdqa
-sa_dashboard <- function(x, n_recent_obs = 24){
-    .Deprecated("sc_dashboard")
-    sc_dashboard(x = x, n_recent_obs = n_recent_obs)
-}
+
 #' Plot a Statistics Canada seasonal adjustment dashboard
 #' 
 #' Function to plot Statistics Canada dashboard of a seasonal adjustment model.

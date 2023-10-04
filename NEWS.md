@@ -1,3 +1,7 @@
+# rjdqa 0.1.3
+
+- deprecated function `sa_dashboard()` removed.
+
 # rjdqa 0.1.2
 
 - documentation updated.
