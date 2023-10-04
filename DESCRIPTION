@@ -7,7 +7,7 @@ Authors@R: c(
                  email = "alain.quartier@yahoo.fr",
                  comment = c(ORCID = "0000-0001-7890-3857")))
 Description: Add-in to the 'RJDemetra' package on seasonal adjustments.
-    It allows to produce quality assessments outputs (dashboards, quality report matrix, etc.).
+    It allows to produce dashboards to summarise models and quickly check the quality of the seasonal adjustment.
 License: EUPL
 SystemRequirements: Java (>= 8)
 Depends:
