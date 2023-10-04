@@ -1,4 +1,5 @@
-summary_diagnostics <- function(x, digits = 2, decimal.mark = getOption("OutDec")){
+summary_diagnostics <- function(x, digits = 2, decimal.mark = getOption("OutDec"),
+                                colours = c(`1` = "red", `2` = "yellow", `3` = "#A0CD63")){
     UseMethod("summary_diagnostics", x)
 }
 summary_diagnostics.X13 <- function(x, digits = 2, decimal.mark = getOption("OutDec"),
