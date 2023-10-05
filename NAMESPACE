@@ -2,7 +2,6 @@
 
 S3method(plot,sc_dashboard)
 S3method(plot,simple_dashboard)
-export(sa_dashboard)
 export(sc_dashboard)
 export(simple_dashboard)
 importFrom(RJDemetra,x13)
