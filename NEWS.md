@@ -2,6 +2,8 @@
 
 - deprecated function `sa_dashboard()` removed.
 
+- legend in `simple_dashboard()`.
+
 # rjdqa 0.1.2
 
 - documentation updated.

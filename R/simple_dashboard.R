@@ -194,6 +194,10 @@ plot.simple_dashboard <- function(x, main = "Simple Dashboard",
             ylab = NULL,
             main = NULL
             )
+    legend("bottomright", legend = names(color_series),
+           col = color_series, lty = 1,
+           pch = NA_integer_,
+           inset = c(0,1), xpd = TRUE, horiz=TRUE, bty = "n")
     par(mai = c(0.0, 0.2, 0.2, 0.4))
     ggdemetra::siratioplot(siratio_plot,main = NULL)
     
