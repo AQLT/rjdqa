@@ -218,16 +218,16 @@ plot.simple_dashboard2 <- function(x, main = "Simple Dashboard with outliers",
            pch = NA_integer_,
            inset = c(0,1), xpd = TRUE, horiz=TRUE, bty = "n")
     par(mai = c(0.0, 0.2, 0.2, 0.4))
-    ggdemetra::siratioplot(siratio_plot,main = NULL)
+    ggdemetra::siratioplot(siratio_plot, main = NULL)
     
     
     par(mai = c(0.4, 0.2, 0.2, 0))
     par(mar = rep.int(0.4, 4))
     plot.new()
     # box()
-    legend("topleft", legend = c(NA,summary_text), 
+    legend("topleft", legend = c(NA, summary_text), 
            bty = "n", text.font =  2, inset = c(0),
-           cex = 1,
+           cex = 0.95,
            xpd = TRUE)
     
     # plot.new()
