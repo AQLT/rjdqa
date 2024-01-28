@@ -151,7 +151,7 @@ trading_day_pattern <- function(x){
 #     class(result) <- c("trading_day_pattern", class(result))
 #     result
 # }
-
+#'@exportS3Method NULL
 plot.trading_day_pattern <- function(x, decimal.mark = getOption("OutDec"),
                                      ...){
     if(is.null(x$evolution)){

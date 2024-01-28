@@ -2,6 +2,7 @@ summary_diagnostics <- function(x, digits = 2, decimal.mark = getOption("OutDec"
                                 colours = c(`1` = "red", `2` = "yellow", `3` = "#A0CD63")){
     UseMethod("summary_diagnostics", x)
 }
+#'@exportS3Method NULL
 summary_diagnostics.X13 <- function(x, digits = 2, decimal.mark = getOption("OutDec"),
                                     colours = c(`1` = "red", `2` = "yellow", `3` = "#A0CD63")){
     if (!all(c("decomposition.c17") %in% names(x$user_defined))) {
@@ -54,7 +55,7 @@ summary_diagnostics.X13 <- function(x, digits = 2, decimal.mark = getOption("Out
     
     summary_diagnostics
 }
-
+#'@exportS3Method NULL
 summary_diagnostics.TRAMO_SEATS <- function(x, digits = 2, decimal.mark = getOption("OutDec"),
                                     colours = c(`1` = "red", `2` = "yellow", `3` = "green")){
     
@@ -96,6 +97,7 @@ summary_diagnostics.TRAMO_SEATS <- function(x, digits = 2, decimal.mark = getOpt
 description_outlier <- function(x, nb_previous_periods = 0){
     UseMethod("description_outlier", x)
 }
+#'@exportS3Method NULL
 description_outlier.X13 <- function(x, nb_previous_periods = 0){
 
     regression_var_names <- rownames(x$regarima$regression.coefficients)
@@ -115,6 +117,7 @@ description_outlier.X13 <- function(x, nb_previous_periods = 0){
     }
     value
 }
+#'@exportS3Method NULL
 description_outlier.TRAMO_SEATS <- function(x, nb_previous_periods = 0){
     
     regression_var_names <- rownames(x$regarima$regression.coefficients)
@@ -143,7 +146,7 @@ date_r2jd <- function(date, frequency){
     }
     sprintf("%s-%i", period, date_v[1])
 }
-
+#'@exportS3Method NULL
 plot.summary_diagnostics <- function(x, ...){
     bg_color <- cbind("white", x$Colour)
     

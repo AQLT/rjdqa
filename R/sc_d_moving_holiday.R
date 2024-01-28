@@ -138,7 +138,7 @@ moving_holiday_pattern <- function(x){
 #     class(result) <- c("moving_holiday_pattern", class(result))
 #     result
 # }
-
+#'@exportS3Method NULL
 plot.moving_holiday_pattern <- function(x, ...){
     if(is.null(x$evolution)){
         plot(0,type='n',axes=FALSE,main="Moving Holiday Pattern")

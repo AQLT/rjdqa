@@ -7,7 +7,7 @@ recent_history <- function(x, n_recent_obs = 24){
     class(result) <- c("recent_history", class(result))
     result
 }
-
+#'@exportS3Method NULL
 plot.recent_history <- function(x,
                                 raw_color = "#33A02C",
                                 sa_color = "#E31A1C",

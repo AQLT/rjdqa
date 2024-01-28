@@ -33,6 +33,7 @@ seasonal_pattern <- function(x){
     
     result
 }
+#'@exportS3Method NULL
 plot.seasonal_pattern <- function(x, ...){
     
     data_table <- round(x$evolution, 1)

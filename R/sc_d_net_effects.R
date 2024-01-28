@@ -1,6 +1,7 @@
 net_effect <- function(x){
     UseMethod("net_effect", x)
 }
+#'@exportS3Method NULL
 net_effect.X13 <- function(x){
     sa <- x$final$series[,"sa"]
     y <- x$final$series[,"y"]
@@ -157,7 +158,7 @@ net_effect.X13 <- function(x){
     
     res
 }
-
+#'@exportS3Method NULL
 net_effect.TRAMO_SEATS <- function(x){
     sa <- x$final$series[,"sa"]
     y <- x$final$series[,"y"]
@@ -368,7 +369,7 @@ net_effect.TRAMO_SEATS <- function(x){
 #     
 #     res
 # }
-
+#'@exportS3Method NULL
 plot.net_effect <- function(x,
                             raw_color = "#33A02C",
                             sa_color = "#E31A1C", ...){

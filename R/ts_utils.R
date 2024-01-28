@@ -1,15 +1,18 @@
 ev <- function(x){
     UseMethod("ev", x)
 }
+#'@exportS3Method NULL
 ev.ts <- function(x){
     result <- (x/stats::lag(x, k = -1) - 1) * 100
     return(result)
 }
+#'@exportS3Method NULL
 ev.mts <- function(x){
     result <- (x/stats::lag(x, k = -1) - 1) * 100
     colnames(result) <- colnames(x)
     return(result)
 }
+#'@exportS3Method NULL
 ev.xts <- function(x){
     result <- (x / stats::lag(x, k = 1) - 1) * 100
     return(result)
