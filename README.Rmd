@@ -75,3 +75,10 @@ plot(dashboard_data, main = "Statistics Canada dashboard",
 dashboard_data <- simple_dashboard(sa_model)
 plot(dashboard_data, main = "Simple dashboard - IPI FR")
 ```
+
+`simple_dashbord2()` is a slightly variation of `simple_dashbord()` with smaller description text to include a table with last outliers:
+
+```{r simple_dash_out}
+dashboard_data <- simple_dashboard2(sa_model)
+plot(dashboard_data, main = "Simple dashboard with outliers - IPI FR")
+```

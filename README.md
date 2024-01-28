@@ -73,3 +73,13 @@ plot(dashboard_data, main = "Simple dashboard - IPI FR")
 ```
 
 <img src="man/figures/README-simple_dash-1.png" style="display: block; margin: auto;" />
+
+`simple_dashbord2()` is a slightly variation of `simple_dashbord()` with
+smaller description text to include a table with last outliers:
+
+``` r
+dashboard_data <- simple_dashboard2(sa_model)
+plot(dashboard_data, main = "Simple dashboard with outliers - IPI FR")
+```
+
+<img src="man/figures/README-simple_dash_out-1.png" style="display: block; margin: auto;" />
