@@ -2,7 +2,7 @@
 #' Compute data for a simple seasonal adjustment
 #' 
 #' Functions to compute the data to produce a simple seasonal adjustment dashboard.
-#' `simple_dashbord2()` is a slightly variation of `simple_dashbord()` with smaller description
+#' `simple_dashboard2()` is a slightly variation of `simple_dashboard()` with smaller description
 #' text to include a table with last outliers.
 #' 
 #' @inheritParams sc_dashboard

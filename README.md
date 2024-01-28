@@ -74,7 +74,7 @@ plot(dashboard_data, main = "Simple dashboard - IPI FR")
 
 <img src="man/figures/README-simple_dash-1.png" style="display: block; margin: auto;" />
 
-`simple_dashbord2()` is a slightly variation of `simple_dashbord()` with
+`simple_dashboard2()` is a slightly variation of `simple_dashboard()` with
 smaller description text to include a table with last outliers:
 
 ``` r
