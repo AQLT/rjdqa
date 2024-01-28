@@ -139,7 +139,7 @@ simple_dashboard2 <- function(x, digits = 2, digits_outliers = digits,
     outliers <- do.call(rbind, RJDemetra::get_indicators(x, sprintf("preprocessing.model.out(%i)", seq_len(n_last_outliers))))
     outliers_color <- NULL
     if (!is.null(outliers)) {
-        outliers <- outliers[, columns_outliers]
+        outliers <- outliers[, columns_outliers, drop = FALSE]
         outliers <- round(outliers, digits_outliers)
         outliers <- data.frame(rownames(outliers), 
                                outliers)
