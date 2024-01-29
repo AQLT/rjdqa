@@ -62,8 +62,8 @@ simple_dashboard2 <- function(x, digits = 2, digits_outliers = digits,
     tde <- sprintf("%s, %s",
                    ifelse(ntd==0, "No trading days effect",
                           sprintf("Trading days effect (%s)", ntd)),
-                   ifelse(is_easter, "Easter effect",
-                          "No easter effect"))
+                   ifelse(is_easter, "easter effect",
+                          "no easter effect"))
     # nb outliers
     out <- sprintf("%s detected outliers", RJDemetra::get_indicators(x, "preprocessing.model.nout")[[1]])
     summary_text <- c(est_span, transform, tde, out, arima_ord)
