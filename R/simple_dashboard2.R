@@ -47,7 +47,9 @@ simple_dashboard2 <- function(x, digits = 2, digits_outliers = digits,
                          paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("p", "d", "q")))), collapse = ","),
                          paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("bp", "bd", "bd")))), collapse = ","))
     ntd <- RJDemetra::get_indicators(x, "preprocessing.model.ntd")[[1]] # nombre de JO
-    is_easter <- !is.null(RJDemetra::get_indicators(x, "preprocessing.model.nmh")[[1]])
+    nmh <- RJDemetra::get_indicators(x, "preprocessing.model.nmh")[[1]]
+    is_easter <- (! is.null(nmh)) &&
+        (nmh > 0)
     
     est_span <- sprintf("Estimation span: %s to %s (%s obs)",
                         RJDemetra::get_indicators(x, "preprocessing.model.espan.start")[[1]],
@@ -154,7 +156,6 @@ simple_dashboard2 <- function(x, digits = 2, digits_outliers = digits,
     res <- list(main_plot = data_plot,
                 siratio_plot = ggdemetra::siratio(x),
                 summary_text = summary_text,
-                arima_ord = arima_ord,
                 decomp_stats = list(table = decomp_stats,
                                     colors = decomp_stats_color),
                 residuals_tests = list(table = all_tests,
@@ -175,7 +176,6 @@ plot.simple_dashboard2 <- function(x, main = "Simple Dashboard with outliers",
     main_plot = x$main_plot
     siratio_plot = x$siratio_plot
     summary_text = x$summary_text
-    arima_ord = x$arima_ord
     decomp_stats = x$decomp_stats
     residuals_tests = x$residuals_tests
     last_date = x$last_date
