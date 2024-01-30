@@ -4,6 +4,8 @@
 
 - legend in `simple_dashboard()`.
 
+- new parameter in `simple_dashboard()` to remove the "Others" contribution in the variance decomposition table and to rescale the contributions to sum to 100.
+
 - new function `simple_dashboard2()`: same as `simple_dashboard()` but with smaller text to add informations on last outliers.
 
 

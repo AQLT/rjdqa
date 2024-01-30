@@ -5,11 +5,18 @@
 \alias{simple_dashboard2}
 \title{Compute data for a simple seasonal adjustment}
 \usage{
-simple_dashboard(x, digits = 2)
+simple_dashboard(
+  x,
+  digits = 2,
+  scale_var_decomp = FALSE,
+  remove_others_contrib = FALSE
+)
 
 simple_dashboard2(
   x,
   digits = 2,
+  scale_var_decomp = FALSE,
+  remove_others_contrib = FALSE,
   digits_outliers = digits,
   columns_outliers = c("Estimate", "T-stat"),
   n_last_outliers = 4
@@ -19,6 +26,11 @@ simple_dashboard2(
 \item{x}{a seasonal adjustment model made by 'RJDemetra' (object of class \code{"SA"}).}
 
 \item{digits}{number of digits used in the tables.}
+
+\item{scale_var_decomp}{boolean indicating if the variance decomposition table should be rescaled to 100.}
+
+\item{remove_others_contrib}{boolean indication if the "Others" contribution (i.e.: the pre-adjustment contribution)
+should be removed from the variance decomposition table.}
 
 \item{digits_outliers}{number of digits used in the table of outliers.}
 

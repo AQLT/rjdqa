@@ -14,7 +14,10 @@
 #' 
 #' @rdname simple_dashboard
 #' @export
-simple_dashboard2 <- function(x, digits = 2, digits_outliers = digits,
+simple_dashboard2 <- function(x, digits = 2,
+                              scale_var_decomp = FALSE,
+                              remove_others_contrib = FALSE,
+                              digits_outliers = digits,
                               columns_outliers = c("Estimate", "T-stat"),
                               n_last_outliers = 4) {
     if (inherits(x, "TRAMO_SEATS")) {
@@ -75,8 +78,20 @@ simple_dashboard2 <- function(x, digits = 2, digits_outliers = digits,
     # Stats on variance decomp
     var_decomp <- RJDemetra::get_indicators(x, "diagnostics.variancedecomposition")[[1]]
     names(var_decomp) <- c("Cycle", "Seasonal", "Irregular", "TDH", "Others", "Total")
+    if (remove_others_contrib) {
+        var_decomp <- var_decomp[-5]
+        i_total <- length(var_decomp)
+        var_decomp[i_total] <- sum(var_decomp[-i_total])
+    }
+    if (scale_var_decomp) {
+        i_total <- length(var_decomp)
+        var_decomp[-i_total] <- var_decomp[-i_total] / sum(var_decomp[-i_total])
+        var_decomp[i_total] <- 1
+    }
+    
     var_decomp <- as.data.frame(t(data.frame(var_decomp*100)))
     var_decomp <- var_decomp
+    
     # Tests on linearised series
     liste_ind_seas <- c("F-test" = "diagnostics.seas-lin-f",
                         "QS-test" = "diagnostics.seas-lin-qs",

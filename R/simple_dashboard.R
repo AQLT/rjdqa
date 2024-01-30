@@ -7,6 +7,9 @@
 #' 
 #' @inheritParams sc_dashboard
 #' @param digits number of digits used in the tables.
+#' @param scale_var_decomp boolean indicating if the variance decomposition table should be rescaled to 100.
+#' @param remove_others_contrib boolean indication if the "Others" contribution (i.e.: the pre-adjustment contribution)
+#' should be removed from the variance decomposition table.
 #' 
 #' @examples
 #' data <- window(RJDemetra::ipi_c_eu[, "FR"], start = 2003)
@@ -17,7 +20,9 @@
 #' plot(dashboard_data2, main = "Simple dashboard with outliers IPI - FR")
 #' @seealso \code{\link{plot.sc_dashboard}}.
 #' @export
-simple_dashboard <- function(x, digits = 2) {
+simple_dashboard <- function(x, digits = 2,
+                             scale_var_decomp = FALSE,
+                             remove_others_contrib = FALSE) {
     if (inherits(x, "TRAMO_SEATS")) {
         x <- RJDemetra::jtramoseats(RJDemetra::get_ts(x), RJDemetra::tramoseats_spec(x))
     } else if (inherits(x, "X13")) {
@@ -69,6 +74,17 @@ simple_dashboard <- function(x, digits = 2) {
     # Stats on variance decomp
     var_decomp <- RJDemetra::get_indicators(x, "diagnostics.variancedecomposition")[[1]]
     names(var_decomp) <- c("Cycle", "Seasonal", "Irregular", "TDH", "Others", "Total")
+    if (remove_others_contrib) {
+        var_decomp <- var_decomp[-5]
+        i_total <- length(var_decomp)
+        var_decomp[i_total] <- sum(var_decomp[-i_total])
+    }
+    if (scale_var_decomp) {
+        i_total <- length(var_decomp)
+        var_decomp[-i_total] <- var_decomp[-i_total] / sum(var_decomp[-i_total])
+        var_decomp[i_total] <- 1
+    }
+    
     var_decomp <- as.data.frame(t(data.frame(var_decomp*100)))
     var_decomp <- var_decomp
     # Tests on linearised series
