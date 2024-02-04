@@ -18,9 +18,9 @@ downloads](http://cranlogs.r-pkg.org/badges/grand-total/rjdqa?color=lightgrey)](
 
 rjdqa is an extension of the R package
 [RJDemetra](https://github.com/jdemetra/rjdemetra), which is an
-interface to JDemetra+, the seasonal adjustment software officially
-recommended to the members of the ESS and the European System of Central
-Banks.
+interface to JDemetra+, the seasonal adjustment software [officially
+recommended](https://wayback.archive-it.org/12090/20240102173448/https://cros-legacy.ec.europa.eu/system/files/Jdemetra_%20release.pdf)
+to the members of the ESS and the European System of Central Banks.
 
 The rjdqa package provides help to the quality assessment by producing
 different dashboards.

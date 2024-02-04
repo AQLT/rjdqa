@@ -20,5 +20,6 @@ Imports:
     graphics,
     stats
 Encoding: UTF-8
-URL: https://github.com/AQLT/rjdqa
+URL: https://aqlt.github.io/rjdqa/, https://github.com/AQLT/rjdqa
+BugReports: https://github.com/AQLT/rjdqa/issues
 RoxygenNote: 7.3.1
