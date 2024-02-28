@@ -1,3 +1,9 @@
+# rjdqa 0.1.4
+
+- Fix of minimum versions of dependencies.
+
+- Correction of the orders of the outliers in `simple_dashboard2()`.
+
 # rjdqa 0.1.3
 
 - deprecated function `sa_dashboard()` removed.
