@@ -12,3 +12,4 @@ TODO.R
 ^revdep$
 ^pkgdown$
 ^\.github$
+^reconf.sh$
