@@ -50,7 +50,7 @@ simple_dashboard2 <- function(x, digits = 2,
     # Global info on model
     arima_ord <- sprintf("ARIMA(%s)(%s)",
                          paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("p", "d", "q")))), collapse = ","),
-                         paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("bp", "bd", "bd")))), collapse = ","))
+                         paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("bp", "bd", "bq")))), collapse = ","))
     ntd <- RJDemetra::get_indicators(x, "preprocessing.model.ntd")[[1]] # nombre de JO
     nmh <- RJDemetra::get_indicators(x, "preprocessing.model.nmh")[[1]]
     is_easter <- (! is.null(nmh)) &&
@@ -163,7 +163,7 @@ simple_dashboard2 <- function(x, digits = 2,
         dates_out <- outliers_to_dates(rownames(outliers))
         dates_out$type <- factor(dates_out$type, levels = order_outliers, ordered = TRUE)
         outliers <- outliers[order(dates_out$year, dates_out$period, dates_out$type, decreasing = TRUE), ]
-        outliers <- outliers[seq_len(n_last_outliers), columns_outliers, drop = FALSE]
+        outliers <- outliers[seq_len(min(n_last_outliers, nrow(outliers))), columns_outliers, drop = FALSE]
         outliers <- round(outliers, digits_outliers)
         outliers <- data.frame(rownames(outliers), 
                                outliers)
