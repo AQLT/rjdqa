@@ -19,7 +19,8 @@ simple_dashboard2(
   remove_others_contrib = FALSE,
   digits_outliers = digits,
   columns_outliers = c("Estimate", "T-stat"),
-  n_last_outliers = 4
+  n_last_outliers = 4,
+  order_outliers = c("AO", "LS", "TC", "SO")
 )
 }
 \arguments{
@@ -44,6 +45,8 @@ By default only the estimate coefficients and the t-statistics are printed
 (`columns_outliers = c("Estimate", "T-stat")`).}
 
 \item{n_last_outliers}{number of last outliers to be printed (by default `n_last_outliers = 4`).}
+
+\item{order_outliers}{order of the outliers in case of several outliers at the same date.}
 }
 \description{
 Functions to compute the data to produce a simple seasonal adjustment dashboard.

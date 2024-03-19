@@ -35,7 +35,8 @@ install.packages("rjdqa")
 
 # Install development version from GitHub
 # install.packages("devtools")
-devtools::install_github("AQLT/rjdqa")
+# devtools::install_github("AQLT/rjdqa")
+install.packages("rjdqa", repos = c('https://aqlt.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 If you have troubles with the installation of RJDemetra or rjdqa, check

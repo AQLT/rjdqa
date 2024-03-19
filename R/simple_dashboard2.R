@@ -10,6 +10,7 @@
 #' By default only the estimate coefficients and the t-statistics are printed 
 #' (`columns_outliers = c("Estimate", "T-stat")`).
 #' @param n_last_outliers number of last outliers to be printed (by default `n_last_outliers = 4`).
+#' @param order_outliers order of the outliers in case of several outliers at the same date.
 #' 
 #' 
 #' @rdname simple_dashboard
@@ -19,7 +20,8 @@ simple_dashboard2 <- function(x, digits = 2,
                               remove_others_contrib = FALSE,
                               digits_outliers = digits,
                               columns_outliers = c("Estimate", "T-stat"),
-                              n_last_outliers = 4) {
+                              n_last_outliers = 4,
+                              order_outliers = c("AO", "LS", "TC", "SO")) {
     if (inherits(x, "TRAMO_SEATS")) {
         x <- RJDemetra::jtramoseats(RJDemetra::get_ts(x), RJDemetra::tramoseats_spec(x))
     } else if (inherits(x, "X13")) {
@@ -48,7 +50,7 @@ simple_dashboard2 <- function(x, digits = 2,
     # Global info on model
     arima_ord <- sprintf("ARIMA(%s)(%s)",
                          paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("p", "d", "q")))), collapse = ","),
-                         paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("bp", "bd", "bd")))), collapse = ","))
+                         paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("bp", "bd", "bq")))), collapse = ","))
     ntd <- RJDemetra::get_indicators(x, "preprocessing.model.ntd")[[1]] # nombre de JO
     nmh <- RJDemetra::get_indicators(x, "preprocessing.model.nmh")[[1]]
     is_easter <- (! is.null(nmh)) &&
@@ -68,7 +70,8 @@ simple_dashboard2 <- function(x, digits = 2,
                    ifelse(is_easter, "easter effect",
                           "no easter effect"))
     # nb outliers
-    out <- sprintf("%s detected outliers", RJDemetra::get_indicators(x, "preprocessing.model.nout")[[1]])
+    nout <- RJDemetra::get_indicators(x, "preprocessing.model.nout")[[1]]
+    out <- sprintf("%s detected outliers", nout)
     summary_text <- c(est_span, transform, tde, out, arima_ord)
     
     
@@ -153,10 +156,14 @@ simple_dashboard2 <- function(x, digits = 2,
         colnames(decomp_stats)[ncol(qstats)+1] <- "   "
     }
     
-    outliers <- do.call(rbind, RJDemetra::get_indicators(x, sprintf("preprocessing.model.out(%i)", seq_len(n_last_outliers))))
-    outliers_color <- NULL
-    if (!is.null(outliers)) {
-        outliers <- outliers[, columns_outliers, drop = FALSE]
+    outliers <- outliers_color <- NULL
+    if (nout > 0) {
+        outliers <- do.call(rbind, RJDemetra::get_indicators(x, sprintf("preprocessing.model.out(%i)", seq_len(nout))))
+        # sort outliers by dates
+        dates_out <- outliers_to_dates(rownames(outliers))
+        dates_out$type <- factor(dates_out$type, levels = order_outliers, ordered = TRUE)
+        outliers <- outliers[order(dates_out$year, dates_out$period, dates_out$type, decreasing = TRUE), , drop = FALSE]
+        outliers <- outliers[seq_len(min(n_last_outliers, nrow(outliers))), columns_outliers, drop = FALSE]
         outliers <- round(outliers, digits_outliers)
         outliers <- data.frame(rownames(outliers), 
                                outliers)
@@ -181,7 +188,14 @@ simple_dashboard2 <- function(x, digits = 2,
     class(res) <- c("simple_dashboard2")
     res
 }
-
+outliers_to_dates <- function(name_out){
+    dates_out <- gsub("\\w. \\((.*)\\)", "\\1", name_out)
+    types <- gsub(" .*", "", name_out)
+    dates <- do.call(rbind, strsplit(dates_out, "-"))
+    periods <- as.numeric(as.roman(dates[,1]))
+    years <- as.numeric(dates[,2])
+    data.frame(year = years, period = periods, type = types)
+}
 #' @rdname plot.simple_dashboard
 #' @export
 plot.simple_dashboard2 <- function(x, main = "Simple Dashboard with outliers",

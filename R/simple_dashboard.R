@@ -44,7 +44,7 @@ simple_dashboard <- function(x, digits = 2,
     # Global info on model
     arima_ord <- sprintf("ARIMA(%s)(%s)",
                          paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("p", "d", "q")))), collapse = ","),
-                         paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("bp", "bd", "bd")))), collapse = ","))
+                         paste(unlist(RJDemetra::get_indicators(x, sprintf("preprocessing.arima.%s", c("bp", "bd", "bq")))), collapse = ","))
     ntd <- RJDemetra::get_indicators(x, "preprocessing.model.ntd")[[1]] # nombre de JO
     nmh <- RJDemetra::get_indicators(x, "preprocessing.model.nmh")[[1]]
     is_easter <- (! is.null(nmh)) &&
