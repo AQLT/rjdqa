@@ -58,29 +58,4 @@ plot.seasonal_pattern <- function(x, ...){
     par(mai = mai)
 }
 
-#' @export
-head.ts <- function(x, n = 6L, ...) {
-    ts(x[1:min(n, length(x))], 
-       start = start(x),
-       frequency = frequency(x))
-}
-#' @export
-head.mts <- function(x, n = 6L, ...) {
-    ts(x[1:min(n, nrow(x)),], 
-       start = start(x),
-       frequency = frequency(x))
-}
-#' @importFrom stats end
-#' @export
-tail.ts <- function(x, n = 6L, ...) {
-    ts(x[max(1, length(x) - n + 1):length(x)], 
-       end = end(x),
-       frequency = frequency(x))
-}
-#' @export
-tail.mts <- function(x, n = 6L, ...) {
-    ts(x[max(1, nrow(x) - n + 1):nrow(x),], 
-       end = end(x),
-       frequency = frequency(x))
-}
 
