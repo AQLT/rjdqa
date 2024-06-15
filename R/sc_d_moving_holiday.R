@@ -16,7 +16,7 @@ moving_holiday_pattern <- function(x){
     is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
     
     mhe <- x$regarima$model$effects[,"ee"]
-    last_date <- tail(time(mhe), 1)
+    last_date <- time(mhe)[length(time(mhe))]
     mhe <- window(mhe, start = last_date - 1 + deltat(mhe))
     freq <- frequency(mhe)
     

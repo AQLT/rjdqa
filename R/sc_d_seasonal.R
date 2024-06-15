@@ -1,7 +1,7 @@
 
 seasonal_pattern <- function(x){
     sa <- x$final$series[,"s"]
-    last_date <- tail(time(sa), 1)
+    last_date <- time(sa)[length(time(sa))]
     sa <- window(sa, start = last_date - 1 + deltat(sa))
     freq <- frequency(sa)
     estimated_values <- as.numeric(sa)
@@ -57,3 +57,30 @@ plot.seasonal_pattern <- function(x, ...){
                   vlines = TRUE,title = title, xjust = 0.5, yjust = 0.5)
     par(mai = mai)
 }
+
+#' @export
+head.ts <- function(x, n = 6L, ...) {
+    ts(x[1:min(n, length(x))], 
+       start = start(x),
+       frequency = frequency(x))
+}
+#' @export
+head.mts <- function(x, n = 6L, ...) {
+    ts(x[1:min(n, nrow(x)),], 
+       start = start(x),
+       frequency = frequency(x))
+}
+#' @importFrom stats end
+#' @export
+tail.ts <- function(x, n = 6L, ...) {
+    ts(x[max(1, length(x) - n + 1):length(x)], 
+       end = end(x),
+       frequency = frequency(x))
+}
+#' @export
+tail.mts <- function(x, n = 6L, ...) {
+    ts(x[max(1, nrow(x) - n + 1):nrow(x),], 
+       end = end(x),
+       frequency = frequency(x))
+}
+
