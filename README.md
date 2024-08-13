@@ -6,13 +6,13 @@
 <!-- <img src="man/figures/logo.png" align="right" /> -->
 
 [![R-CMD-check](https://github.com/AQLT/rjdqa/workflows/R-CMD-check/badge.svg)](https://github.com/AQLT/rjdqa/actions)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rjdqa)](https://cran.r-project.org/package=rjdqa)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/rjdqa)](https://cran.r-project.org/package=rjdqa)
 [![CRAN last
-release](http://www.r-pkg.org/badges/last-release/rjdqa)](https://cran.r-project.org/package=rjdqa)
+release](https://www.r-pkg.org/badges/last-release/rjdqa)](https://cran.r-project.org/package=rjdqa)
 [![CRAN monthly
-downloads](http://cranlogs.r-pkg.org/badges/rjdqa?color=lightgrey)](https://cran.r-project.org/package=rjdqa)
+downloads](https://cranlogs.r-pkg.org/badges/rjdqa?color=lightgrey)](https://cran.r-project.org/package=rjdqa)
 [![CRAN
-downloads](http://cranlogs.r-pkg.org/badges/grand-total/rjdqa?color=lightgrey)](https://cran.r-project.org/package=rjdqa)
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/rjdqa?color=lightgrey)](https://cran.r-project.org/package=rjdqa)
 
 ## Overview
 
