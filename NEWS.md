@@ -1,3 +1,6 @@
+# rjdqa 0.1.6
+
+
 # rjdqa 0.1.5
 
 - correction of the use of `tail()` on `ts` object to avoid error.
