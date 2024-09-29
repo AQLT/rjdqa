@@ -6,18 +6,18 @@
 <!-- <img src="man/figures/logo.png" align="right" /> -->
 
 [![R-CMD-check](https://github.com/AQLT/rjdqa/workflows/R-CMD-check/badge.svg)](https://github.com/AQLT/rjdqa/actions)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/rjdqa)](https://cran.r-project.org/package=rjdqa)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/rjdqa)](https://cran.r-project.org/package=rjdqa)
 [![CRAN last
-release](http://www.r-pkg.org/badges/last-release/rjdqa)](https://cran.r-project.org/package=rjdqa)
+release](https://www.r-pkg.org/badges/last-release/rjdqa)](https://cran.r-project.org/package=rjdqa)
 [![CRAN monthly
-downloads](http://cranlogs.r-pkg.org/badges/rjdqa?color=lightgrey)](https://cran.r-project.org/package=rjdqa)
+downloads](https://cranlogs.r-pkg.org/badges/rjdqa?color=lightgrey)](https://cran.r-project.org/package=rjdqa)
 [![CRAN
-downloads](http://cranlogs.r-pkg.org/badges/grand-total/rjdqa?color=lightgrey)](https://cran.r-project.org/package=rjdqa)
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/rjdqa?color=lightgrey)](https://cran.r-project.org/package=rjdqa)
 
 ## Overview
 
 rjdqa is an extension of the R package
-[RJDemetra](https://github.com/jdemetra/rjdemetra), which is an
+[RJDemetra](https://github.com/rjdverse/rjdemetra), which is an
 interface to JDemetra+, the seasonal adjustment software [officially
 recommended](https://wayback.archive-it.org/12090/20240102173448/https://cros-legacy.ec.europa.eu/system/files/Jdemetra_%20release.pdf)
 to the members of the ESS and the European System of Central Banks.
@@ -41,7 +41,7 @@ install.packages("rjdqa", repos = c('https://aqlt.r-universe.dev', 'https://clou
 
 If you have troubles with the installation of RJDemetra or rjdqa, check
 the [installation
-manual](https://github.com/jdemetra/rjdemetra/wiki/Installation-manual).
+manual](https://github.com/rjdverse/rjdemetra/wiki/Installation-manual).
 
 # Usage
 

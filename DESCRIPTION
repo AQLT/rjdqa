@@ -1,7 +1,7 @@
 Package: rjdqa
 Type: Package
 Title: Quality Assessment for Seasonal Adjustment
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: c(
    person("Alain", "Quartier-la-Tente", role = c("aut", "cre"),
                  email = "alain.quartier@yahoo.fr",
@@ -22,4 +22,4 @@ Imports:
 Encoding: UTF-8
 URL: https://aqlt.github.io/rjdqa/, https://github.com/AQLT/rjdqa
 BugReports: https://github.com/AQLT/rjdqa/issues
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
