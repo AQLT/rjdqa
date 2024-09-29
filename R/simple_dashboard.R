@@ -10,6 +10,7 @@
 #' @param scale_var_decomp boolean indicating if the variance decomposition table should be rescaled to 100.
 #' @param remove_others_contrib boolean indication if the "Others" contribution (i.e.: the pre-adjustment contribution)
 #' should be removed from the variance decomposition table.
+#' @param add_obs_to_forecast Boolean indicating if the last observed values should be added to the forecast table (for the plot).
 #' 
 #' @examples
 #' data <- window(RJDemetra::ipi_c_eu[, "FR"], start = 2003)
@@ -22,7 +23,8 @@
 #' @export
 simple_dashboard <- function(x, digits = 2,
                              scale_var_decomp = FALSE,
-                             remove_others_contrib = FALSE) {
+                             remove_others_contrib = FALSE,
+                             add_obs_to_forecast = TRUE) {
     if (inherits(x, "TRAMO_SEATS")) {
         x <- RJDemetra::jtramoseats(RJDemetra::get_ts(x), RJDemetra::tramoseats_spec(x))
     } else if (inherits(x, "X13")) {
@@ -38,7 +40,8 @@ simple_dashboard <- function(x, digits = 2,
     
     data_plot <- do.call(ts.union, data_plot)
     # add observed data for plots
-    data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y_f", "t_f", "sa_f")] <-
+    if (add_obs_to_forecast)
+        data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y_f", "t_f", "sa_f")] <-
         data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y", "t", "sa")]
 
     # Global info on model

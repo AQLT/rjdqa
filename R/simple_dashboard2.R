@@ -21,7 +21,8 @@ simple_dashboard2 <- function(x, digits = 2,
                               digits_outliers = digits,
                               columns_outliers = c("Estimate", "T-stat"),
                               n_last_outliers = 4,
-                              order_outliers = c("AO", "LS", "TC", "SO")) {
+                              order_outliers = c("AO", "LS", "TC", "SO"),
+                              add_obs_to_forecast = TRUE) {
     if (inherits(x, "TRAMO_SEATS")) {
         x <- RJDemetra::jtramoseats(RJDemetra::get_ts(x), RJDemetra::tramoseats_spec(x))
     } else if (inherits(x, "X13")) {
@@ -44,7 +45,8 @@ simple_dashboard2 <- function(x, digits = 2,
     
     data_plot <- do.call(ts.union, data_plot)
     # add observed data for plots
-    data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y_f", "t_f", "sa_f")] <-
+    if (add_obs_to_forecast)
+        data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y_f", "t_f", "sa_f")] <-
         data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y", "t", "sa")]
     
     # Global info on model

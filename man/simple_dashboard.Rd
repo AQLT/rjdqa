@@ -9,7 +9,8 @@ simple_dashboard(
   x,
   digits = 2,
   scale_var_decomp = FALSE,
-  remove_others_contrib = FALSE
+  remove_others_contrib = FALSE,
+  add_obs_to_forecast = TRUE
 )
 
 simple_dashboard2(
@@ -20,7 +21,8 @@ simple_dashboard2(
   digits_outliers = digits,
   columns_outliers = c("Estimate", "T-stat"),
   n_last_outliers = 4,
-  order_outliers = c("AO", "LS", "TC", "SO")
+  order_outliers = c("AO", "LS", "TC", "SO"),
+  add_obs_to_forecast = TRUE
 )
 }
 \arguments{
@@ -32,6 +34,8 @@ simple_dashboard2(
 
 \item{remove_others_contrib}{boolean indication if the "Others" contribution (i.e.: the pre-adjustment contribution)
 should be removed from the variance decomposition table.}
+
+\item{add_obs_to_forecast}{Boolean indicating if the last observed values should be added to the forecast table (for the plot).}
 
 \item{digits_outliers}{number of digits used in the table of outliers.}
 
