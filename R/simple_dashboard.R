@@ -19,7 +19,7 @@
 #' plot(dashboard_data, main = "Simple dashboard IPI - FR")
 #' dashboard_data2 <- simple_dashboard2(sa_model)
 #' plot(dashboard_data2, main = "Simple dashboard with outliers IPI - FR")
-#' @seealso \code{\link{plot.sc_dashboard}}.
+#' @seealso \code{\link{plot.simple_dashboard}}.
 #' @export
 simple_dashboard <- function(x, digits = 2,
                              scale_var_decomp = FALSE,
@@ -178,31 +178,51 @@ simple_dashboard <- function(x, digits = 2,
 #' plot(dashboard_data2, main = "Simple dashboard with outliers IPI - FR")
 #' @seealso \code{\link{simple_dashboard}}.
 #' @export
-plot.simple_dashboard <- function(x, main = "Simple Dashboard",
-                              subtitle = NULL,
-                              color_series = c(y = "#F0B400", t = "#1E6C0B", sa = "#155692"),
-                              reference_date = TRUE, ...){
+plot.simple_dashboard <- function(x, main = "Simple Dashboard with outliers",
+                                  subtitle = NULL,
+                                  color_series = c(y = "#F0B400", t = "#1E6C0B", sa = "#155692"),
+                                  reference_date = TRUE,...){
     main_plot = x$main_plot
     siratio_plot = x$siratio_plot
     summary_text = x$summary_text
     decomp_stats = x$decomp_stats
     residuals_tests = x$residuals_tests
     last_date = x$last_date
+    outliers = x$outliers
     
+    # Check if it is simple_dashboard (TRUE) or simple_dashboard2
+    is_sd <- is.null(outliers)
     def.par <- par(no.readonly = TRUE)    
     
-    nf <- layout(matrix(c(rep(1,8),
-                          rep(2,4),rep(3,4),
-                          rep(4,3), rep(5,5),
-                          rep(4,3), rep(6,5)),ncol = 8,byrow = T),
-                 heights = c(0.2,2.5,0.5,1.3))
+    if (is_sd) {
+        # simple_dashboard
+        nf <- layout(matrix(c(rep(1,8),
+                              rep(2,4),rep(3,4),
+                              rep(4,3), rep(5,5),
+                              rep(4,3), rep(6,5)),ncol = 8,byrow = T),
+                     heights = c(0.2,2.5,0.5,1.3))
+        cex <- 1
+        y_res_test <- 0.5 # y position of the residuals tests table smaller
+    } else {
+        # simple_dashboard2
+        nf <- layout(matrix(c(rep(1,8),
+                              rep(2,4), rep(3,4),
+                              rep(4,3), rep(5,5),
+                              rep(4,3), rep(6,5),
+                              rep(7,3), rep(8,5)),ncol = 8,byrow = T),
+                     heights = c(0.2,2.2,0.5,0.2,0.7))
+        cex <- 0.95 # smaller text
+        y_res_test <- 0.8
+    }
+    
+    # layout.show(nf)
     on.exit({
         par(def.par)
     })
     
     oma.saved <- par("oma")
     par(oma = rep.int(0, 4))
-    par(oma = oma.saved)
+    # par(oma = oma.saved)
     o.par <- par(mar = rep.int(0, 4))
     plot.new()
     box(which = "inner")
@@ -213,28 +233,30 @@ plot.simple_dashboard <- function(x, main = "Simple Dashboard",
     
     par(mai = c(0, 0.4, 0.2, 0.1))
     stats::plot.ts(main_plot,plot.type = "single",
-            col = rep(color_series, 2),
-            lty = rep(c(1,2), each = 3),
-            xlab = NULL,
-            ylab = NULL,
-            main = NULL
-            )
+                   col = rep(color_series, 2),
+                   lty = rep(c(1,2), each = 3),
+                   xlab = NULL,
+                   ylab = NULL,
+                   main = NULL
+    )
     legend("bottomright", legend = names(color_series),
            col = color_series, lty = 1,
            pch = NA_integer_,
            inset = c(0,1), xpd = TRUE, horiz=TRUE, bty = "n")
     par(mai = c(0.0, 0.2, 0.2, 0.4))
-    ggdemetra::siratioplot(siratio_plot,main = NULL)
+    ggdemetra::siratioplot(siratio_plot, main = NULL)
     
     
     par(mai = c(0.4, 0.2, 0.2, 0))
+    par(mar = rep.int(0.4, 4))
     plot.new()
-    # box()
-    legend("topleft", legend = c(NA,summary_text), 
-           bty = "n", text.font =  2, inset = c(0))
+    legend("topleft", legend = c(NA, summary_text), 
+           bty = "n", text.font =  2, inset = c(0),
+           cex = cex, 
+           xpd = TRUE)
     
     
-    par(mar = rep(rep(2, 4)))
+    par(mar = rep(2, 4))
     par(mai = c(0, 0.2, 0, 0.2))
     
     plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1),
@@ -243,11 +265,30 @@ plot.simple_dashboard <- function(x, main = "Simple Dashboard",
                            decomp_stats$table, bty = "o", display.rownames = FALSE, hlines = TRUE,
                            vlines = TRUE,bg = decomp_stats$colors, xjust = 0.5, yjust = 1)
     
+    # Empty plot
+    if(! is_sd) {
+        plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1),
+             axes = FALSE)
+        plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1),
+             axes = FALSE)
+        par(mai = c(0, 0.2, 0.2, 0.2))
+    }
+    
+    if(! is_sd && ! is.null(outliers$table)) {
+        
+        plotrix::addtable2plot(0.5, 0.7,
+                               outliers$table, 
+                               bg = outliers$colors,
+                               bty = "o", 
+                               display.rownames = FALSE, hlines = TRUE,
+                               vlines = TRUE, 
+                               xjust = 0.5, yjust = 0.5)
+    }
+    
     plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1),
          axes = FALSE)
     par(mai = c(0, 0.2, 0.2, 0.2))
-    
-    plotrix::addtable2plot(0.5, 0.6,
+    plotrix::addtable2plot(0.5, y_res_test,
                            residuals_tests$table, bty = "o", 
                            display.rownames = TRUE, hlines = TRUE,
                            vlines = TRUE,

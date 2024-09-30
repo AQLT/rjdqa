@@ -66,5 +66,5 @@ dashboard_data2 <- simple_dashboard2(sa_model)
 plot(dashboard_data2, main = "Simple dashboard with outliers IPI - FR")
 }
 \seealso{
-\code{\link{plot.sc_dashboard}}.
+\code{\link{plot.simple_dashboard}}.
 }
