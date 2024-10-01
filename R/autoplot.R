@@ -29,14 +29,14 @@
 #         # On met la legende en bas du graphique
 #         theme(legend.position="bottom", legend.title = element_blank(),
 #               legend.box.spacing = unit(0, "pt"))
-#     p_siratio <- ggdemetra::ggsiratioplot(siratio_plot, main = NULL) + theme_bw() 
-#     
+#     p_siratio <- ggdemetra::ggsiratioplot(siratio_plot, main = NULL) + theme_bw()
+# 
 #     p_text_sum <- grid::textGrob(
 #         paste(summary_text, collapse = "\n"),
 #         gp=grid::gpar(fontsize=text_base_size),
 #         hjust = 0, vjust = 1,
 #         vp = grid::viewport(x = 0,y = 1))
-#     
+# 
 #     if(decomp_stats$colors[[3]] == "white") {
 #         #X13
 #         col_head <- c(rep("grey80", 2),
@@ -55,7 +55,7 @@
 #         decomp_stats$table,
 #         theme = th_decomp_stat, rows = NULL,
 #         vp = grid::viewport(x = .5,y = 1))
-#     
+# 
 #     th_res_test <- gridExtra::ttheme_default(core=list(
 #         bg_params = list(fill=residuals_tests$colors)
 #     ), base_size = table_base_size,
@@ -63,8 +63,8 @@
 #     p_tab_tests <- gridExtra::tableGrob(
 #         residuals_tests$table,
 #         theme = th_res_test,
-#         vp = grid::viewport(x = .5,y = 1))
-#     
+#         vp = grid::viewport(x = .4,y = .5))
+# 
 #     if (is_sd) {
 #         p_tab_outliers <- NULL
 #         layout <- "
@@ -82,20 +82,20 @@
 #             outliers$table,
 #             theme = th_outliers,
 #             rows = NULL,
-#             vp = grid::viewport(x = .5,y = 1))
+#             vp = grid::viewport(x = .4,y = .5))
 #         layout <- "
 # AAAABBBB
 # CCCDDDDD
 # EEEEFFFF
 # "
-#         heights <- c(2.9,0.7, 0.5)
+#         heights <- c(3,1, 1)
 #     }
 #     all_plots <- list(p_global, p_siratio, p_text_sum, p_tab_decomp_stat,
 #                       p_tab_outliers, p_tab_tests)
 #     if (is_sd) {
 #         all_plots[[5]] <- NULL
 #     }
-#     
+# 
 #     if (reference_date)  {
 #         subtitle <- sprintf("Reference Date: %s",last_date)
 #     } else {
@@ -117,5 +117,5 @@
 #         )
 #     p_dashboard
 # }
-# autoplot(dashboard_data,table_base_size = 8,text_base_size = 6)
-# autoplot(dashboard_data2,table_base_size = 8,text_base_size = 6)
+# autoplot(dashboard_data)
+# autoplot(dashboard_data2)
