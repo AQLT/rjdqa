@@ -11,6 +11,8 @@
 #' @param remove_others_contrib boolean indication if the "Others" contribution (i.e.: the pre-adjustment contribution)
 #' should be removed from the variance decomposition table.
 #' @param add_obs_to_forecast Boolean indicating if the last observed values should be added to the forecast table (for the plot).
+#' @param td_effect Boolean indicating if the residual trading days effect test should be printed.
+#' By default (`td_effect = NULL`) the test is only printed for monthly series.
 #' 
 #' @examples
 #' data <- window(RJDemetra::ipi_c_eu[, "FR"], start = 2003)
@@ -24,7 +26,8 @@
 simple_dashboard <- function(x, digits = 2,
                              scale_var_decomp = FALSE,
                              remove_others_contrib = FALSE,
-                             add_obs_to_forecast = TRUE) {
+                             add_obs_to_forecast = TRUE,
+                             td_effect = NULL) {
     if (inherits(x, "TRAMO_SEATS")) {
         x <- RJDemetra::jtramoseats(RJDemetra::get_ts(x), RJDemetra::tramoseats_spec(x))
     } else if (inherits(x, "X13")) {
@@ -132,8 +135,12 @@ simple_dashboard <- function(x, digits = 2,
                                  "None" = "#A0CD63", "orange")),
                         c(ifelse(td_res_test[,1] < 0.05,  "red", "#A0CD63"),
                           rep("white", 4)))
-    
-    
+    if (is.null(td_effect))
+        td_effect <- frequency(data_plot) == 12
+    if (!td_effect) {
+        all_tests <- all_tests[-3,]
+        color_test<- color_test[-3,]
+    }
     decomp_stats_color <- c(sapply(qstats, function(x) ifelse(x < 1, "#A0CD63", "red")),
                          "white",
                          rep("grey90", ncol(var_decomp)

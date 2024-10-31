@@ -2,6 +2,11 @@
 
 - new parameter `add_obs_to_forecast` to `simple_dashboard()` and `simple_dashboard2()`.
 
+- new parameter `td_effect` to `simple_dashboard()` and `simple_dashboard2()` to indicate if the residual trading days effect test should be printed.
+By default (`td_effect = NULL`) the test is only printed for monthly series.
+
+- The title of table of outliers of `simple_dashboard2()` now also depend on the number of outliers detected by the model.
+
 # rjdqa 0.1.5
 
 - correction of the use of `tail()` on `ts` object to avoid error.
