@@ -283,13 +283,13 @@ plot.simple_dashboard <- function(x, main = "Simple Dashboard with outliers",
     
     if(! is_sd && ! is.null(outliers$table)) {
         
-        plotrix::addtable2plot(0.5, 0.7,
+        plotrix::addtable2plot(0.5, 1,
                                outliers$table, 
                                bg = outliers$colors,
                                bty = "o", 
                                display.rownames = FALSE, hlines = TRUE,
                                vlines = TRUE, 
-                               xjust = 0.5, yjust = 0.5)
+                               xjust = 0.5, yjust = 0)
     }
     
     plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1),
