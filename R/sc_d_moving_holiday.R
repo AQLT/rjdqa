@@ -1,21 +1,9 @@
 moving_holiday_pattern <- function(x){
-    # UseMethod("moving_holiday_pattern", x)
-    if(!all(c("preprocessing.model.mhe_f") %in% names(x$user_defined))){
-        if(inherits(x, "X13")){
-            my_spec <- RJDemetra::x13_spec(x)
-            x <- RJDemetra::x13(x$final$series[,"y"], my_spec,
-                                userdefined = "preprocessing.model.mhe_f")
-        }else if(inherits(x, "TRAMO_SEATS ")){
-            my_spec <- RJDemetra::tramoseats_spec(x)
-            x <- RJDemetra::tramoseats(x$final$series[,"y"], my_spec,
-                                       userdefined = "preprocessing.model.mhe_f")
-        }else{
-            stop("Wrong type of object")
-        }
-    }
-    is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
+    data <- RJDemetra::get_indicators(x, c("preprocessing.model.mhe", "preprocessing.model.mhe_f","y", "preprocessing.model.log"))
     
-    mhe <- x$regarima$model$effects[,"ee"]
+    is_multiplicative <- as.logical(data[["preprocessing.model.log"]])
+    
+    mhe <- data[["preprocessing.model.mhe"]]
     last_date <- time(mhe)[length(time(mhe))]
     mhe <- window(mhe, start = last_date - 1 + deltat(mhe))
     freq <- frequency(mhe)
@@ -26,118 +14,38 @@ moving_holiday_pattern <- function(x){
     
     estimated_values <- as.numeric(mhe)
     evolution <- c(tail(mhe, 2),
-                   head(x$user_defined$preprocessing.model.mhe_f,1))
+                   head(data[["preprocessing.model.mhe_f"]],1))
     if (!is_multiplicative) {
-        series_mean <- mean(x$final$series[,"y"],
+        series_mean <- mean(data[["y"]],
                             na.rm = TRUE)
         estimated_values <- as.numeric(estimated_values) / series_mean + 1
         evolution <- evolution/series_mean + 1 
     }
     
-    if (freq == 12) {
+    if(freq == 12){
         names(estimated_values) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
                                      "Oct", "Nov", "Dec")[cycle(mhe)]
         period <- "Month"
-    }else{
+    }else if (freq == 4){
         names(estimated_values) <- sprintf("Q%i",1:4)[cycle(mhe)]
         period <- "Quarter"
+    } else {
+        names(estimated_values) <- paste("P", cycle(mhe), sep = "")
+        period <- "Period"
     }
     estimated_values <- (estimated_values - 1) * 100
     evolution <- (evolution - 1) * 100
-    evolution <- data.frame(Evolution = evolution,
-                            row.names = sprintf("%s %s",
-                                                c("Previous", "Current", "Next"),
-                                                period))
+    evolution <- data.frame(
+        Evolution = evolution,
+        row.names = sprintf(
+            "%s %s",
+            c("Previous", "Current", "Next"),
+            period)
+    )
     result <- list(estimated_values = estimated_values, evolution = evolution)
     class(result) <- c("moving_holiday_pattern", class(result))
     result
 }
-# moving_holiday_pattern.X13 <- function(x){
-#     if (!all(c("preprocessing.model.mhe_f") %in% names(x$user_defined))) {
-#         my_spec <- RJDemetra::x13_spec(x)
-#         x <- RJDemetra::x13(x$final$series[,"y"], my_spec,userdefined = "preprocessing.model.mhe_f")
-#     }
-#     
-#     mhe <- x$regarima$model$effects[,"ee"]
-#     last_date <- tail(time(mhe), 1)
-#     mhe <- window(mhe, start = last_date - 1 + deltat(mhe))
-#     is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
-#     
-#     freq <- frequency(mhe)
-#     
-#     estimated_values <- as.numeric(mhe)
-#     evolution <- c(tail(mhe, 2),
-#                    head(x$user_defined$preprocessing.model.mhe_f,1))
-#     if (!is_multiplicative) {
-#         series_mean <- mean(x$final$series[,"y"],
-#                             na.rm = TRUE)
-#         estimated_values <- as.numeric(estimated_values) / series_mean + 1
-#         evolution <- evolution/series_mean + 1 
-#     }
-#     
-#     if (freq == 12) {
-#         names(estimated_values) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
-#                                      "Oct", "Nov", "Dec")[cycle(mhe)]
-#         period <- "Month"
-#     }else{
-#         names(estimated_values) <- sprintf("Q%i",1:4)[cycle(mhe)]
-#         period <- "Quarter"
-#     }
-#     estimated_values <- (estimated_values - 1) * 100
-#     evolution <- (evolution - 1) * 100
-#     evolution <- data.frame(Evolution = evolution,
-#                             row.names = sprintf("%s %s",
-#                                                 c("Previous", "Current", "Next"),
-#                                                 period))
-#     result <- list(estimated_values = estimated_values, evolution = evolution)
-#     class(result) <- c("moving_holiday_pattern", class(result))
-#     result
-# }
-# moving_holiday_pattern.TRAMO_SEATS <- function(x){
-#     if (!all(c("preprocessing.model.mhe_f") %in% names(x$user_defined))) {
-#         my_spec <- RJDemetra::tramoseats_spec(x)
-#         x <- RJDemetra::tramoseats(x$final$series[,"y"], my_spec,
-#                                    userdefined = "preprocessing.model.mhe_f")
-#     }
-#     is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
-#     
-#     mhe <- x$regarima$model$effects[,"ee"]
-#     last_date <- tail(time(mhe), 1)
-#     mhe <- window(mhe, start = last_date - 1 + deltat(mhe))
-#     freq <- frequency(mhe)
-#     
-#     if (is_multiplicative) {
-#         mhe <- exp(mhe)
-#     }
-#     
-#     estimated_values <- as.numeric(mhe)
-#     evolution <- c(tail(mhe, 2),
-#                    head(x$user_defined$preprocessing.model.mhe_f,1))
-#     if (!is_multiplicative) {
-#         series_mean <- mean(x$final$series[,"y"],
-#                             na.rm = TRUE)
-#         estimated_values <- as.numeric(estimated_values) / series_mean + 1
-#         evolution <- evolution/series_mean + 1 
-#     }
-#     
-#     if (freq == 12) {
-#         names(estimated_values) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
-#                                      "Oct", "Nov", "Dec")[cycle(mhe)]
-#         period <- "Month"
-#     }else{
-#         names(estimated_values) <- sprintf("Q%i",1:4)[cycle(mhe)]
-#         period <- "Quarter"
-#     }
-#     estimated_values <- (estimated_values - 1) * 100
-#     evolution <- (evolution - 1) * 100
-#     evolution <- data.frame(Evolution = evolution,
-#                             row.names = sprintf("%s %s",
-#                                                 c("Previous", "Current", "Next"),
-#                                                 period))
-#     result <- list(estimated_values = estimated_values, evolution = evolution)
-#     class(result) <- c("moving_holiday_pattern", class(result))
-#     result
-# }
 #'@exportS3Method NULL
 plot.moving_holiday_pattern <- function(x, ...){
     if(is.null(x$evolution)){
@@ -162,9 +70,9 @@ plot.moving_holiday_pattern <- function(x, ...){
     par(mai = c(0,0,0,0))
     plot(0,type='n',axes=FALSE,ann = F, xlim = c(0,1), ylim = c(0,1))
     plotrix::addtable2plot(0.5, 0.5,
-                  data_table[-3,, drop=FALSE], bty = "o", display.rownames = TRUE, hlines = TRUE,
-                  display.colnames = FALSE,
-                  vlines = TRUE,title = title, xjust = 0.5, yjust = 0.5)
+                           data_table[-3,, drop=FALSE], bty = "o", display.rownames = TRUE, hlines = TRUE,
+                           display.colnames = FALSE,
+                           vlines = TRUE,title = title, xjust = 0.5, yjust = 0.5)
     par(mai = mai)
     
 }

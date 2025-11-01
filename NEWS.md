@@ -9,6 +9,8 @@ By default (`td_effect = NULL`) the test is only printed for monthly series.
 
 - improvement placement of table of outliers in `simple_dashboard2()`.
 
+- improvement of `sc_dashboard()` to handle user-defined calendar regressors.
+
 # rjdqa 0.1.5
 
 - correction of the use of `tail()` on `ts` object to avoid error.

@@ -1,26 +1,30 @@
 
 seasonal_pattern <- function(x){
-    sa <- x$final$series[,"s"]
-    last_date <- time(sa)[length(time(sa))]
-    sa <- window(sa, start = last_date - 1 + deltat(sa))
-    freq <- frequency(sa)
-    estimated_values <- as.numeric(sa)
-    is_multiplicative <- x$regarima$model$spec_rslt[, "Log transformation"]
-    evolution <- c(tail(sa, 2),
-                   head(x$final$forecasts[,"s_f"],1))
+    data <- RJDemetra::get_indicators(x, c("s", "s_f", "y", "preprocessing.model.log"))
+    s <- data[["s"]]
+    last_date <- time(s)[length(time(s))]
+    s <- window(s, start = last_date - 1 + deltat(s))
+    freq <- frequency(s)
+    estimated_values <- as.numeric(s)
+    is_multiplicative <- as.logical(data[["preprocessing.model.log"]])
+    evolution <- c(tail(s, 2),
+                   head(data[["s_f"]],1))
     if(!is_multiplicative){
-        series_mean <- mean(x$final$series[,"y"],
+        series_mean <- mean(data[["y"]],
                             na.rm = TRUE)
         estimated_values <- estimated_values / series_mean + 1
         evolution <- evolution/series_mean + 1 
     }
     if(freq == 12){
         names(estimated_values) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
-                                     "Oct", "Nov", "Dec")[cycle(sa)]
+                                     "Oct", "Nov", "Dec")[cycle(s)]
         period <- "Month"
-    }else{
-        names(estimated_values) <- sprintf("Q%i",1:4)[cycle(sa)]
+    }else if (freq == 4){
+        names(estimated_values) <- sprintf("Q%i",1:4)[cycle(s)]
         period <- "Quarter"
+    } else {
+        names(estimated_values) <- paste("P", cycle(s), sep = "")
+        period <- "Period"
     }
     estimated_values <- (estimated_values - 1)*100
     evolution <- (evolution - 1)*100
