@@ -15,6 +15,7 @@ Depends:
     RJDemetra (>= 0.2.5),
 Imports:
     plotrix,
+    rJava,
     ggdemetra (>= 0.2.5),
     utils,
     graphics,

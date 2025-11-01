@@ -1,3 +1,4 @@
+#' @importFrom rJava .jinstanceof
 net_effect <- function(x){
     data <- RJDemetra::get_indicators(x, c(
         "y", "s", "sa", "preprocessing.model.tde",
