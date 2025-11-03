@@ -1,4 +1,3 @@
-
 seasonal_pattern <- function(x){
     data <- RJDemetra::get_indicators(x, c("s", "s_f", "y", "preprocessing.model.log"))
     s <- data[["s"]]
