@@ -1,3 +1,5 @@
+# rjdqa 0.1.7
+
 # rjdqa 0.1.6
 
 - new parameter `add_obs_to_forecast` to `simple_dashboard()` and `simple_dashboard2()`.
