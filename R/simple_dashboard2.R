@@ -21,7 +21,9 @@ simple_dashboard2 <- function(x, digits = 2,
                               digits_outliers = digits,
                               columns_outliers = c("Estimate", "T-stat"),
                               n_last_outliers = 4,
-                              order_outliers = c("AO", "LS", "TC", "SO")) {
+                              order_outliers = c("AO", "LS", "TC", "SO"),
+                              add_obs_to_forecast = TRUE,
+                              td_effect = NULL) {
     if (inherits(x, "TRAMO_SEATS")) {
         x <- RJDemetra::jtramoseats(RJDemetra::get_ts(x), RJDemetra::tramoseats_spec(x))
     } else if (inherits(x, "X13")) {
@@ -44,7 +46,8 @@ simple_dashboard2 <- function(x, digits = 2,
     
     data_plot <- do.call(ts.union, data_plot)
     # add observed data for plots
-    data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y_f", "t_f", "sa_f")] <-
+    if (add_obs_to_forecast)
+        data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y_f", "t_f", "sa_f")] <-
         data_plot[which(is.na(data_plot[,"y"]))[1]-1, c("y", "t", "sa")]
     
     # Global info on model
@@ -137,7 +140,12 @@ simple_dashboard2 <- function(x, digits = 2,
                                  "None" = "#A0CD63", "orange")),
                         c(ifelse(td_res_test[,1] < 0.05,  "red", "#A0CD63"),
                           rep("white", 4)))
-    
+    if (is.null(td_effect))
+        td_effect <- frequency(data_plot) == 12
+    if (!td_effect) {
+        all_tests <- all_tests[-3,]
+        color_test<- color_test[-3,]
+    }
     
     decomp_stats_color <- c(sapply(qstats, function(x) ifelse(x < 1, "#A0CD63", "red")),
                             "white",
@@ -167,7 +175,7 @@ simple_dashboard2 <- function(x, digits = 2,
         outliers <- round(outliers, digits_outliers)
         outliers <- data.frame(rownames(outliers), 
                                outliers)
-        colnames(outliers)[1] <- sprintf("Last %i outliers", n_last_outliers)
+        colnames(outliers)[1] <- sprintf("Last %i outliers", min(n_last_outliers, nrow(outliers)))
         rownames(outliers) <- NULL
         
         outliers_color <- 
@@ -185,7 +193,7 @@ simple_dashboard2 <- function(x, digits = 2,
                 last_date = last_date,
                 outliers = list(table = outliers,
                                 colors = outliers_color))
-    class(res) <- c("simple_dashboard2")
+    class(res) <- c("simple_dashboard")
     res
 }
 outliers_to_dates <- function(name_out){
@@ -195,116 +203,4 @@ outliers_to_dates <- function(name_out){
     periods <- as.numeric(as.roman(dates[,1]))
     years <- as.numeric(dates[,2])
     data.frame(year = years, period = periods, type = types)
-}
-#' @rdname plot.simple_dashboard
-#' @export
-plot.simple_dashboard2 <- function(x, main = "Simple Dashboard with outliers",
-                                   subtitle = NULL,
-                                   color_series = c(y = "#F0B400", t = "#1E6C0B", sa = "#155692"),
-                                   reference_date = TRUE,...){
-    main_plot = x$main_plot
-    siratio_plot = x$siratio_plot
-    summary_text = x$summary_text
-    decomp_stats = x$decomp_stats
-    residuals_tests = x$residuals_tests
-    last_date = x$last_date
-    outliers = x$outliers
-    
-    def.par <- par(no.readonly = TRUE)    
-    
-    nf <- layout(matrix(c(rep(1,8),
-                          rep(2,4), rep(3,4),
-                          rep(4,3), rep(5,5),
-                          rep(4,3), rep(6,5),
-                          rep(7,3), rep(8,5)),ncol = 8,byrow = T),
-                 heights = c(0.2,2.2,0.5,0.2,0.7))
-    # layout.show(nf)
-    on.exit({
-        par(def.par)
-    })
-    
-    oma.saved <- par("oma")
-    par(oma = rep.int(0, 4))
-    # par(oma = oma.saved)
-    o.par <- par(mar = rep.int(0, 4))
-    plot.new()
-    box(which = "inner")
-    
-    box()
-    text(0.5, 0.5, main, font = 2,cex = 1.2)
-    par(o.par)
-    
-    par(mai = c(0, 0.4, 0.2, 0.1))
-    stats::plot.ts(main_plot,plot.type = "single",
-                   col = rep(color_series, 2),
-                   lty = rep(c(1,2), each = 3),
-                   xlab = NULL,
-                   ylab = NULL,
-                   main = NULL
-    )
-    legend("bottomright", legend = names(color_series),
-           col = color_series, lty = 1,
-           pch = NA_integer_,
-           inset = c(0,1), xpd = TRUE, horiz=TRUE, bty = "n")
-    par(mai = c(0.0, 0.2, 0.2, 0.4))
-    ggdemetra::siratioplot(siratio_plot, main = NULL)
-    
-    
-    par(mai = c(0.4, 0.2, 0.2, 0))
-    par(mar = rep.int(0.4, 4))
-    plot.new()
-    # box()
-    legend("topleft", legend = c(NA, summary_text), 
-           bty = "n", text.font =  2, inset = c(0),
-           cex = 0.95,
-           xpd = TRUE)
-    
-    # plot.new()
-    # # box()
-    # legend("right", legend = c(arima_ord), 
-    #        bty = "n", text.font =  2, inset = c(0),
-    #        cex = 0.8)
-    
-    par(mar = rep(rep(2, 4)))
-    par(mai = c(0, 0.2, 0, 0.2))
-    
-    plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1),
-         axes = FALSE)
-    plotrix::addtable2plot(0.5, 0,
-                           decomp_stats$table, bty = "o", display.rownames = FALSE, hlines = TRUE,
-                           vlines = TRUE,bg = decomp_stats$colors, xjust = 0.5, yjust = 1)
-    
-    # Empty plot
-    plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1),
-         axes = FALSE)
-    
-    plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1),
-         axes = FALSE)
-    par(mai = c(0, 0.2, 0.2, 0.2))
-    
-    if(! is.null(outliers$table)) {
-        plotrix::addtable2plot(0.5, 0.7,
-                               outliers$table, 
-                               bg = outliers$colors,
-                               bty = "o", 
-                               display.rownames = FALSE, hlines = TRUE,
-                               vlines = TRUE, 
-                               xjust = 0.5, yjust = 0.5)
-    }
-    
-    plot(1, type = "n", xlab = "", ylab = "", xlim = c(0, 1), ylim = c(0, 1),
-         axes = FALSE)
-    par(mai = c(0, 0.2, 0.2, 0.2))
-    plotrix::addtable2plot(0.5, 0.8,
-                           residuals_tests$table, bty = "o", 
-                           display.rownames = TRUE, hlines = TRUE,
-                           vlines = TRUE,
-                           bg = residuals_tests$colors, 
-                           xjust = 0.5, yjust = 0.5)
-    if (reference_date) 
-        mtext(sprintf("Reference Date: %s",last_date), side = 3, line = -3, 
-              outer = TRUE,font = 3,cex = 0.7,at = 0.95, adj = 1)
-    mtext(subtitle, side = 3, line = -3, 
-          outer = TRUE,font = 3,cex = 0.7,at = 0.1, adj = 1)
-    invisible()
 }

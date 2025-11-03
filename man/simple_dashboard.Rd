@@ -9,7 +9,9 @@ simple_dashboard(
   x,
   digits = 2,
   scale_var_decomp = FALSE,
-  remove_others_contrib = FALSE
+  remove_others_contrib = FALSE,
+  add_obs_to_forecast = TRUE,
+  td_effect = NULL
 )
 
 simple_dashboard2(
@@ -20,7 +22,9 @@ simple_dashboard2(
   digits_outliers = digits,
   columns_outliers = c("Estimate", "T-stat"),
   n_last_outliers = 4,
-  order_outliers = c("AO", "LS", "TC", "SO")
+  order_outliers = c("AO", "LS", "TC", "SO"),
+  add_obs_to_forecast = TRUE,
+  td_effect = NULL
 )
 }
 \arguments{
@@ -32,6 +36,11 @@ simple_dashboard2(
 
 \item{remove_others_contrib}{boolean indication if the "Others" contribution (i.e.: the pre-adjustment contribution)
 should be removed from the variance decomposition table.}
+
+\item{add_obs_to_forecast}{Boolean indicating if the last observed values should be added to the forecast table (for the plot).}
+
+\item{td_effect}{Boolean indicating if the residual trading days effect test should be printed.
+By default (`td_effect = NULL`) the test is only printed for monthly series.}
 
 \item{digits_outliers}{number of digits used in the table of outliers.}
 
@@ -62,5 +71,5 @@ dashboard_data2 <- simple_dashboard2(sa_model)
 plot(dashboard_data2, main = "Simple dashboard with outliers IPI - FR")
 }
 \seealso{
-\code{\link{plot.sc_dashboard}}.
+\code{\link{plot.simple_dashboard}}.
 }

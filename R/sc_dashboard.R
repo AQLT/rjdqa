@@ -38,27 +38,12 @@
 #' @seealso \code{\link{plot.sc_dashboard}}.
 #' @export
 sc_dashboard <- function(x, n_recent_obs = 24){
-    if (inherits(x, "jSA")) {
-        x <- RJDemetra::jSA2R(x, 
-                              userdefined = c("decomposition.c17","preprocessing.model.tde_f",
-                                              "preprocessing.model.mhe_f"))
+    if (inherits(x, "TRAMO_SEATS")) {
+        x <- RJDemetra::jtramoseats(RJDemetra::get_ts(x), RJDemetra::tramoseats_spec(x))
+    } else if (inherits(x, "X13")) {
+        x <- RJDemetra::jx13(RJDemetra::get_ts(x), RJDemetra::x13_spec(x))
     }
-    if (inherits(x, "X13") && !all(c("decomposition.c17","preprocessing.model.tde_f",
-                                     "preprocessing.model.mhe_f") %in% names(x$user_defined))) {
-        my_spec <- RJDemetra::x13_spec(x)
-        x <- RJDemetra::x13(x$final$series[,"y"], my_spec,
-                            userdefined = c("decomposition.c17","preprocessing.model.tde_f",
-                                            "preprocessing.model.mhe_f"))
-    }
-    if (inherits(x, "TRAMO_SEATS") && !all(c("preprocessing.model.tde_f",
-                                     "preprocessing.model.mhe_f") %in% names(x$user_defined))) {
-        my_spec <- RJDemetra::tramoseats_spec(x)
-        x <- RJDemetra::tramoseats(x$final$series[,"y"], my_spec,
-                                   userdefined = c("preprocessing.model.tde_f",
-                                                   "preprocessing.model.mhe_f"))
-    }
-    
-    last_date <- tail(time_to_date(x$final$series[,"y"]), 1)
+    last_date <- tail(time_to_date(RJDemetra::get_indicators(x, c("y"))[[1]]), 1)
     last_date <- format(last_date, format = "%Y-%m")
     res <- list(recent_history = recent_history(x, n_recent_obs = n_recent_obs),
          summary_diagnostics = summary_diagnostics(x),

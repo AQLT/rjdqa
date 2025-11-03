@@ -1,44 +1,39 @@
 summary_diagnostics <- function(x, digits = 2, decimal.mark = getOption("OutDec"),
                                 colours = c(`1` = "red", `2` = "yellow", `3` = "#A0CD63")){
-    UseMethod("summary_diagnostics", x)
-}
-#'@exportS3Method NULL
-summary_diagnostics.X13 <- function(x, digits = 2, decimal.mark = getOption("OutDec"),
-                                    colours = c(`1` = "red", `2` = "yellow", `3` = "#A0CD63")){
-    if (!all(c("decomposition.c17") %in% names(x$user_defined))) {
-        my_spec <- x13_spec(x)
-        x <- x13(x$final$series[,"y"], my_spec,userdefined = "decomposition.c17")
+    
+    m7 <- RJDemetra::get_indicators(x, "mstats.M(7)")[[1]]
+    if (!is.null(m7)) {
+        m7_c <- cut(m7,
+                    breaks = c(0, 1.25, 1.75, Inf),
+                    labels = FALSE, right = FALSE)
+        m7_c <- (3:1)[m7_c]
+        names(m7) <- "Adjustability (M7)"
+    } else {
+        m7 <- m7_c <- NULL
     }
     
-    m7 <- x$decomposition$mstats["M(7)", ]
-    m7_c <- cut(m7,
-                breaks = c(0, 1.25, 1.75, Inf),
-                labels = FALSE, right = FALSE)
-    m7_c <- (3:1)[m7_c]
-    m7 <- round(m7,2)
+    # residuals tests
+    liste_ind <- c(
+        "Residual Seasonality (qs-test on sa)" = "diagnostics.seas-sa-qs",
+        "Residual Seasonality (f-test on sa)" = "diagnostics.seas-sa-f",
+        "Residual Trading-days effects (f-test on sa)" = "diagnostics.td-sa-all",
+        "ARIMA autocorrelation (lb test)" = "preprocessing.residuals.lb"
+    )
     
-    qs_sa_on_sa <- x$diagnostics$residuals_test["qs test on sa", 2]
-    f_test_sa_on_sa <- x$diagnostics$residuals_test["f-test on sa (seasonal dummies)", 2]
-    f_test_td_on_sa <- x$diagnostics$residuals_test["f-test on sa (td)", 2]
-    autocorrelation <-  x$regarima$residuals.stat$tests["ljung box",2]
-    residuals_tests <- c(qs_sa_on_sa, f_test_sa_on_sa, f_test_td_on_sa, autocorrelation)
+    residuals_tests <- unlist(lapply(RJDemetra::get_indicators(x, liste_ind), `[[`, 2))
+    names(residuals_tests) <- names(liste_ind)
+    
     residuals_tests_c <- cut(residuals_tests,
                              breaks = c(0, 0.01, 0.05, Inf),
                              labels = FALSE, right = FALSE)
     recent_outlier <- rbind(description_outlier(x, 0),description_outlier(x, 1))
-
-    row.names <- c("Adjustability (M7)", "Residual Seasonality (qs-test on sa)",
-                   "Residual Seasonality (f-test on sa)",
-                   "Residual Trading-days effects (f-test on sa)",
-                   "ARIMA autocorrelation (lb test)",
-                   "Recent Outliers (current period)",
-                   "Recent Outliers (previous period)"
-                   # "Evolutive seasonality test"
-    )
+    rownames(recent_outlier) <- c("Recent Outliers (current period)",
+                              "Recent Outliers (previous period)")
+    
     value <- c(m7,
                residuals_tests,
                recent_outlier[,1]
-               )
+    )
     value[1:length(c(m7, residuals_tests))] <-
         formatC(c(m7, residuals_tests),
                 format = "f", digits = digits,
@@ -47,87 +42,33 @@ summary_diagnostics.X13 <- function(x, digits = 2, decimal.mark = getOption("Out
                         residuals_tests_c,
                         recent_outlier[,2])]
     
-    summary_diagnostics <- data.frame(Value = value, Indicator = "",
-                                      Colour = colour,
-                                      row.names = row.names,
-                                      stringsAsFactors = FALSE)
-    class(summary_diagnostics) <- c("summary_diagnostics", class(summary_diagnostics))
-    
-    summary_diagnostics
-}
-#'@exportS3Method NULL
-summary_diagnostics.TRAMO_SEATS <- function(x, digits = 2, decimal.mark = getOption("OutDec"),
-                                    colours = c(`1` = "red", `2` = "yellow", `3` = "green")){
-    
-    qs_sa_on_sa <- x$diagnostics$residuals_test["qs test on sa", 2]
-    f_test_sa_on_sa <- x$diagnostics$residuals_test["f-test on sa (seasonal dummies)", 2]
-    f_test_td_on_sa <- x$diagnostics$residuals_test["f-test on sa (td)", 2]
-    autocorrelation <-  x$regarima$residuals.stat$tests["ljung box",2]
-    residuals_tests <- c(qs_sa_on_sa, f_test_sa_on_sa, f_test_td_on_sa, autocorrelation)
-    residuals_tests_c <- cut(residuals_tests,
-                             breaks = c(0, 0.01, 0.05, Inf),
-                             labels = FALSE, right = FALSE)
-    recent_outlier <- rbind(description_outlier(x, 0),description_outlier(x, 1))
-
-    row.names <- c("Residual Seasonality (qs-test on sa)",
-                   "Residual Seasonality (f-test on sa)",
-                   "Residual Trading-days effects (f-test on sa)",
-                   "ARIMA autocorrelation (lb test)",
-                   "Recent Outliers (current period)",
-                   "Recent Outliers (previous period)"
-    )
-    value <- c(residuals_tests,
-               recent_outlier[,1]
-    )
-    value[1:length(residuals_tests)] <-
-        formatC(residuals_tests,
-                format = "f", digits = digits,
-                decimal.mark = decimal.mark)
-    colour <- colours[c(residuals_tests_c,
-                        recent_outlier[,2])]
-    
-    summary_diagnostics <- data.frame(Value = value, Indicator = "",
-                                      Colour = colour,
-                                      row.names = row.names,
-                                      stringsAsFactors = FALSE)
+    summary_diagnostics <- data.frame(
+        Value = value, Indicator = "",
+        Colour = colour,
+        row.names = names(value),
+        stringsAsFactors = FALSE)
     class(summary_diagnostics) <- c("summary_diagnostics", class(summary_diagnostics))
     
     summary_diagnostics
 }
 description_outlier <- function(x, nb_previous_periods = 0){
-    UseMethod("description_outlier", x)
-}
-#'@exportS3Method NULL
-description_outlier.X13 <- function(x, nb_previous_periods = 0){
-
-    regression_var_names <- rownames(x$regarima$regression.coefficients)
-    freq <- frequency(x$final$series)
-    date <- tail(time(x$final$series), nb_previous_periods + 1)[1]
+    regression_var_names <- RJDemetra::get_indicators(x, "preprocessing.model.description")[[1]]
+    y <- RJDemetra::get_indicators(x, c("y"))[[1]]
+    freq <- frequency(y)
+    date <- tail(time(y), nb_previous_periods + 1)[1]
     is_outlier <- length(grep(date_r2jd(date, freq), regression_var_names)) > 1
-    
-    c17 <- x$user_defined$decomposition.c17
-    last_c17 <- window(c17, start = date)[1]
+    c17 <- RJDemetra::get_indicators(x, "decomposition.c17")[[1]]
+    if (!is.null(c17)) {
+        last_c17 <- window(c17, start = date)[1]
+    } else {
+        last_c17 <- NULL
+    }
     
     if (is_outlier) {
-        value <- c("Outlier",1)
+        value <- c("Outlier", 1)
     }else if (isTRUE(all.equal(last_c17, 0))) {
         value <- c("Extreme", 2)
     }else{
-        value <- c("Regular", 3)
-    }
-    value
-}
-#'@exportS3Method NULL
-description_outlier.TRAMO_SEATS <- function(x, nb_previous_periods = 0){
-    
-    regression_var_names <- rownames(x$regarima$regression.coefficients)
-    freq <- frequency(x$final$series)
-    date <- tail(time(x$final$series), nb_previous_periods + 1)[1]
-    is_outlier <- length(grep(date_r2jd(date, freq), regression_var_names)) > 1
-    
-    if (is_outlier) {
-        value <- c("Outlier",1)
-    } else {
         value <- c("Regular", 3)
     }
     value

@@ -6,6 +6,8 @@
 <!-- <img src="man/figures/logo.png" align="right" /> -->
 
 [![R-CMD-check](https://github.com/AQLT/rjdqa/workflows/R-CMD-check/badge.svg)](https://github.com/AQLT/rjdqa/actions)
+[![R universe
+version](https://aqlt.r-universe.dev/badges/rjdqa)](https://aqlt.r-universe.dev/rjdqa)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/rjdqa)](https://cran.r-project.org/package=rjdqa)
 [![CRAN last
 release](https://www.r-pkg.org/badges/last-release/rjdqa)](https://cran.r-project.org/package=rjdqa)

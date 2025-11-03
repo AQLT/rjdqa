@@ -1,11 +1,11 @@
 Package: rjdqa
 Type: Package
 Title: Quality Assessment for Seasonal Adjustment
-Version: 0.1.5
+Version: 0.1.6
 Authors@R: c(
    person("Alain", "Quartier-la-Tente", role = c("aut", "cre"),
-                 email = "alain.quartier@yahoo.fr",
-                 comment = c(ORCID = "0000-0001-7890-3857")))
+          email = "alain.quartier@yahoo.fr",
+          comment = c(ORCID = "0000-0001-7890-3857")))
 Description: Add-in to the 'RJDemetra' package on seasonal adjustments.
     It allows to produce dashboards to summarise models and quickly check the quality of the seasonal adjustment.
 License: EUPL
@@ -15,6 +15,7 @@ Depends:
     RJDemetra (>= 0.2.5),
 Imports:
     plotrix,
+    rJava,
     ggdemetra (>= 0.2.5),
     utils,
     graphics,
@@ -22,4 +23,4 @@ Imports:
 Encoding: UTF-8
 URL: https://aqlt.github.io/rjdqa/, https://github.com/AQLT/rjdqa
 BugReports: https://github.com/AQLT/rjdqa/issues
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
